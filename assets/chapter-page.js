@@ -168,7 +168,7 @@ async function renderReferenceNote(activeChapter) {
   const sourceUrl = resolvePath(htmlSource[1]);
 
   try {
-    const response = await fetch(sourceUrl);
+    const response = await fetch(withFreshQuery(sourceUrl), { cache: "no-store" });
     if (!response.ok) {
       throw new Error(`HTTP ${response.status}`);
     }
@@ -189,6 +189,13 @@ async function renderReferenceNote(activeChapter) {
   } catch (error) {
     status.textContent = `원본 HTML을 불러오지 못했습니다. 아래 source link에서 직접 확인해 주세요. (${error.message})`;
   }
+}
+
+function withFreshQuery(path) {
+  const url = new URL(path, window.location.href);
+  const pageVersion = new URLSearchParams(window.location.search).get("v");
+  url.searchParams.set("v", pageVersion || Date.now().toString(36));
+  return url.href;
 }
 
 function rewriteRelativeUrls(root, baseUrl) {
