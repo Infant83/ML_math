@@ -1,0 +1,370 @@
+<!DOCTYPE html><html lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>머신러닝 수학적 기초와 판별 모형의 이해</title>
+<style>.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 24px 40px;
+    background-color: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    }
+.chart-container {
+    position: relative;
+    margin: 3em auto;
+    max-width: 700px;
+    min-height: 200px;
+    max-height: 400px;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+    }
+h4 {
+    font-size: 18px;
+    }
+h5 {
+    font-size: 16px;
+    }
+body {
+    font-family: "Georgia", "serif", "Nanum Myeongjo";
+    line-height: 1.8;
+    color: #333;
+    background-color: #fdfdfd;
+    margin: 0 24px 0 24px;
+    padding: 0;
+    font-size: 16px;
+    max-width: None;
+    }
+h1, h2, h3 {
+    font-family: "Helvetica Neue", "Helvetica", "Arial", "sans-serif", "Apple SD Gothic Neo";
+    font-weight: 700;
+    line-height: 1.3;
+    color: #1a1a1a;
+    font-size: 28px;
+    margin-top: 24px;
+    margin-bottom: 20px;
+    }
+h1 {
+    font-size: 28px;
+    margin-bottom: 20px;
+    text-align: center;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 0.5em;
+    margin-top: 24px;
+    }
+h2 {
+    font-size: 22px;
+    margin-top: 2em;
+    margin-bottom: 1em;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 0.4em;
+    }
+h3 {
+    font-size: 20px;
+    margin-top: 1.8em;
+    margin-bottom: 0.8em;
+    }
+p, li {
+    font-size: 18px;
+    margin-bottom: 1.2em;
+    }
+ul, ol {
+    padding-left: 1.5em;
+    }
+a {
+    color: #07c;
+    text-decoration: none;
+    }
+a:hover {
+    text-decoration: underline;
+    }
+blockquote {
+    border-left: 4px solid #ccc;
+    padding-left: 1.5em;
+    margin: 1.5em 0;
+    font-style: italic;
+    color: #666;
+    }
+figure {
+    margin: 2em 0;
+    text-align: center;
+    }
+img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    display: block;
+    overflow: hidden;
+    max-height: 280px;
+    margin: 1em auto;
+    }
+figcaption {
+    font-size: 14px;
+    color: #666;
+    margin-top: 0.8em;
+    font-style: italic;
+    }
+.toc {
+    background-color: #f9f9f9;
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    padding: 20px;
+    margin-bottom: 2em;
+    }
+.toc h3 {
+    margin-top: 0;
+    border-bottom: none;
+    }
+.toc ul {
+    list-style-type: none;
+    padding: 0;
+    }
+.toc ul li {
+    margin: 0.5em 0;
+    font-size: 16px;
+    }
+.toc ul ul {
+    padding-left: 20px;
+    }
+.key-points {
+    background-color: #eef7ff;
+    border: 1px solid #bce8f1;
+    border-radius: 5px;
+    padding: 20px;
+    margin: 2em 0;
+    }
+.key-points h3 {
+    color: #31708f;
+    margin-top: 0;
+    }
+code {
+    font-family: "Menlo", "Monaco", "Courier New", monospace;
+    background-color: #f0f0f0;
+    padding: 2px 5px;
+    border-radius: 3px;
+    font-size: 0.9em;
+    }
+@media only screen and (max-device-width: 768px) {
+            body {
+                padding: 0;
+                margin: 0;
+                font-family: PingFang SC;
+                font-size: 15px;
+                line-height: 1.5;
+            }
+
+            .container {
+                padding: 0;
+                margin: 16px 20px 30px;
+                box-shadow: none;
+            }
+
+            h1,
+            h2,
+            h3,
+            h4 {
+                font-family: PingFang SC;
+            }
+
+            h1 {
+                font-size: 1.87em;
+                line-height: 1.6;
+                margin-bottom: 0.5em;
+                text-align: center;
+            }
+
+            h2 {
+                font-size: 1.6em;
+                font-weight: 600;
+                margin-top: 1.3em;
+                margin-bottom: 0.8em;
+                border-bottom: 1px solid #eee;
+                padding-bottom: 0.5em;
+            }
+
+            h3 {
+                font-size: 1.2em;
+                font-weight: 600;
+                margin-top: 1em;
+                margin-bottom: 0.6em;
+            }
+
+            h4 {
+                font-size: 1.1em;
+                font-weight: 500;
+                margin-top: 1em;
+                margin-bottom: 0.5em;
+                font-style: normal;
+            }
+
+            h5 {
+                font-size: 1em;
+                font-weight: 500;
+                margin-bottom: 1.2em;
+            }
+
+            ul,
+            ol {
+                font-size: 1em; /* Equivalent to 17.6px if base is 16px */
+                font-weight: 400;
+                margin-bottom: 1.2em;
+                line-height: 1.8;
+            }
+
+            p {
+                font-size: 1em;
+                line-height: 1.8; /* Equivalent to 17.6px if base is 16px */
+                font-weight: 400;
+                margin-top: 0.8em;
+                margin-bottom: 0.8em;
+            }
+
+            blockquote {
+                padding: 1em 1.2em;
+
+            p {
+                margin: 0;
+            }
+        }
+
+        figcaption {
+            margin-top: 0.5em;
+            font-size: 0.8em; /* Equivalent to 17.6px if base is 16px */
+            font-weight: 400;
+            text-align: center;
+            font-style: normal;
+            color: #7F8896;
+        }
+
+        img {
+            display: block;
+            overflow: hidden;
+            max-width: 100%;
+            max-height: 335px;
+            margin: 1em auto;
+            border-radius: 8px;
+        }
+        }</style>
+</head>
+<body>
+<div class="container">
+<h1 id="section-1">머신러닝 수학적 기초와 판별 모형의 이해</h1>
+<nav class="toc" id="table-of-contents">
+<h3 id="section-0-1">목차</h3>
+<ul>
+<li><a href="#section-chapter1">챕터 1: 서론 - 판별 모델과 머신러닝의 큰 그림</a>
+<ul>
+<li><a href="#section-intro">도입: 기계는 어떻게 학습하는가? - 질문으로 시작하기</a></li>
+<li><a href="#section-approach1">접근법 1: 판별 모델 (Discriminative Model) - &#34;구분선 긋기&#34;</a></li>
+<li><a href="#section-approach2">접근법 2: 생성 모델 (Generative Model) - &#34;특징을 이해하고 그려보기&#34;</a></li>
+<li><a href="#section-language">머신러닝의 언어: 문제 공식화하기</a></li>
+<li><a href="#section-math-tools">수학이라는 강력한 도구: 앞으로 배울 내용에 대한 청사진</a></li>
+<li><a href="#section-overview">강의 개요 및 준비 사항</a></li>
+</ul>
+</li>
+</ul>
+</nav>
+<h2 id="section-chapter1">챕터 1: 서론 - 판별 모델과 머신러닝의 큰 그림</h2>
+<h3 id="section-intro">도입: 기계는 어떻게 학습하는가? - 질문으로 시작하기</h3>
+<p>우리의 학습 여정은 하나의 근본적인 질문에서 시작합니다. &#34;기계는 어떻게 고양이와 개를 구별하는 법을 배울까요?&#34; 이 질문은 단순해 보이지만, 머신러닝의 핵심적인 도전과 철학을 담고 있습니다. 인간에게는 직관적인 이 과업이 기계에게는 왜 어려운 문제일까요?</p>
+<p>기계가 보는 이미지는 단순히 수많은 숫자의 배열, 즉 픽셀(pixel) 값의 집합에 불과합니다. 같은 고양이라도 카메라의 각도, 조명의 밝기, 취하고 있는 자세에 따라 이 숫자 배열은 완전히 달라집니다. <a href="https://velog.io/@gawon1224/CS231n-Lecture-01" target="_blank">CS231n 강의 자료</a>에서 지적하듯, 이러한 <strong>관점 변화(Viewpoint variation)</strong>, <strong>조명(Illumination)</strong>, 그리고 <strong>변형(Deformation)</strong>은 동일한 대상을 수천, 수만 가지의 다른 데이터로 보이게 만듭니다. 기계는 이 모든 변화에도 불구하고 &#39;고양이&#39;라는 본질적인 패턴을 인식해야 합니다.</p>
+<p>이처럼 복잡하고 가변적인 현실 세계의 문제를 해결하기 위해, 머신러닝은 데이터를 해석하고 패턴을 학습하는 정교한 방법론을 발전시켜 왔습니다. 본 챕터의 목표는 기계가 이러한 문제를 해결하는 두 가지 핵심적인 접근법, 즉 &#39;판별 모델&#39;과 &#39;생성 모델&#39;의 개념을 이해하고, 이 학습 과정을 가능하게 하는 수학적 도구들이 왜, 그리고 어떻게 필요한지에 대한 큰 그림을 그리는 것입니다. 이 과정을 통해 우리는 앞으로 배울 선형대수, 미분, 최적화 이론이 단순한 공식이 아니라, 기계에게 &#39;지능&#39;을 부여하는 강력한 도구임을 깨닫게 될 것입니다.</p>
+<h3 id="section-approach1">접근법 1: 판별 모델 (Discriminative Model) - &#34;구분선 긋기&#34;</h3>
+<p>판별 모델은 이름에서 알 수 있듯이, 서로 다른 데이터 그룹을 &#39;판별&#39;하거나 &#39;구분&#39;하는 데 초점을 맞춥니다. 이 접근법의 핵심 아이디어는 데이터 클래스들 사이에 명확한 <strong>결정 경계(Decision Boundary)</strong>를 설정하는 것입니다. <a href="https://www.moveworks.com/us/en/resources/ai-terms-glossary/discrimnative-model" target="_blank">판별 모델에 대한 설명</a>에 따르면, 이 모델들은 입력 데이터가 주어졌을 때 출력 레이블의 조건부 확률, 즉 P(Y|X)를 직접 모델링하여 클래스를 나누는 경계를 학습합니다.</p>
+<p>이 개념을 두 나라의 국경선을 긋는 것에 비유할 수 있습니다. 우리의 목표가 단지 A국과 B국을 나누는 국경선을 정하는 것이라면, 우리는 두 나라의 경계 지역 지형에만 집중하면 됩니다. 각 나라의 전체적인 지리, 기후, 문화 등 모든 것을 상세히 알 필요는 없습니다. 판별 모델은 이와 같이 효율적으로 &#39;구분&#39;이라는 목표에 집중합니다.</p>
+<figure>
+<img alt="결정 경계 시각화" src="https://picture-search.tiangong.cn/image/rt/dcdd0c5ad3893a18e3d2ddaaa63982b6.jpg" style="max-height: 280px; max-width: 100%;"/>
+<figcaption>특성 공간(Feature Space)에 표현된 데이터와 클래스를 구분하는 결정 경계(Decision Boundary)의 예시</figcaption>
+</figure>
+<p>고양이와 개 분류 문제에 이 접근법을 적용해 봅시다. 수백만 개의 픽셀로 이루어진 원본 이미지를 직접 다루는 대신, 우리는 문제 해결에 도움이 될 만한 핵심 <strong>특성(Feature)</strong>을 추출합니다. 예를 들어 &#39;귀의 뾰족한 정도&#39;와 &#39;털의 길이&#39;라는 두 가지 특성을 뽑아 2차원 <strong>특성 공간(Feature Space)</strong>이라는 가상의 지도 위에 각 이미지 데이터를 점으로 표시할 수 있습니다. 위 그림처럼, 이 공간에서 고양이 데이터와 개 데이터는 아마도 서로 다른 영역에 군집을 이룰 것입니다.</p>
+<p>판별 모델의 역할은 바로 이 특성 공간에서 두 데이터 그룹을 가장 잘 나누는 &#39;선&#39;이나 &#39;곡선&#39;, 즉 결정 경계를 찾는 것입니다. <a href="https://hyper-polaris.tistory.com/entry/%EB%A8%B8%EC%8B%A0%EB%9F%AC%EB%8B%9D-%EB%A8%B8%EC%8B%A0%EB%9F%AC%EB%8B%9D%EA%B3%BC-%EB%B6%84%EB%A5%98-%ED%9A%8C%EA%B7%80-%EA%B5%B0%EC%A7%91%ED%99%94-%ED%8A%B9%EC%A7%95%EC%B6%94%EC%B6%9C" target="_blank">한 기술 블로그</a>에서는 학습의 목표가 분류 오차를 최소화하는 최적의 결정 경계를 찾는 것이라고 설명합니다. 일단 이 경계가 정해지면, 새로운 데이터가 주어졌을 때 그 점이 경계의 어느 쪽에 위치하는지에 따라 &#34;이것은 고양이다&#34; 또는 &#34;이것은 개다&#34;라고 판별할 수 있는 강력한 규칙이 생깁니다. 우리 강의의 핵심은 바로 이 &#39;최적의&#39; 결정 경계를 어떻게 수학적으로 정의하고, 효율적으로 찾아낼 것인지에 대한 원리를 탐구하는 것입니다.</p>
+<h3 id="section-approach2">접근법 2: 생성 모델 (Generative Model) - &#34;특징을 이해하고 그려보기&#34;</h3>
+<p>판별 모델이 데이터 간의 &#39;차이점&#39;에 집중하여 경계선을 긋는다면, 생성 모델은 각 데이터 클래스의 &#39;본질&#39;을 이해하고 학습하는 데 중점을 둡니다. 즉, 데이터가 어떻게 &#39;생성&#39;되는지에 대한 근본적인 확률 분포를 학습하는 것이 목표입니다. <a href="https://stats.stackexchange.com/questions/12421/generative-vs-discriminative" target="_blank">한 통계 포럼의 설명</a>에 따르면, 생성 모델은 각 클래스의 개별적인 분포를 모델링하는 반면, 판별 모델은 클래스 간의 경계를 학습합니다.</p>
+<p>다시 국경선 비유로 돌아가 보겠습니다. 생성 모델은 단순히 국경선을 긋는 것을 넘어, A국의 지형, 기후, 인구 분포, 주요 도시 위치 등 모든 데이터를 학습하여 A국의 지도를 직접 그려낼 수 있는 능력을 갖추는 것과 같습니다. 마찬가지로 B국의 지도도 그릴 수 있게 됩니다. 두 나라의 지도를 모두 가지고 있다면, 특정 위치가 A국에 속하는지 B국에 속하는지 판단하는 것은 당연히 가능합니다.</p>
+<p>고양이/개 분류 문제에서 생성 모델은 &#34;고양이는 어떻게 생겼는가?&#34;와 &#34;개는 어떻게 생겼는가?&#34;라는 질문에 답하려고 합니다. 고양이의 전형적인 눈, 코, 입의 형태, 귀 모양, 수염의 분포 등 &#39;고양이&#39;라는 개념을 구성하는 모든 통계적 특징을 학습합니다. 그 결과, 생성 모델은 학습이 끝난 후 세상에 존재하지 않는 새로운 고양이 이미지를 &#39;생성&#39;하거나, 특정 이미지가 고양이일 확률을 계산할 수 있게 됩니다.</p>
+<p>수학적으로 이 차이를 간결하게 표현하면, 생성 모델은 입력 데이터 x와 라벨 y의 결합 확률 분포 P(x, y)를 학습합니다. 이는 &#39;이러한 특징(x)을 가진 고양이(y)가 나타날 확률&#39;을 아는 것과 같습니다. 반면, 판별 모델은 조건부 확률 P(y|x), 즉 &#39;이러한 특징(x)이 주어졌을 때, 이것이 고양이(y)일 확률&#39;에만 집중하여 결정 경계를 찾는 데 필요한 최소한의 정보만 학습합니다(<a href="https://stackoverflow.com/questions/879432/what-is-the-difference-between-a-generative-and-a-discriminative-algorithm" target="_blank">Stack Overflow 토론</a> 참조). 분류 문제에 있어서는 판별 모델이 일반적으로 더 직접적이고 계산적으로 효율적인 경향이 있습니다. 따라서 본 강의에서는 데이터 분류 문제 해결에 가장 널리 쓰이는 &#39;판별 모델&#39;의 원리를 깊이 있게 파고들 것입니다.</p>
+<h3 id="section-language">머신러닝의 언어: 문제 공식화하기</h3>
+<p>지금까지 논의한 &#39;결정 경계&#39;, &#39;특성&#39; 등의 개념을 기계가 이해하고 계산할 수 있도록 하려면, 이를 엄밀한 수학적 언어로 바꾸는 과정이 필요합니다. 이 과정은 문제를 명확하게 정의하고 해결책을 찾는 첫걸음입니다. &#39;고양이/개 분류&#39; 예시와 함께 머신러닝의 핵심 용어들을 체계적으로 정리해 보겠습니다.</p>
+<ul>
+<li><strong>입력 공간 (Input Space, X):</strong> 우리가 다루는 모든 가능한 데이터의 집합입니다. 고양이/개 분류 문제에서는 세상에 존재하는 모든 이미지, 또는 우리가 수집한 모든 이미지의 픽셀 데이터 집합이 입력 공간에 해당합니다.</li>
+<li><strong>특성 공간 (Feature Space, Φ(x)):</strong> 원본 입력 데이터(<code>x</code>)에서 문제 해결에 유용하다고 판단되는 특징들을 추출하여 만든 새로운 공간입니다. 예를 들어, 이미지의 픽셀 데이터(입력 공간)에서 &#39;귀의 뾰족함&#39;과 &#39;코의 크기&#39;라는 두 가지 특징을 추출했다면, 이 두 특징을 축으로 하는 2차원 평면이 바로 특성 공간이 됩니다. 결정 경계는 바로 이 특성 공간이라는 무대 위에 그려집니다.</li>
+<li><strong>라벨 (Label, y):</strong> 각 데이터의 정답을 의미합니다. 이진 분류 문제에서는 보통 숫자로 표현하며, 예를 들어 &#39;고양이&#39;는 1, &#39;개&#39;는 0으로 약속할 수 있습니다.</li>
+<li><strong>가설 (Hypothesis, h):</strong> 데이터를 분류하기 위한 하나의 &#39;후보&#39; 규칙 또는 함수를 의미합니다. 특성 공간에서는 하나의 특정 결정 경계에 해당합니다. 예를 들어, &#34;<code>0.8 * (귀 뾰족함) - 1.2 * (코 크기) + 0.5 &gt; 0</code> 이면 고양이&#34;와 같은 구체적인 수식이 하나의 가설이 될 수 있습니다.</li>
+<li><strong>가설 공간 (Hypothesis Space, H):</strong> 모델이 탐색할 수 있는 모든 가능한 가설들의 집합입니다. <a href="https://www.geeksforgeeks.org/machine-learning/ml-understanding-hypothesis/" target="_blank">GeeksforGeeks의 설명</a>에 따르면, 이는 알고리즘이 목표 함수를 가장 잘 설명하기 위해 탐색하는 모든 가능한 함수의 집합입니다. 예를 들어, 모델이 선형 결정 경계만 찾는다고 가정하면, 가설 공간은 특성 공간 위에 그릴 수 있는 모든 직선의 집합이 됩니다.</li>
+</ul>
+<figure>
+<figcaption>데이터를 분류하기 위한 수많은 가능한 결정 경계(가설)들이 모여 가설 공간을 형성합니다.</figcaption>
+</figure>
+<ul>
+<li><strong>손실 함수 (Loss Function, L):</strong> 특정 가설(결정 경계)이 얼마나 &#39;나쁜지&#39;를 정량적으로 측정하는 척도입니다. <a href="https://www.datacamp.com/tutorial/loss-function-in-machine-learning" target="_blank">DataCamp의 튜토리얼</a>에서는 손실 함수를 모델 예측과 실제 목표값 사이의 차이를 수치화하는 수학적 과정이라고 정의합니다. 예를 들어, 어떤 결정 경계가 고양이 10마리와 개 5마리를 잘못 분류했다면, 손실 함수는 이 오차를 반영하여 높은 값을 출력합니다. 반면, 완벽하게 분류했다면 손실 값은 0에 가까워집니다. 우리의 궁극적인 목표는 이 손실 함수의 값을 최소로 만드는 &#39;최적의&#39; 가설을 가설 공간 안에서 찾아내는 것입니다.</li>
+</ul>
+<p>이러한 용어들을 통해 우리는 &#34;고양이와 개를 구별한다&#34;는 모호한 문제를 &#34;주어진 (X, y) 데이터에 대해, 가설 공간 H 안에서 손실 함수 L(h(x), y)를 최소화하는 최적의 가설 h*를 찾는다&#34;는 명확한 수학 문제로 공식화할 수 있습니다.</p>
+<h3 id="section-math-tools">수학이라는 강력한 도구: 앞으로 배울 내용에 대한 청사진</h3>
+<p>이제 우리의 목표는 명확해졌습니다: &#34;손실 함수를 최소화하는 최적의 결정 경계를 찾는다.&#34; 이는 마치 안개가 자욱한 산에서 가장 낮은 계곡을 찾아 내려가는 것과 같습니다. 손실 함수가 바로 이 산의 지형이고, 결정 경계의 파라미터들이 우리의 위치 좌표이며, 가장 낮은 지점이 우리가 찾고자 하는 최적의 모델입니다. 이 여정을 성공적으로 마치기 위해 우리에게는 지도, 나침반, 그리고 걷는 전략이라는 세 가지 강력한 수학적 도구가 필요합니다.</p>
+<figure>
+<figcaption>머신러닝의 학습 과정은 손실 함수(Cost)를 최소화하는 파라미터(W)를 찾아가는 여정과 같습니다. 경사 하강법은 이 언덕의 가장 낮은 지점을 향해 한 걸음씩 나아가는 전략입니다.</figcaption>
+</figure>
+<ol>
+<li>
+<strong>선형대수 (Linear Algebra): 지도</strong>
+<ul>
+<li><strong>왜 필요한가?</strong> 선형대수는 데이터와 모델을 간결하고 효율적으로 표현하는 &#39;언어&#39;입니다. 수만 개의 픽셀 데이터, 수십 개의 특성, 그리고 복잡한 결정 경계를 벡터와 행렬이라는 표준화된 형식으로 나타낼 수 있게 해줍니다. <a href="https://medium.com/@weidagang/demystifying-hyperplanes-in-machine-learning-97c772e9938f" target="_blank">한 기술 블로그</a>에서는 SVM과 같은 알고리즘에서 초평면(hyperplane)이 어떻게 결정 경계 역할을 하는지 설명하며 선형대수의 중요성을 강조합니다.</li>
+<li><strong>무엇을 배우는가?</strong> 데이터 포인트는 &#39;벡터&#39;로, 전체 데이터셋은 &#39;행렬&#39;로, 그리고 n차원 공간의 결정 경계는 &#39;초평면&#39;의 방정식으로 표현하는 법을 배웁니다. 이를 통해 복잡한 계산을 컴퓨터가 효율적으로 처리할 수 있게 됩니다.</li>
+</ul>
+</li>
+<li>
+<strong>미분 (Calculus): 나침반</strong>
+<ul>
+<li><strong>왜 필요한가?</strong> 손실 함수라는 언덕의 현재 위치에서 어느 방향이 가장 가파른 내리막길인지 알려주는 &#39;나침반&#39; 역할을 합니다. 이 방향을 알아야 손실을 가장 효과적으로 줄일 수 있습니다.</li>
+<li><strong>무엇을 배우는가?</strong> 함수의 특정 지점에서의 기울기를 나타내는 <strong>경사(Gradient)</strong> 개념을 배웁니다. <a href="https://blog.naver.com/peachmode__/223619081285" target="_blank">경사 하강법(Gradient Descent)</a>은 바로 이 경사의 반대 방향으로 파라미터를 업데이트하여 손실을 줄여나가는 핵심 메커니즘입니다. 미분은 이 경사를 계산하는 도구입니다.</li>
+</ul>
+</li>
+<li>
+<strong>최적화 (Optimization): 걷는 전략</strong>
+<ul>
+<li><strong>왜 필요한가?</strong> 나침반(미분)이 가리키는 방향으로 얼마나 큰 보폭으로, 얼마나 여러 번 나아가야 계곡의 바닥에 안전하고 효율적으로 도달할 수 있는지를 결정하는 &#39;전략&#39;입니다.</li>
+<li><strong>무엇을 배우는가?</strong> <strong>경사 하강법(Gradient Descent)</strong>과 같은 최적화 알고리즘을 배웁니다. <a href="https://en.wikipedia.org/wiki/Gradient_descent" target="_blank">위키피디아</a>에 따르면, 이 알고리즘은 함수의 경사를 따라 반복적으로 이동하여 함수의 최솟값을 찾는 1차 최적화 알고리즘입니다. 우리는 이 전략을 통해 손실 함수를 점진적으로 최소화하고, 마침내 최적의 모델 파라미터(결정 경계)를 찾게 됩니다.</li>
+</ul>
+</li>
+</ol>
+<p>이 세 가지 수학적 도구는 서로 긴밀하게 연결되어 머신러닝 모델의 &#39;학습&#39;이라는 과정을 완성합니다. 데이터는 <strong>선형대수</strong>의 언어로 표현되고, 모델의 성능은 <strong>손실 함수</strong>로 평가됩니다. <strong>미분</strong>을 통해 손실을 줄이는 가장 좋은 방향을 찾고, <strong>최적화</strong> 알고리즘이 그 방향으로 모델을 업데이트하는 과정을 수없이 반복하며 최적의 해답을 찾아가는 것입니다. 앞으로의 챕터에서 우리는 이 도구들을 하나씩 연마하며 머신러닝의 작동 원리를 깊이 있게 탐험할 것입니다.</p>
+<h3 id="section-overview">강의 개요 및 준비 사항</h3>
+<p>본 강의는 머신러닝, 특히 판별 모델의 작동 원리를 수학적 기초부터 차근차근 이해하고, 최종적으로는 파이썬 코드를 통해 직접 모델을 구현해보는 것을 목표로 합니다. 이론적 깊이와 실용적 구현 능력을 함께 기를 수 있도록 강의를 구성했습니다.</p>
+<h4>전체 강의 로드맵</h4>
+<ol>
+<li><strong>챕터 1: 서론 - 판별 모델과 머신러닝의 큰 그림 (현재 챕터)</strong></li>
+<li><strong>챕터 2: 선형대수 기초 - 공간과 변환의 언어</strong></li>
+<li><strong>챕터 3: 미분과 최적화 - 최고의 모델을 찾는 여정</strong></li>
+<li><strong>챕터 4: 선형 회귀 - 가장 단순한 판별 모델</strong></li>
+<li><strong>챕터 5: 로지스틱 회귀와 서포트 벡터 머신(SVM) - 분류 문제 정복하기</strong></li>
+<li><strong>챕터 6: 실전 프로젝트 - 나만의 판별 모델 만들기</strong></li>
+</ol>
+<h4>필요 도구 소개</h4>
+<p>강의를 원활하게 수강하고 실습을 진행하기 위해 다음과 같은 도구들이 사용됩니다. 기본적인 설치 및 사용법은 강의 초반에 안내될 예정입니다.</p>
+<ul>
+<li><strong>Python:</strong> 머신러닝 구현을 위한 핵심 프로그래밍 언어입니다. 간결한 문법과 강력한 라이브러리 생태계 덕분에 데이터 과학 분야의 표준 언어로 자리 잡았습니다.</li>
+<li><strong>NumPy:</strong> &#39;Numerical Python&#39;의 약자로, 벡터, 행렬 등 다차원 배열을 효율적으로 다루고 과학적 계산을 수행하기 위한 필수 라이브러리입니다. (<a href="https://numpy.org/learn/" target="_blank">NumPy 공식 학습 자료</a>)</li>
+<li><strong>Matplotlib/Seaborn:</strong> 데이터 시각화를 위한 라이브러리입니다. 우리는 이 도구들을 사용하여 특성 공간의 데이터 분포, 결정 경계, 손실 함수의 변화 과정 등을 시각적으로 확인하며 모델의 학습 과정을 직관적으로 이해할 것입니다.</li>
+</ul>
+<h4>평가 방식 안내</h4>
+<p>학습 성취도를 종합적으로 평가하기 위해 다음과 같은 평가 항목들이 포함될 예정입니다.</p>
+<ul>
+<li><strong>퀴즈:</strong> 각 챕터의 핵심 개념 이해도를 확인하기 위한 간단한 퀴즈.</li>
+<li><strong>코딩 과제:</strong> 배운 수학적 원리를 NumPy와 같은 라이브러리를 사용하여 직접 코드로 구현하는 과제.</li>
+<li><strong>최종 프로젝트:</strong> 실제 데이터를 사용하여 자신만의 판별 모델을 설계, 학습, 평가하는 종합 프로젝트.</li>
+</ul>
+<div class="key-points">
+<h3 id="section-1-7">예비 퀴즈 (OX 퀴즈)</h3>
+<p>이번 챕터에서 다룬 핵심 개념들을 잘 이해했는지 간단한 OX 퀴즈로 확인해 보세요.</p>
+<ol>
+<li>선형 결정 경계는 항상 직선의 형태를 띤다. ( <strong>O</strong> )</li>
+<li>손실 함수의 값이 클수록 모델의 성능이 좋은 것이다. ( <strong>X</strong> )</li>
+<li>판별 모델의 주된 목표는 학습 데이터와 유사한 새로운 데이터를 &#39;생성&#39;하는 것이다. ( <strong>X</strong> )</li>
+</ol>
+<p><em>정답 해설: 1. 2차원 특성 공간에서 선형 결정 경계는 직선이며, 3차원에서는 평면, 그 이상에서는 초평면이 됩니다. 모두 &#39;선형&#39;적인 형태입니다. 2. 손실 함수는 모델의 &#39;오차&#39;를 측정하므로, 값이 작을수록 성능이 좋은 것입니다. 3. 새로운 데이터를 생성하는 것은 &#39;생성 모델&#39;의 목표입니다. 판별 모델은 데이터를 &#39;분류&#39;하는 경계를 찾습니다.</em></p>
+</div>
+<p>이제 우리는 머신러닝의 큰 그림과 앞으로 나아갈 길에 대한 지도를 얻었습니다. 다음 챕터부터는 이 지도를 현실로 만들어 줄 강력한 도구인 선형대수의 세계로 본격적인 탐험을 시작하겠습니다.</p>
+</div>
+
+</body></html>

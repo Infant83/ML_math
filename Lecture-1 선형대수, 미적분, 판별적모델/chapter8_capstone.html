@@ -1,0 +1,786 @@
+<!DOCTYPE html><html lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Capstone: 날씨 데이터 로지스틱 회귀</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 24px 40px;
+    background-color: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    }
+.chart-container {
+    position: relative;
+    margin: 3em auto;
+    max-width: 700px;
+    min-height: 200px;
+    max-height: 400px;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+    aspect-ratio: 7/5;}
+h5 {
+    font-size: 16px;
+    }
+body {
+    font-family: "Georgia", "serif", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+    line-height: 1.8;
+    font-size: 16px;
+    color: #333;
+    background-color: #fdfdfd;
+    margin: 0 24px 0 24px;
+    padding: 0;
+    max-width: None;
+    }
+h1, h2, h3, h4 {
+    font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+    color: #1a1a1a;
+    line-height: 1.3;
+    margin-top: 24px;
+    margin-bottom: 20px;
+    font-size: 28px;
+    }
+h1 {
+    font-size: 28px;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 0.5em;
+    margin-top: 24px;
+    margin-bottom: 20px;
+    }
+h2 {
+    font-size: 22px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 0.4em;
+    }
+h3 {
+    font-size: 20px;
+    }
+h4 {
+    font-size: 18px;
+    }
+p {
+    margin-bottom: 1.2em;
+    }
+a {
+    color: #07c;
+    text-decoration: none;
+    }
+a:hover {
+    text-decoration: underline;
+    }
+code {
+    font-family: "Menlo", "Monaco", "Courier New", monospace;
+    background-color: #f5f5f5;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.9em;
+    }
+pre {
+    background-color: #f5f5f5;
+    padding: 15px;
+    border-radius: 4px;
+    overflow-x: auto;
+    font-size: 0.9em;
+    }
+pre code {
+    padding: 0;
+    background-color: transparent;
+    border-radius: 0;
+    }
+blockquote {
+    border-left: 4px solid #ccc;
+    padding-left: 20px;
+    margin: 2em 0;
+    color: #666;
+    font-style: italic;
+    }
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 2em 0;
+    }
+th, td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+    }
+th {
+    background-color: #f9f9f9;
+    font-weight: bold;
+    }
+figure {
+    margin: 2em 0;
+    text-align: center;
+    }
+img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    display: block;
+    overflow: hidden;
+    max-height: 280px;
+    margin: 1em auto;
+    }
+figcaption {
+    margin-top: 0.8em;
+    font-size: 0.9em;
+    color: #666;
+    font-style: italic;
+    }
+.toc {
+    background: #f9f9f9;
+    border: 1px solid #e0e0e0;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 2em;
+    }
+.toc h2 {
+    margin-top: 0;
+    border-bottom: none;
+    }
+.toc ul {
+    list-style-type: none;
+    padding-left: 0;
+    }
+.toc ul ul {
+    padding-left: 20px;
+    }
+.toc li {
+    margin-bottom: 0.5em;
+    }
+.quiz {
+    background-color: #eef7ff;
+    border: 1px solid #bce8f1;
+    padding: 20px;
+    margin: 2em 0;
+    border-radius: 8px;
+    }
+.quiz h4 {
+    margin-top: 0;
+    color: #31708f;
+    }
+.quiz .answer {
+    margin-top: 1em;
+    padding-top: 1em;
+    border-top: 1px dashed #bce8f1;
+    font-size: 0.95em;
+    }
+        .chart-container canvas {
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: contain;
+}
+
+@media only screen and (max-device-width: 768px) {
+            body {
+                padding: 0;
+                margin: 0;
+                font-family: PingFang SC;
+                font-size: 15px;
+                line-height: 1.5;
+            }
+
+            .container {
+                padding: 0;
+                margin: 16px 20px 30px;
+                box-shadow: none;
+            }
+
+            h1,
+            h2,
+            h3,
+            h4 {
+                font-family: PingFang SC;
+            }
+
+            h1 {
+                font-size: 1.87em;
+                line-height: 1.6;
+                margin-bottom: 0.5em;
+                text-align: center;
+            }
+
+            h2 {
+                font-size: 1.6em;
+                font-weight: 600;
+                margin-top: 1.3em;
+                margin-bottom: 0.8em;
+                border-bottom: 1px solid #eee;
+                padding-bottom: 0.5em;
+            }
+
+            h3 {
+                font-size: 1.2em;
+                font-weight: 600;
+                margin-top: 1em;
+                margin-bottom: 0.6em;
+            }
+
+            h4 {
+                font-size: 1.1em;
+                font-weight: 500;
+                margin-top: 1em;
+                margin-bottom: 0.5em;
+                font-style: normal;
+            }
+
+            h5 {
+                font-size: 1em;
+                font-weight: 500;
+                margin-bottom: 1.2em;
+            }
+
+            ul,
+            ol {
+                font-size: 1em; /* Equivalent to 17.6px if base is 16px */
+                font-weight: 400;
+                margin-bottom: 1.2em;
+                line-height: 1.8;
+            }
+
+            p {
+                font-size: 1em;
+                line-height: 1.8; /* Equivalent to 17.6px if base is 16px */
+                font-weight: 400;
+                margin-top: 0.8em;
+                margin-bottom: 0.8em;
+            }
+
+            blockquote {
+                padding: 1em 1.2em;
+
+            p {
+                margin: 0;
+            }
+        }
+
+        figcaption {
+            margin-top: 0.5em;
+            font-size: 0.8em; /* Equivalent to 17.6px if base is 16px */
+            font-weight: 400;
+            text-align: center;
+            font-style: normal;
+            color: #7F8896;
+        }
+
+        img {
+            display: block;
+            overflow: hidden;
+            max-width: 100%;
+            max-height: 335px;
+            margin: 1em auto;
+            border-radius: 8px;
+        }
+        }</style>
+<link rel="stylesheet" href="https://static.skywork.ai/fe/skywork-site-assets/styles/doc_reference_style.css?v=1956699729526894592"/></head>
+<body>
+<div class="container">
+<h1 id="section-1">머신러닝 수학적 기초와 판별 모형의 이해</h1>
+<nav class="toc" id="table-of-contents">
+<h2 id="section-1">강의 목차</h2>
+<ul>
+<li><a href="#section-chapter-8">Capstone: 날씨 데이터 로지스틱 회귀</a>
+<ul>
+<li><a href="#section-section-8-0">강의 목표 및 개요</a></li>
+<li><a href="#section-section-8-1">1. 프로젝트 시작: 문제 정의 및 데이터 준비</a></li>
+<li><a href="#section-section-8-2">2. 모델 학습: 로지스틱 회귀의 적용</a></li>
+<li><a href="#section-section-8-3">3. 모델 평가: 예측 성능 측정하기</a></li>
+<li><a href="#section-section-8-4">4. 결과 해석 및 시각화: PCA 활용</a></li>
+<li><a href="#section-section-8-5">총정리 및 다음 단계</a></li>
+</ul>
+</li>
+</ul>
+</nav>
+<h2 id="section-chapter-8">Capstone: 날씨 데이터 로지스틱 회귀</h2>
+<h3 id="section-section-8-0">강의 목표 및 개요</h3>
+<p>이번 캡스톤 프로젝트의 목표는 실제 날씨 데이터를 사용하여 &#39;내일 비가 올 것인가?&#39;를 예측하는 분류 모델을 구축하는 전 과정을 경험하는 것입니다. 이 과정을 통해 데이터 전처리, 모델 학습, 성능 평가, 그리고 결과 해석 및 시각화로 이어지는 머신러닝 프로젝트의 전체 파이프라인(pipeline)을 통합적으로 이해하게 될 것입니다. 이전 챕터들에서 배운 개별적인 수학적 개념들이 실제 문제 해결 과정에서 어떻게 유기적으로 결합되는지 확인하는 중요한 과정입니다.</p>
+<ul>
+<li><strong>목표:</strong> 실제 날씨 데이터를 사용하여 &#39;내일 비가 올 것인가?&#39;를 예측하는 분류 모델을 구축하는 전 과정을 경험한다. 이를 통해 데이터 전처리, 모델 학습, 성능 평가, 결과 해석 및 시각화로 이어지는 머신러닝 프로젝트의 전체 파이프라인을 통합적으로 이해한다.</li>
+<li><strong>핵심 개념:</strong> 로지스틱 회귀(Logistic Regression), 혼동 행렬(Confusion Matrix), ROC-AUC, 주성분 분석(PCA) 시각화.</li>
+<li><strong>강의 흐름:</strong>
+<ol>
+<li><strong>문제 정의 및 데이터 준비:</strong> 날씨 예측 문제를 정의하고, 사용할 데이터를 탐색 및 전처리한다.</li>
+<li><strong>모델 학습:</strong> 로지스틱 회귀 모델을 사용하여 비 예측 모델을 학습시킨다.</li>
+<li><strong>모델 평가:</strong> 학습된 모델의 성능을 다양한 지표(정확도, 정밀도, 재현율, F1-Score, ROC-AUC)로 평가한다.</li>
+<li><strong>해석 및 시각화:</strong> 학습된 모델의 계수를 해석하고, PCA를 이용해 결정 경계를 시각적으로 이해한다.</li>
+</ol>
+</li>
+</ul>
+<hr/>
+<h3 id="section-section-8-1">1. 프로젝트 시작: 문제 정의 및 데이터 준비</h3>
+<p>모든 머신러닝 프로젝트는 명확한 문제 정의에서 시작하여 양질의 데이터를 준비하는 것으로 그 첫 단추를 꿴다. 이 단계의 완성도는 최종 모델의 성능을 좌우하는 가장 결정적인 요소 중 하나입니다. 데이터의 특성을 깊이 파악하고 모델이 학습하기에 가장 적합한 형태로 가공하는 과정의 중요성을 이해하는 것이 핵심입니다.</p>
+<h4>문제 정의: 내일의 강수 확률 예측</h4>
+<ul>
+<li><strong>문제 유형:</strong> 이진 분류(Binary Classification). 내일의 날씨 상태를 &#39;비가 온다(1)&#39; 또는 &#39;비가 오지 않는다(0)&#39;의 두 가지 상호 배타적인 클래스로 분류하는 문제입니다.</li>
+<li><strong>활용 데이터:</strong> 본 강의에서는 <a href="https://www.kaggle.com/datasets/jsphyg/weather-dataset-rattle-package" target="_blank">Kaggle의 &#34;Rain in Australia&#34; 데이터셋</a>과 같은 호주 기상청의 일일 날씨 데이터를 예시로 사용합니다. 이 데이터는 실제 기상 관측소에서 수집된 다양한 기상 변수를 포함하고 있습니다.
+                <ul>
+<li><strong>포함된 변수(Features) 소개:</strong> <code>MinTemp</code>(최저기온), <code>MaxTemp</code>(최고기온), <code>Rainfall</code>(강수량), <code>Evaporation</code>(증발량), <code>Sunshine</code>(일조시간), <code>WindGustSpeed</code>(최대풍속), <code>Humidity9am</code>(오전 9시 습도), <code>Humidity3pm</code>(오후 3시 습도), <code>Pressure9am</code>(오전 9시 기압), <code>Cloud3pm</code>(오후 3시 구름량), <code>RainToday</code>(오늘 비 여부) 등.</li>
+</ul>
+</li>
+<li><strong>최종 목표(Target):</strong> 오늘의 날씨 데이터를 설명 변수(X)로 사용하여, 내일의 강수 여부를 나타내는 <code>RainTomorrow</code> 변수를 예측하는 모델을 개발하는 것입니다.</li>
+</ul>
+<figure>
+<figcaption>호주 기상청에서 수집된 일일 날씨 데이터의 일부. 다양한 기상 변수들이 포함되어 있다</figcaption>
+</figure>
+<h4>데이터 탐색 및 전처리 (Preprocessing)</h4>
+<p>데이터 전처리는 원본 데이터(raw data)에 존재하는 노이즈, 결측치, 불일치 등을 처리하여 모델이 패턴을 효과적으로 학습할 수 있는 &#39;깨끗하고 정제된&#39; 데이터로 만드는 과정입니다. &#34;쓰레기가 들어가면 쓰레기가 나온다(Garbage In, Garbage Out)&#34;는 머신러닝의 오랜 격언처럼, 이 단계의 중요성은 아무리 강조해도 지나치지 않습니다.</p>
+<h5>주요 단계 상세 설명</h5>
+<ol>
+<li><strong>결측치 처리 (Handling Missing Values):</strong> 실제 데이터는 다양한 이유로 값이 누락될 수 있습니다. 이를 처리하지 않으면 대부분의 머신러닝 알고리즘은 오류를 발생시킵니다.
+                <ul>
+<li><strong>수치형 변수:</strong> 데이터의 분포를 고려하여 평균(mean), 중앙값(median) 등으로 대체합니다. 예를 들어, 특정 날의 <code>Sunshine</code> 값이 누락되었다면, 해당 월의 평균 일조시간으로 채울 수 있습니다.</li>
+<li><strong>범주형 변수:</strong> 가장 빈번하게 나타나는 값(최빈값, mode)으로 대체하거나, 결측치 자체를 하나의 정보로 간주하여 &#39;Unknown&#39;과 같은 새로운 카테고리를 생성할 수 있습니다.</li>
+</ul>
+</li>
+<li><strong>이상치 탐지 및 처리 (Outlier Detection):</strong> 다른 데이터와 극단적으로 다른 값을 가지는 이상치(outlier)는 모델의 가중치를 왜곡시켜 성능을 저하시킬 수 있습니다.
+                <ul>
+<li>시각화(Box Plot)나 사분위수 범위(IQR, Interquartile Range)와 같은 통계적 방법을 사용하여 이상치를 식별합니다.</li>
+<li>식별된 이상치는 제거하거나, 특정 임계값으로 값을 제한(Capping)하는 등의 방법으로 처리합니다.</li>
+</ul>
+</li>
+<li><strong>특성 공학 (Feature Engineering):</strong> 기존 변수를 조합하거나 변형하여 모델의 예측력에 더 도움이 되는 새로운 변수를 만드는 창의적인 과정입니다.
+                <ul>
+<li><strong>예시:</strong> 일교차를 나타내는 <code>TempDiff</code> = <code>MaxTemp</code> - <code>MinTemp</code> 변수를 생성할 수 있습니다. 일교차가 큰 날씨는 특정 기상 패턴과 관련이 있을 수 있습니다.</li>
+<li><code>RainToday</code>와 같은 범주형 변수(&#39;Yes&#39;/&#39;No&#39;)는 모델이 이해할 수 있도록 숫자(1/0)로 변환(encoding)해야 합니다.</li>
+</ul>
+</li>
+<li><strong>데이터 정규화/표준화 (Normalization/Standardization):</strong> 각 특성(feature)의 값의 범위, 즉 스케일(scale)이 크게 다를 경우, 특정 특성이 모델 학습에 과도한 영향을 미치는 것을 방지하기 위해 스케일을 조정합니다.
+                <ul>
+<li><strong>수학적 배경:</strong> 경사 하강법과 같이 거리 기반으로 최적화를 수행하는 알고리즘은 모든 특성이 동등한 스케일을 가질 때 비용 함수의 등고선이 원형에 가까워져 더 빠르고 안정적으로 최적해에 수렴할 수 있습니다. 스케일이 다르면 등고선이 찌그러진 타원형이 되어 수렴 과정이 비효율적으로 변합니다.</li>
+<li><strong>StandardScaler (표준화):</strong> 데이터의 분포를 평균이 0, 표준편차가 1인 표준정규분포와 유사하게 변환합니다.
+                        $$ z = \frac{x - \mu}{\sigma} $$
+                        여기서 $x$는 원본 데이터, $\mu$는 해당 특성의 평균, $\sigma$는 표준편차입니다.
+                    </li>
+<li><strong>MinMaxScaler (정규화):</strong> 데이터의 모든 값을 0과 1 사이의 범위로 변환합니다.
+                        $$ x_{scaled} = \frac{x - x_{min}}{x_{max} - x_{min}} $$
+                        여기서 $x_{min}$과 $x_{max}$는 각각 해당 특성의 최솟값과 최댓값입니다.
+                    </li>
+</ul>
+</li>
+</ol>
+<figure>
+<img alt="데이터 표준화 예시" src="https://picture-search.tiangong.cn/image/rt/db392caa7a8127e2fe919c32e02a6a74.jpg" style="max-height: 280px; max-width: 100%;"/>
+<figcaption>데이터 표준화(Standardization) 전후의 특성 값 변화 예시. 각 특성의 스케일이 조정되어 모델 학습에 용이한 형태로 변환된다</figcaption>
+</figure>
+<h5>데이터 분할 (Train-Test Split)</h5>
+<p>모델의 일반화(generalization) 성능, 즉 학습에 사용되지 않은 새로운 데이터에 대한 예측 성능을 객관적으로 평가하기 위해 전체 데이터를 학습 데이터(Train Set)와 테스트 데이터(Test Set)로 분리해야 합니다. 모델은 학습 데이터로만 학습되고, 테스트 데이터는 오직 최종 성능 평가에만 사용됩니다.</p>
+<ul>
+<li><strong><code>stratify</code> 옵션:</strong> 클래스 불균형 문제가 있는 데이터셋에서 특히 중요합니다. 예를 들어, 전체 데이터에서 비가 오는 날(<code>RainTomorrow=1</code>)의 비율이 20%라면, <code>stratify</code> 옵션을 사용하면 분할된 학습 데이터와 테스트 데이터 모두에서 이 비율이 20%로 유지됩니다. 이는 모델이 소수 클래스에 대해 충분히 학습하고, 평가가 편향되지 않도록 보장하는 중요한 장치입니다.</li>
+</ul>
+<div class="quiz">
+<h4>✍️ 예제 퀴즈 1</h4>
+<p><strong>질문:</strong> 날씨 데이터의 <code>Humidity3pm</code>(오후 3시 습도)와 <code>WindSpeed9am</code>(오전 9시 풍속) 변수는 각각 백분율(0-100)과 km/h 단위로 스케일이 다릅니다. 로지스틱 회귀 모델 학습 전, 이 변수들을 어떻게 처리하는 것이 가장 바람직할까요?</p>
+<ol>
+<li>그대로 사용한다. 모델이 알아서 스케일 차이를 학습할 것이다.</li>
+<li>두 변수 중 하나를 제거하여 스케일 문제를 없앤다.</li>
+<li>StandardScaler 또는 MinMaxScaler를 사용하여 모든 특성의 스케일을 유사하게 맞춘다.</li>
+<li>두 변수를 곱하여 하나의 새로운 변수로 만든다.</li>
+</ol>
+<div class="answer">
+<p><strong>정답 및 해설:</strong> 3번. 경사 하강법 기반의 최적화 알고리즘은 특성들의 스케일에 민감합니다. 스케일이 다르면 특정 가중치(weight)만 급격하게 업데이트되어 최적의 해를 찾기 어렵습니다. 예를 들어, 스케일이 큰 변수에 해당하는 가중치는 작은 변화에도 비용 함수 값이 크게 변동하여 학습 과정이 불안정해질 수 있습니다. 따라서 표준화나 정규화를 통해 모든 특성이 동등한 스케일을 갖도록 조정하여 학습 효율과 성능을 높이는 것이 바람직합니다.</p>
+</div>
+</div>
+<hr/>
+<h3 id="section-section-8-2">2. 모델 학습: 로지스틱 회귀의 적용</h3>
+<p>정제된 데이터를 바탕으로 이제 분류 모델을 학습시킬 차례입니다. 이 장에서는 이전 챕터에서 배운 로지스틱 회귀의 수학적 원리를 실제 날씨 데이터 예측 문제에 어떻게 적용하는지 구체적으로 살펴봅니다.</p>
+<h4>로지스틱 회귀 복습</h4>
+<ul>
+<li><strong>핵심 아이디어:</strong> 로지스틱 회귀는 선형 회귀의 예측 결과(실수 전체 범위)를 특정 함수에 통과시켜 0과 1 사이의 &#39;확률&#39; 값으로 변환하는 이진 분류 모델입니다. 이 &#39;특정 함수&#39;가 바로 시그모이드 함수(Sigmoid Function)입니다.</li>
+<li><strong>수학적 표현:</strong>
+<ol>
+<li><strong>선형 결합 (Logit):</strong> 입력 특성 벡터 $\mathbf{x} = (x_1, x_2, \dots, x_n)$와 이에 대응하는 가중치 벡터 $\mathbf{w} = (w_1, w_2, \dots, w_n)$의 선형 결합(내적)에 편향(bias) $b$를 더한 값입니다. 이 값을 로짓(Logit)이라고도 부릅니다.
+                        $$ z = \mathbf{w}^T \mathbf{x} + b = w_1x_1 + w_2x_2 + \dots + w_nx_n + b $$
+                        이 식은 특성 공간에서 하나의 초평면(hyperplane)을 정의합니다.
+                    </li>
+<li><strong>시그모이드 함수 (확률 변환):</strong> 선형 결합의 결과인 $z$를 시그모이드 함수 $\sigma(z)$에 입력하여 최종적으로 확률 값을 출력합니다.
+                        $$ P(y=1 | \mathbf{x}) = h_{\mathbf{w}}(\mathbf{x}) = \sigma(z) = \frac{1}{1 + e^{-z}} $$
+                        <strong>직관적 해석:</strong> $z$ 값이 양의 무한대로 커질수록(즉, 비가 올 증거가 많을수록) $e^{-z}$는 0에 가까워져 확률은 1에 수렴합니다. 반대로 $z$ 값이 음의 무한대로 작아질수록 $e^{-z}$는 무한대로 커져 확률은 0에 수렴합니다.
+                    </li>
+</ol>
+</li>
+<li><strong>결정 경계 (Decision Boundary):</strong>
+<ul>
+<li>모델이 클래스를 0과 1로 구분하는 기준선입니다. 일반적으로 확률이 0.5가 되는 지점을 경계로 삼습니다.</li>
+<li>$P(y=1 | \mathbf{x}) = 0.5$가 되려면 시그모이드 함수의 입력인 $z$가 0이어야 합니다.</li>
+<li>따라서 결정 경계는 $z = \mathbf{w}^T \mathbf{x} + b = 0$으로 정의되는 특성 공간상의 초평면입니다. 모델은 이 경계를 기준으로 한쪽은 클래스 1, 다른 쪽은 클래스 0으로 예측합니다.</li>
+</ul>
+</li>
+</ul>
+<h4>비용 함수와 최적화: 최대우도추정(MLE) 관점</h4>
+<p>모델 학습의 목표는 주어진 학습 데이터를 가장 잘 설명하는 최적의 가중치 $\mathbf{w}$와 편향 $b$를 찾는 것입니다. 이를 위해 모델의 예측이 실제 값과 얼마나 다른지를 정량적으로 측정하는 비용 함수(Cost Function)를 정의하고, 이 함수를 최소화해야 합니다.</p>
+<ul>
+<li><strong>비용 함수 (Cost Function):</strong> 로지스틱 회귀에서는 로그 손실(Log Loss) 또는 이진 교차 엔트로피(Binary Cross-Entropy) 함수를 사용합니다. 이 함수는 최대우도추정(Maximum Likelihood Estimation, MLE) 원리로부터 유도됩니다.
+                $$ J(\mathbf{w}, b) = -\frac{1}{m} \sum_{i=1}^{m} [y^{(i)}\log(h_{\mathbf{w}}(\mathbf{x}^{(i)})) + (1-y^{(i)})\log(1-h_{\mathbf{w}}(\mathbf{x}^{(i)}))] $$
+                <ul>
+<li>$m$: 전체 학습 데이터 샘플 수</li>
+<li>$y^{(i)}$: $i$번째 데이터의 실제 레이블 (0 또는 1)</li>
+<li>$h_{\mathbf{w}}(\mathbf{x}^{(i)})$: $i$번째 데이터에 대한 모델의 예측 확률</li>
+</ul>
+<strong>작동 원리:</strong>
+<ul>
+<li>실제 값이 $y=1$일 때, 비용은 $-\log(h_{\mathbf{w}}(\mathbf{x}))$가 됩니다. 예측 확률 $h_{\mathbf{w}}(\mathbf{x})$가 1에 가까워질수록 로그 값은 0에 수렴하여 비용이 감소합니다.</li>
+<li>실제 값이 $y=0$일 때, 비용은 $-\log(1-h_{\mathbf{w}}(\mathbf{x}))$가 됩니다. 예측 확률 $h_{\mathbf{w}}(\mathbf{x})$가 0에 가까워질수록 $1-h_{\mathbf{w}}(\mathbf{x})$는 1에 가까워져 비용이 감소합니다.</li>
+<li>이처럼 로그 손실 함수는 모델이 정답을 맞힐수록(확신도가 높을수록) 비용을 낮게, 틀릴수록(확신도가 낮을수록) 비용을 기하급수적으로 높게 부여하여 모델이 올바른 방향으로 학습되도록 유도합니다.</li>
+</ul>
+</li>
+<li><strong>최적화 (Optimization):</strong> 비용 함수 $J(\mathbf{w}, b)$를 최소화하는 가중치 $\mathbf{w}$와 편향 $b$를 찾는 과정입니다. 이 비용 함수는 다행히도 볼록 함수(convex function)이므로, 경사 하강법(Gradient Descent)을 통해 전역 최적해(global optimum)를 안정적으로 찾을 수 있습니다.
+                <ul>
+<li><strong>경사 하강법:</strong> 비용 함수의 각 가중치에 대한 편미분 값, 즉 기울기(gradient)를 계산하여, 기울기가 가장 가파르게 감소하는 반대 방향으로 가중치를 점진적으로 업데이트합니다.
+                        $$ w_j := w_j - \alpha \frac{\partial}{\partial w_j} J(\mathbf{w}, b) $$
+                        여기서 $\alpha$는 학습률(learning rate)로, 한 번에 얼마나 이동할지를 결정하는 하이퍼파라미터입니다.
+                    </li>
+</ul>
+</li>
+</ul>
+<div class="quiz">
+<h4>✍️ 예제 퀴즈 2</h4>
+<p><strong>질문:</strong> 로지스틱 회귀 모델을 학습시킨 후, &#39;습도&#39;에 해당하는 가중치($w_{humidity}$)가 양수(+)의 큰 값을 가졌습니다. 이를 어떻게 해석할 수 있을까요?</p>
+<ol>
+<li>습도가 높을수록 비가 올 확률이 낮아진다.</li>
+<li>습도는 비 예측에 아무런 영향을 주지 않는다.</li>
+<li>습도가 높을수록 비가 올 확률(정확히는 로그 오즈비)이 높아진다.</li>
+<li>모델 학습이 잘못되었다. 가중치는 음수여야 한다.</li>
+</ol>
+<div class="answer">
+<p><strong>정답 및 해설:</strong> 3번. 로지스틱 회귀에서 양수 가중치는 해당 특성 변수가 증가할 때 로짓($z = \mathbf{w}^T \mathbf{x} + b$)이 증가함을 의미합니다. 로짓은 오즈비(odds ratio, $\frac{p}{1-p}$)에 로그를 취한 값으로, 이 값이 증가하면 오즈비도 증가하고, 결과적으로 시그모이드 함수를 통해 변환된 확률 값($p$)도 증가합니다. 따라서 습도에 대한 가중치가 양수라는 것은 습도가 높을수록 비가 올 확률이 높아진다고 해석할 수 있습니다.</p>
+</div>
+</div>
+<hr/>
+<h3 id="section-section-8-3">3. 모델 평가: 예측 성능 측정하기</h3>
+<p>모델 학습이 완료되었다면, 이제 그 모델이 얼마나 좋은 성능을 내는지 객관적인 지표로 평가해야 합니다. 특히 분류 문제에서는 단순히 &#39;정확도&#39;만 보는 것이 아니라, 문제의 특성에 따라 다양한 측면에서 성능을 다각도로 분석하는 것이 매우 중요합니다.</p>
+<h4>혼동 행렬 (Confusion Matrix)</h4>
+<p>혼동 행렬은 모델의 예측 결과를 실제 값과 비교하여 표 형태로 정리한 것으로, 모든 분류 평가 지표의 기초가 됩니다. 이 행렬을 통해 모델이 어떤 종류의 실수를 저지르고 있는지 직관적으로 파악할 수 있습니다.</p>
+<table style="width: 60%; margin-left: auto; margin-right: auto; text-align: center;">
+<caption>날씨 예측 문제에서의 혼동 행렬</caption>
+<thead>
+<tr>
+<th colspan="2" rowspan="2"></th>
+<th colspan="2">예측 값 (Predicted)</th>
+</tr>
+<tr>
+<th>비 옴 (1)</th>
+<th>비 안 옴 (0)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th rowspan="2" style="writing-mode: vertical-rl; text-orientation: mixed;">실제 값 (Actual)</th>
+<th>비 옴 (1)</th>
+<td><strong>True Positive (TP)</strong><br/>정답 (맞게 예측)</td>
+<td><strong>False Negative (FN)</strong><br/>Type II Error (예보 실패)</td>
+</tr>
+<tr>
+<th>비 안 옴 (0)</th>
+<td><strong>False Positive (FP)</strong><br/>Type I Error (오보)</td>
+<td><strong>True Negative (TN)</strong><br/>정답 (맞게 예측)</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>True Positive (TP):</strong> 비가 온다고 예측했고, 실제로 비가 왔습니다. (정확한 예측)</li>
+<li><strong>True Negative (TN):</strong> 비가 안 온다고 예측했고, 실제로 비가 안 왔습니다. (정확한 예측)</li>
+<li><strong>False Positive (FP):</strong> 비가 온다고 예측했지만, 실제로는 비가 안 왔습니다. (Type I Error, 불필요한 대비를 유발하는 오보)</li>
+<li><strong>False Negative (FN):</strong> 비가 안 온다고 예측했지만, 실제로는 비가 왔습니다. (Type II Error, 대비하지 못해 피해를 유발하는 예보 실패)</li>
+</ul>
+<h4>주요 평가 지표</h4>
+<ul>
+<li><strong>정확도 (Accuracy):</strong> 전체 샘플 중 모델이 올바르게 예측한 샘플의 비율입니다. 가장 직관적인 지표이지만, 데이터 불균형 상황에서는 모델 성능을 왜곡할 수 있습니다.
+                $$ \text{Accuracy} = \frac{TP + TN}{TP + TN + FP + FN} $$
+                <blockquote><strong>정확도의 함정:</strong> 만약 100일 중 95일은 비가 안 오고 5일만 비가 온다면, 모델이 무조건 &#34;비 안 옴&#34;이라고만 예측해도 정확도는 95%가 됩니다. 이는 모델이 비 오는 패턴을 전혀 학습하지 못했음에도 불구하고 성능이 좋아 보이는 착시를 일으킵니다.</blockquote>
+</li>
+<li><strong>정밀도 (Precision):</strong> 모델이 &#39;비가 온다(Positive)&#39;고 예측한 것들 중에서, 실제로 비가 온 비율입니다. 예측의 &#39;질&#39;을 평가합니다.
+                $$ \text{Precision} = \frac{TP}{TP + FP} $$
+                <strong>중요한 경우:</strong> 스팸 메일 분류. 일반 메일을 스팸으로 분류(FP)하는 비용이 매우 크므로, Positive 예측은 신중해야 합니다.
+            </li>
+<li><strong>재현율 (Recall / Sensitivity):</strong> 실제 비가 온 날들 중에서, 모델이 &#39;비가 온다&#39;고 맞춘 비율입니다. 실제 Positive를 얼마나 잘 &#39;재현&#39;해내는지를 평가합니다.
+                $$ \text{Recall} = \frac{TP}{TP + FN} $$
+                <strong>중요한 경우:</strong> 암 진단, 금융 사기 탐지, 그리고 <strong>재난 예측</strong>. 실제 양성(암, 사기, 비)을 놓치는 것(FN)이 치명적인 결과를 초래하는 경우에 매우 중요합니다.
+            </li>
+<li><strong>F1-Score:</strong> 정밀도와 재현율의 조화 평균입니다. 두 지표가 상충 관계(trade-off)에 있을 때, 이 둘의 균형을 고려하여 모델 성능을 평가하는 데 유용합니다.
+                $$ F1 = 2 \times \frac{\text{Precision} \times \text{Recall}}{\text{Precision} + \text{Recall}} $$
+            </li>
+</ul>
+<h4>ROC 곡선과 AUC</h4>
+<p>ROC 곡선과 AUC는 분류 모델의 임계값(threshold) 변화에 따른 성능을 종합적으로 평가하는 강력한 도구입니다.</p>
+<ul>
+<li><strong>ROC (Receiver Operating Characteristic) Curve:</strong>
+<ul>
+<li><strong>개념:</strong> 로지스틱 회귀의 예측 결과는 0과 1 사이의 확률 값입니다. 이 확률 값을 어떤 임계값(e.g., 0.5) 기준으로 0 또는 1로 분류할지 결정해야 합니다. ROC 곡선은 이 임계값을 0부터 1까지 연속적으로 변화시키면서, 각 임계값에 해당하는 FPR과 TPR의 쌍을 좌표 평면에 그려 만든 곡선입니다.</li>
+<li><strong>FPR (False Positive Rate, 위양성률):</strong> 실제 Negative 중에서 Positive로 잘못 예측한 비율. $ \frac{FP}{FP + TN} $</li>
+<li><strong>TPR (True Positive Rate, 진양성률):</strong> 재현율과 동일. 실제 Positive 중에서 Positive로 예측한 비율. $ \frac{TP}{TP + FN} $</li>
+<li><strong>직관적 해석:</strong> 이상적인 모델은 FPR이 0이면서 TPR이 1인 지점, 즉 좌측 상단 꼭짓점(0, 1)에 가까운 ROC 곡선을 가집니다. 대각선(y=x)은 모델이 무작위로 추측하는 것과 같은 성능을 의미합니다.</li>
+</ul>
+</li>
+<li><strong>AUC (Area Under the Curve):</strong>
+<ul>
+<li><strong>개념:</strong> ROC 곡선 아래의 면적을 계산한 값입니다. 0과 1 사이의 값을 가지며, 1에 가까울수록 모델의 성능이 우수함을 의미합니다.</li>
+<li><strong>해석:</strong> AUC는 &#39;모델이 임의로 선택한 Positive 샘플에 대해 Negative 샘플보다 더 높은 확률 점수를 부여할 확률&#39;로 해석할 수 있습니다. 즉, 임계값에 관계없이 모델이 두 클래스를 얼마나 잘 구별하는지를 나타내는 종합적인 성능 지표입니다.</li>
+</ul>
+</li>
+</ul>
+<div class="chart-container" id="canvas-parent-1" data-sk-source-container="chart" data-sk-source-id="ZM2SQT" data-sk-source-type="web_search">
+<canvas id="rocCurveChart"></canvas>
+</div>
+<script>
+            const rocCtx = document.getElementById('rocCurveChart');
+            new Chart(rocCtx, {
+                type: 'line',
+                data: {
+                    labels: [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0],
+                    datasets: [{
+                        label: '로지스틱 회귀 모델 (AUC = 0.85)',
+                        data: [
+                            {x: 0.0, y: 0.0},
+                            {x: 0.05, y: 0.3},
+                            {x: 0.1, y: 0.55},
+                            {x: 0.18, y: 0.7},
+                            {x: 0.25, y: 0.8},
+                            {x: 0.4, y: 0.9},
+                            {x: 0.5, y: 0.94},
+                            {x: 0.6, y: 0.97},
+                            {x: 0.8, y: 0.99},
+                            {x: 1.0, y: 1.0}
+                        ],
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        fill: true,
+                        tension: 0.4
+                    }, {
+                        label: '랜덤 추측 (AUC = 0.50)',
+                        data: [{x: 0, y: 0}, {x: 1, y: 1}],
+                        borderColor: 'rgba(150, 150, 150, 1)',
+                        borderDash: [5, 5],
+                        fill: false,
+                        pointRadius: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            type: 'linear',
+                            position: 'bottom',
+                            title: {
+                                display: true,
+                                text: 'False Positive Rate (FPR)'
+                            },
+                            min: 0,
+                            max: 1
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'True Positive Rate (TPR)'
+                            },
+                            min: 0,
+                            max: 1
+                        }
+                    },
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'ROC 곡선 예시',
+                            font: { size: 18 }
+                        },
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        </script>
+<div class="quiz">
+<h4>✍️ 예제 퀴즈 3</h4>
+<p><strong>질문:</strong> 홍수 예방을 위한 강수 예측 모델을 개발하고 있습니다. 이 모델에서 가장 중요하게 고려해야 할 평가 지표는 무엇일까요?</p>
+<ol>
+<li>정확도 (Accuracy): 전체적으로 얼마나 맞췄는지가 가장 중요하다.</li>
+<li>정밀도 (Precision): &#39;비 온다&#39;는 예보가 틀리면 신뢰도가 떨어지므로 중요하다.</li>
+<li>재현율 (Recall): 실제 비가 오는 상황을 놓치면 큰 피해로 이어지므로 가장 중요하다.</li>
+<li>FPR (False Positive Rate): 비가 안 오는데 온다고 하는 오보를 줄이는 것이 중요하다.</li>
+</ol>
+<div class="answer">
+<p><strong>정답 및 해설:</strong> 3번. 홍수 예방 시나리오에서는 &#39;비가 오지 않는다&#39;고 잘못 예보하여(FN, False Negative) 시민들이나 당국이 대비하지 못하는 경우가 가장 치명적인 결과를 낳습니다. 이러한 예보 실패는 막대한 인명 및 재산 피해로 이어질 수 있습니다. 따라서 실제 비가 오는 경우를 단 하나라도 놓치지 않도록 하는 것, 즉 재현율(Recall)을 극대화하는 것이 모델 평가의 가장 중요한 기준이 됩니다.</p>
+</div>
+</div>
+<hr/>
+<h3 id="section-section-8-4">4. 결과 해석 및 시각화: PCA 활용</h3>
+<p>모델의 성능을 숫자로 확인하는 것을 넘어, 모델이 데이터를 어떻게 바라보고 결정을 내리는지 시각적으로 이해하는 것은 매우 중요합니다. 특히 날씨 데이터처럼 다수의 변수(고차원)를 다룰 때, 주성분 분석(PCA)은 데이터의 구조를 저차원 공간에 시각화하여 직관적인 통찰을 얻게 해주는 강력한 도구입니다.</p>
+<h4>주성분 분석 (PCA, Principal Component Analysis) 개요</h4>
+<ul>
+<li><strong>핵심 아이디어:</strong> PCA는 데이터에 내재된 패턴을 찾아, 데이터의 분산(variance)을 가장 잘 보존하는 새로운 축(주성분, Principal Components)들을 찾는 기법입니다. 본질적으로는 데이터의 좌표계를 회전시켜, 정보량이 가장 많은 축을 순서대로 찾아내는 것과 같습니다. 이를 통해 고차원 데이터를 정보 손실을 최소화하면서 저차원으로 축소하거나 시각화할 수 있습니다.</li>
+<li><strong>수학적 원리:</strong>
+<ol>
+<li><strong>공분산 행렬 계산:</strong> 데이터 특성들 간의 선형 관계를 나타내는 공분산 행렬(Covariance Matrix) $\Sigma$를 계산합니다. 공분산 행렬의 대각 원소는 각 특성의 분산을, 비대각 원소는 두 특성 간의 공분산을 의미합니다.</li>
+<li><strong>고유값 분해 (Eigen-decomposition):</strong> 공분산 행렬 $\Sigma$를 고유값(Eigenvalue)과 고유벡터(Eigenvector)로 분해합니다.
+                        $$ \Sigma \mathbf{v} = \lambda \mathbf{v} $$
+                    </li>
+<li><strong>고유벡터($\mathbf{v}$):</strong> 데이터의 분산이 가장 큰 방향을 나타내는 새로운 축, 즉 주성분이 됩니다. 이 벡터들은 서로 직교합니다.</li>
+<li><strong>고유값($\lambda$):</strong> 해당 고유벡터 방향으로 데이터가 얼마나 퍼져있는지, 즉 분산의 크기를 나타냅니다. 고유값이 클수록 해당 주성분이 더 많은 정보를 담고 있음을 의미합니다.</li>
+<li><strong>주성분 선택:</strong> 계산된 고유값을 큰 순서대로 정렬하고, 가장 큰 고유값에 해당하는 고유벡터부터 차례로 주성분(PC1, PC2, ...)으로 선택합니다.</li>
+</ol>
+</li>
+</ul>
+<figure>
+<figcaption>PCA의 핵심이 되는 고유값 방정식. 행렬 A(공분산 행렬)에 고유벡터 x를 곱한 결과는 고유벡터 x를 스칼라배(고유값 λ)한 것과 같다</figcaption>
+</figure>
+<div class="chart-container" id="canvas-parent-2" style="height: 400px;">
+<canvas id="pcaVarianceChart"></canvas>
+</div>
+<script>
+            const pcaCtx = document.getElementById('pcaVarianceChart');
+            new Chart(pcaCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['PC1', 'PC2', 'PC3', 'PC4', 'PC5', '...'],
+                    datasets: [{
+                        label: '주성분별 설명된 분산 비율 (%)',
+                        data: [45, 25, 12, 8, 4, 6],
+                        backgroundColor: [
+                            'rgba(54, 162, 235, 0.6)',
+                            'rgba(54, 162, 235, 0.6)',
+                            'rgba(54, 162, 235, 0.6)',
+                            'rgba(54, 162, 235, 0.6)',
+                            'rgba(54, 162, 235, 0.6)',
+                            'rgba(201, 203, 207, 0.6)'
+                        ],
+                        borderColor: [
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(201, 203, 207, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: '설명된 분산 비율 (%)'
+                            }
+                        }
+                    },
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: '주성분 분석(PCA)의 설명된 분산 예시',
+                            font: { size: 18 }
+                        },
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+        </script>
+<h4>PCA를 이용한 분류 결과 시각화</h4>
+<ul>
+<li><strong>목표:</strong> 습도, 기온, 기압 등 수많은 날씨 관련 특성(고차원)을 단 2개의 주성분(2차원)으로 압축하여, 로지스틱 회귀 모델이 &#39;비 옴&#39;과 &#39;비 안 옴&#39; 클래스를 어떻게 구분하는지 2차원 평면에 시각화합니다.</li>
+<li><strong>시각화 단계:</strong>
+<ol>
+<li>학습에 사용된 특성 데이터(X)에 PCA를 적용합니다. 시각화를 위해 <code>n_components=2</code>로 설정하여 2개의 주성분만 추출합니다.</li>
+<li>원본 데이터를 첫 번째 주성분(PC1)과 두 번째 주성분(PC2)을 축으로 하는 새로운 2차원 좌표계로 변환(projection)합니다.</li>
+<li>PC1을 x축, PC2를 y축으로 하는 2차원 산점도(scatter plot)를 그립니다.</li>
+<li>각 데이터 포인트를 실제 <code>RainTomorrow</code> 값(0 또는 1)에 따라 다른 색상으로 표시합니다.</li>
+<li>(심화) 학습된 로지스틱 회귀 모델의 결정 경계를 이 2차원 평면에 함께 표시하여 모델이 어떻게 클래스를 분리하는지 직접 확인합니다.</li>
+</ol>
+</li>
+<li><strong>시각화 결과 해석:</strong>
+<ul>
+<li>두 클래스(서로 다른 색상의 점들)가 명확하게 분리되어 보인다면, 데이터가 선형적으로 잘 구분될 수 있는 구조를 가졌음을 의미합니다. 이 경우 로지스틱 회귀와 같은 선형 모델이 좋은 성능을 보일 가능성이 높습니다.</li>
+<li>두 클래스가 많이 겹쳐서 구분이 어렵다면, 데이터가 복잡한 비선형 구조를 가졌거나, 현재 특성만으로는 두 클래스를 구분하기 어렵다는 것을 시사합니다. 이는 모델의 성능이 낮은 이유를 직관적으로 설명해주며, 비선형 모델(e.g., SVM with Kernel, Decision Tree)을 고려하거나 추가적인 특성 공학이 필요함을 암시합니다.</li>
+</ul>
+</li>
+</ul>
+<figure>
+<img alt="PCA를 이용한 2차원 시각화 예시" src="https://picture-search.tiangong.cn/image/rt/2f1cc8fa4bc3486606191c2759e0c566.jpg" style="max-height: 280px; max-width: 100%;"/>
+<figcaption>고차원 데이터를 2개의 주성분(Principal Component 1, 2)으로 축소하여 시각화한 예시. 각 색상은 다른 클래스를 나타내며, 클래스 간의 분리 정도를 직관적으로 파악할 수 있다</figcaption>
+</figure>
+<div class="quiz">
+<h4>✍️ 예제 퀴즈 4</h4>
+<p><strong>질문:</strong> 날씨 데이터 특성들을 PCA로 변환하여 2차원 산점도를 그렸더니, &#39;비 옴&#39;과 &#39;비 안 옴&#39; 클래스의 점들이 거의 겹쳐서 구분되지 않았습니다. 이 결과로부터 무엇을 추론할 수 있을까요?</p>
+<ol>
+<li>PCA가 잘못 계산되었다. 항상 완벽하게 분리되어야 한다.</li>
+<li>로지스틱 회귀 모델의 성능이 매우 뛰어날 것이다.</li>
+<li>데이터의 분산을 가장 잘 설명하는 두 주성분만으로는 두 클래스를 구분하기 어렵다. 즉, 데이터의 선형 분리 가능성이 낮다.</li>
+<li>데이터 전처리가 잘못되었으므로 처음부터 다시 해야 한다.</li>
+</ol>
+<div class="answer">
+<p><strong>정답 및 해설:</strong> 3번. PCA 시각화는 데이터의 내재적 구조를 보여주는 강력한 도구입니다. 만약 데이터의 분산을 가장 잘 설명하는 주성분 공간(PC1, PC2)에서조차 클래스가 잘 분리되지 않는다면, 이는 해당 특성들만으로는 선형 모델(로지스틱 회귀 등)이 두 클래스를 명확히 구분하는 결정 경계를 찾기 어렵다는 것을 의미합니다. 이는 모델의 성능 한계를 시사하며, 문제 해결을 위해 비선형 모델을 고려하거나, 클래스 분리에 더 도움이 되는 새로운 특성을 발굴하는 등의 추가적인 노력이 필요함을 암시합니다.</p>
+</div>
+</div>
+<hr/>
+<h3 id="section-section-8-5">총정리 및 다음 단계</h3>
+<h4>Capstone 프로젝트 요약</h4>
+<p>이번 캡스톤 프로젝트를 통해 우리는 머신러닝 프로젝트의 전체 생명주기를 경험했습니다. 이는 단순히 알고리즘을 적용하는 것을 넘어, 문제 해결을 위한 체계적인 접근 방식을 배우는 과정이었습니다.</p>
+<ul>
+<li>실제 날씨 데이터를 통해 <strong>문제 정의 → 데이터 전처리 → 모델 학습 → 성능 평가 → 결과 해석 및 시각화</strong>로 이어지는 머신러닝 전체 파이프라인을 체계적으로 수행했습니다.</li>
+<li><strong>로지스틱 회귀</strong>를 이용해 &#39;내일의 강수 여부&#39;라는 이진 분류 문제를 해결하고, 학습된 모델의 가중치(계수)가 각 날씨 변수와 강수 확률 간의 관계를 어떻게 설명하는지 해석했습니다.</li>
+<li><strong>혼동 행렬</strong>을 기반으로 정확도, 정밀도, 재현율, F1-Score 등 다양한 평가 지표의 의미를 이해하고, 문제의 특성(재난 예측)에 따라 재현율이 왜 중요한지를 파악했습니다. 또한, <strong>ROC-AUC</strong>를 통해 모델의 종합적인 판별 능력을 평가하는 법을 배웠습니다.</li>
+<li><strong>PCA</strong>를 활용하여 수많은 날씨 변수라는 고차원 데이터를 2차원으로 축소하여, 모델의 결정 경계와 데이터의 분포를 시각적으로 확인했습니다. 이를 통해 모델의 성능 한계를 직관적으로 이해하고 개선 방향을 모색할 수 있었습니다.</li>
+</ul>
+<h4>향후 학습 방향</h4>
+<p>본 프로젝트는 머신러닝 여정의 시작점입니다. 여기서 얻은 경험을 바탕으로 다음과 같은 방향으로 학습을 심화해 나갈 수 있습니다.</p>
+<ul>
+<li><strong>모델 개선:</strong> 날씨 예측과 같이 복잡한 현상은 단순한 선형 관계로 설명하기 어려울 수 있습니다. 결정 트리(Decision Tree), 랜덤 포레스트(Random Forest), 그래디언트 부스팅(Gradient Boosting), 그리고 심층 신경망(Deep Neural Networks)과 같은 더 복잡한 비선형 모델을 사용하여 성능을 비교하고 개선해볼 수 있습니다. </li>
+<li><strong>특성 공학 심화:</strong> 시간과 관련된 변수(계절, 요일, 월 등)나 지리적 위치 정보(위도, 경도, 고도)를 모델에 추가하여 예측 성능을 향상시킬 수 있습니다. 또한, 이동 평균(moving average)과 같은 시계열 특성을 생성하는 것도 좋은 접근법입니다.</li>
+<li><strong>하이퍼파라미터 튜닝:</strong> 로지스틱 회귀의 규제(Regularization) 강도(C)나, 다른 모델들의 다양한 하이퍼파라미터(e.g., 트리의 깊이, 학습률)를 체계적으로 조정(Grid Search, Random Search 등)하여 과적합을 방지하고 모델의 일반화 성능을 최적화할 수 있습니다.</li>
+</ul>
+<div class="reference-container">
+			<div class="reference-section">
+				<h3 class="reference-title">참고 자료</h3>
+				<div class="reference-list">
+					
+					<div class="reference-item">
+						<span class="reference-number">[1]</span>
+						<div class="reference-content">
+							<div class="reference-text-container">
+								<span class="reference-text">weather-prediction · GitHub Topics</span>
+									
+							</div>
+							<a href="https://github.com/topics/weather-prediction" class="reference-link" target="_blank">
+								https://github.com/topics/weather-prediction
+							</a>
+						</div>
+					</div>
+					
+					<div class="reference-item">
+						<span class="reference-number">[2]</span>
+						<div class="reference-content">
+							<div class="reference-text-container">
+								<span class="reference-text">How to explain the ROC curve and ROC AUC score? - Evidently AI</span>
+									
+							</div>
+							<a href="https://www.evidentlyai.com/classification-metrics/explain-roc-curve" class="reference-link" target="_blank">
+								https://www.evidentlyai.com/classification-metrics/explain-roc-curve
+							</a>
+						</div>
+					</div>
+					
+					<div class="reference-item">
+						<span class="reference-number">[3]</span>
+						<div class="reference-content">
+							<div class="reference-text-container">
+								<span class="reference-text">Predictive classification and understanding of weather ...</span>
+									
+							</div>
+							<a href="https://www.sciencedirect.com/science/article/abs/pii/S0968090X21001388" class="reference-link" target="_blank">
+								https://www.sciencedirect.com/science/article/abs/pii/S0968090X21001388
+							</a>
+						</div>
+					</div>
+					
+				</div>
+			</div>
+		</div></div>
+
+</body></html>

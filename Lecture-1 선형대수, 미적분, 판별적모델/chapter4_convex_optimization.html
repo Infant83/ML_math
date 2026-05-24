@@ -1,0 +1,640 @@
+<!DOCTYPE html><html lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>머신러닝 수학적 기초와 판별 모형의 이해 - 제 4장</title>
+<style>.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 24px 40px;
+    background-color: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    }
+.chart-container {
+    position: relative;
+    margin: 3em auto;
+    max-width: 700px;
+    min-height: 200px;
+    max-height: 400px;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+    aspect-ratio: 7/5;}
+h5 {
+    font-size: 16px;
+    }
+body {
+    font-family: "Georgia", "Times New Roman", "serif";
+    line-height: 1.8;
+    color: #333;
+    background-color: #fdfdfd;
+    margin: 0 24px 0 24px;
+    padding: 0;
+    font-size: 16px;
+    max-width: None;
+    }
+h1, h2, h3, h4 {
+    font-family: "Helvetica Neue", "Helvetica", "Arial", "sans-serif";
+    color: #222;
+    line-height: 1.4;
+    font-size: 28px;
+    margin-top: 24px;
+    margin-bottom: 20px;
+    }
+h1 {
+    font-size: 28px;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    margin-top: 24px;
+    }
+h2 {
+    font-size: 22px;
+    margin-top: 2em;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 8px;
+    }
+h3 {
+    font-size: 20px;
+    margin-top: 1.5em;
+    }
+p, ul, ol {
+    font-size: 18px;
+    margin-bottom: 1.2em;
+    }
+ul, ol {
+    padding-left: 1.5em;
+    }
+li {
+    margin-bottom: 0.5em;
+    }
+code {
+    font-family: "Menlo", "Monaco", "Courier New", "monospace";
+    background-color: #f5f5f5;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.9em;
+    }
+pre {
+    background-color: #f5f5f5;
+    padding: 15px;
+    border-radius: 5px;
+    overflow-x: auto;
+    font-size: 14px;
+    }
+blockquote {
+    border-left: 4px solid #ccc;
+    padding-left: 20px;
+    margin-left: 0;
+    font-style: italic;
+    color: #666;
+    }
+a {
+    color: #07c;
+    text-decoration: none;
+    }
+a:hover {
+    text-decoration: underline;
+    }
+figure {
+    margin: 2em 0;
+    text-align: center;
+    }
+img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    display: block;
+    overflow: hidden;
+    max-height: 280px;
+    margin: 1em auto;
+    }
+figcaption {
+    font-size: 14px;
+    color: #666;
+    margin-top: 10px;
+    font-style: italic;
+    }
+.key-points {
+    background-color: #f0f7ff;
+    border: 1px solid #cce5ff;
+    padding: 20px;
+    margin: 2em 0;
+    border-radius: 5px;
+    }
+.key-points h4 {
+    margin-top: 0;
+    color: #004085;
+    }
+.math-formula {
+    font-family: "Latin Modern Math", "Cambria Math", "serif";
+    font-size: 1.1em;
+    text-align: center;
+    padding: 1em;
+    margin: 1em auto;
+    overflow-x: auto;
+    }
+        .chart-container canvas {
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: contain;
+}
+
+@media only screen and (max-device-width: 768px) {
+            body {
+                padding: 0;
+                margin: 0;
+                font-family: PingFang SC;
+                font-size: 15px;
+                line-height: 1.5;
+            }
+
+            .container {
+                padding: 0;
+                margin: 16px 20px 30px;
+                box-shadow: none;
+            }
+
+            h1,
+            h2,
+            h3,
+            h4 {
+                font-family: PingFang SC;
+            }
+
+            h1 {
+                font-size: 1.87em;
+                line-height: 1.6;
+                margin-bottom: 0.5em;
+                text-align: center;
+            }
+
+            h2 {
+                font-size: 1.6em;
+                font-weight: 600;
+                margin-top: 1.3em;
+                margin-bottom: 0.8em;
+                border-bottom: 1px solid #eee;
+                padding-bottom: 0.5em;
+            }
+
+            h3 {
+                font-size: 1.2em;
+                font-weight: 600;
+                margin-top: 1em;
+                margin-bottom: 0.6em;
+            }
+
+            h4 {
+                font-size: 1.1em;
+                font-weight: 500;
+                margin-top: 1em;
+                margin-bottom: 0.5em;
+                font-style: normal;
+            }
+
+            h5 {
+                font-size: 1em;
+                font-weight: 500;
+                margin-bottom: 1.2em;
+            }
+
+            ul,
+            ol {
+                font-size: 1em; /* Equivalent to 17.6px if base is 16px */
+                font-weight: 400;
+                margin-bottom: 1.2em;
+                line-height: 1.8;
+            }
+
+            p {
+                font-size: 1em;
+                line-height: 1.8; /* Equivalent to 17.6px if base is 16px */
+                font-weight: 400;
+                margin-top: 0.8em;
+                margin-bottom: 0.8em;
+            }
+
+            blockquote {
+                padding: 1em 1.2em;
+
+            p {
+                margin: 0;
+            }
+        }
+
+        figcaption {
+            margin-top: 0.5em;
+            font-size: 0.8em; /* Equivalent to 17.6px if base is 16px */
+            font-weight: 400;
+            text-align: center;
+            font-style: normal;
+            color: #7F8896;
+        }
+
+        img {
+            display: block;
+            overflow: hidden;
+            max-width: 100%;
+            max-height: 335px;
+            margin: 1em auto;
+            border-radius: 8px;
+        }
+        }</style>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link rel="stylesheet" href="https://static.skywork.ai/fe/skywork-site-assets/styles/doc_reference_style.css?v=1956689854214287360"/></head>
+<body>
+<div class="container">
+<h1 id="section-1">제 4장: 제약과 볼록 최적화 (Constraints and Convex Optimization)</h1>
+<nav id="table-of-contents">
+<h2 id="section-1">목차</h2>
+<ul>
+<li><a href="#section-intro">최적화 문제의 새로운 지평: 제약과 볼록성</a></li>
+<li><a href="#section-sec-4-1">4.1 제약 최적화: 라그랑주 승수법, KKT 조건, 그리고 투영법</a>
+<ul>
+<li><a href="#section-sec-4-1-1">4.1.1 등식 제약과 라그랑주 승수법 (Equality Constraints &amp; Lagrange Multipliers)</a></li>
+<li><a href="#section-sec-4-1-2">4.1.2 부등식 제약과 KKT 조건 (Inequality Constraints &amp; KKT Conditions)</a></li>
+<li><a href="#section-sec-4-1-3">4.1.3 투영 경사 하강법 (Projected Gradient Descent)</a></li>
+</ul>
+</li>
+<li><a href="#section-sec-4-2">4.2 볼록성: 최적화의 유일 해를 보장하는 열쇠</a>
+<ul>
+<li><a href="#section-sec-4-2-1">4.2.1 볼록 집합과 볼록 함수 (Convex Sets &amp; Convex Functions)</a></li>
+<li><a href="#section-sec-4-2-2">4.2.2 볼록성 판정법 (How to Check for Convexity)</a></li>
+<li><a href="#section-sec-4-2-3">4.2.3 볼록 최적화 문제의 표준형 (Standard Form of Convex Problems)</a></li>
+<li><a href="#section-sec-4-2-4">4.2.4 사례 연구 (Case Studies)</a></li>
+</ul>
+</li>
+<li><a href="#section-summary">요약 및 다음 장으로의 연결</a></li>
+</ul>
+</nav>
+<h2 id="section-intro">최적화 문제의 새로운 지평: 제약과 볼록성</h2>
+<p>이전 챕터에서 우리는 경사 하강법과 같은 알고리즘을 통해 함수의 최솟값을 찾는 여정을 떠났습니다. 이는 아무런 제약 없이 광활한 공간을 탐험하며 가장 낮은 지점을 찾는 것과 같았습니다. 하지만 현실 세계의 문제들은 대부분 &#39;제약(Constraint)&#39;이라는 울타리 안에서 해답을 찾아야 합니다. 예를 들어, 서포트 벡터 머신(SVM)은 두 클래스 사이의 &#39;마진(margin)&#39;을 최대화해야 하지만, 모든 데이터 포인트는 그 마진 바깥에 존재해야 한다는 제약을 따릅니다. 한정된 예산 내에서 최대의 광고 효과를 내거나, 특정 영양소 요구량을 만족시키면서 식단 비용을 최소화하는 문제 역시 제약 최적화의 대표적인 예입니다.</p>
+<p>이번 장의 목표는 두 가지 핵심 질문에 답하는 것입니다:</p>
+<ol>
+<li><strong>&#34;제약이 있는 상황에서 최적의 해는 어떻게 찾을 수 있는가?&#34;</strong></li>
+<li><strong>&#34;우리가 찾은 해가 수많은 국소 최적해(local minimum) 중 하나가 아니라, 정말 &#39;최선&#39;의 해(global minimum)임을 어떻게 보장할 수 있는가?&#34;</strong></li>
+</ol>
+<p>첫 번째 질문에 답하기 위해 우리는 **라그랑주 승수법(Lagrange Multiplier Method)**과 이를 일반화한 **카루시-쿤-터커(Karush-Kuhn-Tucker, KKT) 조건**을 탐구할 것입니다. 이 강력한 도구들은 제약 조건을 목적 함수에 통합하여, 복잡한 제약 문제를 우리가 다룰 수 있는 형태로 변환해 줍니다. 강의의 1부에서는 먼저 등식(=) 제약에서 시작하여 라그랑주 승수법의 기하학적 의미를 파악하고, 이후 부등식(≤, ≥) 제약으로 확장하여 KKT 조건의 각 요소가 어떤 역할을 하는지 직관적으로 이해할 것입니다.</p>
+<p>두 번째 질문에 대한 답은 **&#39;볼록성(Convexity)&#39;**이라는 아름다운 수학적 성질에 있습니다. 만약 우리가 푸는 문제가 &#39;볼록 최적화 문제&#39;라는 것을 보일 수 있다면, 우리는 경사 하강법과 같은 간단한 방법으로 찾은 해가 유일한 전역 최적해임을 보장받을 수 있습니다. 이는 마치 어떤 계곡이든 바닥은 단 하나뿐이어서, 아래로 내려가기만 하면 반드시 가장 낮은 지점에 도달할 수 있다는 것과 같습니다. 강의의 2부에서는 볼록 집합과 볼록 함수의 정의부터 시작하여, 특정 함수가 볼록한지 판별하는 방법, 그리고 로지스틱 회귀와 같은 주요 머신러닝 모델이 왜 안정적으로 최적해를 찾을 수 있는지 수학적으로 증명하며 볼록성의 중요성을 체감하게 될 것입니다.</p>
+<h2 id="section-sec-4-1">4.1 제약 최적화: 라그랑주 승수법, KKT 조건, 그리고 투영법</h2>
+<p>핵심 질문: <strong>목적 함수를 최소화(또는 최대화)하되, 특정 조건을 반드시 만족해야 한다면 최적점은 어디에 있을까?</strong> 이 질문은 머신러닝 모델이 특정 규칙이나 한계 내에서 최상의 성능을 내도록 학습시키는 과정의 본질을 담고 있습니다.</p>
+<h3 id="section-sec-4-1-1">4.1.1 등식 제약과 라그랑주 승수법 (Equality Constraints &amp; Lagrange Multipliers)</h3>
+<p>가장 단순한 형태의 제약 최적화는 등식 제약, 즉 <code>g(x) = c</code>라는 조건을 만족시키면서 목적 함수 <code>f(x)</code>를 최적화하는 문제입니다.</p>
+<h4>직관적 이해: 기하학적 접근</h4>
+<p>2차원 공간에서 목적 함수 <code>f(x, y)</code>의 등고선(contour)과 제약 조건 <code>g(x, y) = c</code>가 정의하는 곡선을 상상해 봅시다. 우리는 <code>g(x, y) = c</code>라는 길을 벗어나지 않으면서 <code>f(x, y)</code>의 값을 최대한 높이거나(최대화) 낮춰야(최소화) 합니다. 최적점은 어디에서 발생할까요?</p>
+<p>만약 우리가 제약 곡선 위를 움직일 때 여전히 <code>f</code>의 값을 더 개선할 수 있다면, 그 지점은 최적점이 아닙니다. 최적점은 더 이상 <code>f</code>의 값을 개선할 수 없는 지점, 즉 <code>f</code>의 등고선이 제약 곡선 <code>g</code>에 접하는(tangent) 지점에서 발생합니다. 기하학적으로 &#39;접한다&#39;는 것은 두 곡선의 법선 벡터(normal vector), 즉 그래디언트(gradient)가 서로 평행하다는 의미입니다. <em data-ref-id="1956689843195850752"></em></p>
+<div class="math-formula">
+            ∇f(x, y) = λ ∇g(x, y)
+        </div>
+<p>여기서 <code>λ</code>(람다)는 두 그래디언트 벡터의 크기 비율을 맞춰주는 스칼라 값으로, 이것이 바로 **라그랑주 승수(Lagrange Multiplier)**입니다. 이는 마치 산의 특정 등산로(제약 조건)를 따라 이동하는 등산가가 도달할 수 있는 가장 높거나 낮은 지점을 찾는 것과 같습니다. 그 지점에서는 등산로의 방향과 등고선의 방향이 수직이 되어 더 이상 고도를 높이거나 낮출 수 없습니다.</p>
+<figure>
+<img alt="이차 함수의 등고선" src="https://picture-search.tiangong.cn/croped/images/5b16dd5ab276adee582aca58f5137e71_crop.jpg" style="max-height: 280px; max-width: 100%;"/>
+<figcaption>목적 함수 f(x)의 등고선(타원)과 제약 조건 g(x)=c(선, 미표시)가 접하는 지점에서 최적해가 발생한다. 이 지점에서 두 함수의 그래디언트는 평행하다.</figcaption>
+</figure>
+<h4>수학적 이론: 라그랑지안 함수</h4>
+<p>이 기하학적 직관을 수학적으로 다루기 위해 **라그랑지안 함수(Lagrangian Function)** <code>L</code>을 다음과 같이 정의합니다.</p>
+<div class="math-formula">
+            L(x, λ) = f(x) - λ(g(x) - c)
+        </div>
+<p>놀랍게도, 이 새로운 함수의 그래디언트를 0으로 만드는 점을 찾는 것이 원래의 제약 최적화 문제를 푸는 것과 동일한 해를 제공합니다. 라그랑지안 함수의 그래디언트를 계산해 보면 그 이유를 알 수 있습니다.</p>
+<div class="math-formula">
+            ∇L(x, λ) = 0  ⇔ 
+            <begin{cases} &="" -="" <="" \\="" \end{cases}="" \text{(1)="" \text{(2)="" c)="0" constraint}="" div="" stationarity}="" λ∇g(x)="0" ∂l="" ∂x="∇f(x)" ∂λ="-(g(x)">
+<p>첫 번째 식 <code>∂L/∂x = 0</code>은 우리가 찾던 그래디언트 평행 조건<code>∇f(x) = λ∇g(x)</code>)과 정확히 일치합니다. 두 번째 식 <code>∂L/∂λ = 0</code>은 원래의 제약 조건<code>g(x) = c</code>)을 그대로 복원합니다. 따라서 우리는 제약이 있는 어려운 문제를 제약이 없는 라그랑지안 함수의 최적화 문제로 변환할 수 있습니다. <em data-ref-id="1956689843195850753"></em></p>
+<h4>사례: 원둘레 제약 하에서의 최적화</h4>
+<p><strong>문제:</strong> 제약 조건 <code>g(x, y) = x² + y² = 1</code> 하에서 목적 함수 <code>f(x, y) = x + y</code>를 최대화하시오.</p>
+<ol>
+<li><strong>라그랑지안 함수 구성:</strong><br/>
+<code>L(x, y, λ) = (x + y) - λ(x² + y² - 1)</code></li>
+<li><strong>각 변수에 대해 편미분하여 0으로 설정:</strong><br/>
+<code>∂L/∂x = 1 - 2λx = 0  ⇒  x = 1/(2λ)</code><br/>
+<code>∂L/∂y = 1 - 2λy = 0  ⇒  y = 1/(2λ)</code><br/>
+<code>∂L/∂λ = -(x² + y² - 1) = 0  ⇒  x² + y² = 1</code></li>
+<li><strong>연립방정식 풀이:</strong><br/>
+                위의 <code>x</code>와 <code>y</code>를 제약 조건 식에 대입하면,<br/>
+<code>(1/(2λ))² + (1/(2λ))² = 1  ⇒  2/(4λ²) = 1  ⇒  λ² = 1/2  ⇒  λ = ±1/√2</code></li>
+<li><strong>최적해 후보 도출:</strong><br/>
+                - If <code>λ = 1/√2</code>, then <code>x = 1/√2</code>, <code>y = 1/√2</code>. 이때 <code>f(x, y) = 2/√2 = √2</code> (최댓값).<br/>
+                - If <code>λ = -1/√2</code>, then <code>x = -1/√2</code>, <code>y = -1/√2</code>. 이때 <code>f(x, y) = -2/√2 = -√2</code> (최솟값).</li>
+</ol>
+<p>따라서 최댓값은 <code>√2</code>이며, 최적점은 <code>(1/√2, 1/√2)</code>입니다. 이 지점에서 목적 함수의 그래디언트 <code>∇f = (1, 1)</code>이고 제약 함수의 그래디언트 <code>∇g = (2x, 2y) = (√2, √2)</code>가 되어, <code>∇f = (1/√2)∇g</code> 관계가 성립함을 확인할 수 있습니다.</p>
+<h3 id="section-sec-4-1-2">4.1.2 부등식 제약과 KKT 조건 (Inequality Constraints &amp; KKT Conditions)</h3>
+<p>현실의 문제는 &#39;같다&#39;는 등식 제약보다 &#39;작거나 같다(≤)&#39; 또는 &#39;크거나 같다(≥)&#39;는 부등식 제약으로 표현되는 경우가 더 많습니다. 예를 들어, &#39;비용은 100만원 이하&#39;, &#39;오차율은 5% 이내&#39;와 같은 조건들입니다. 부등식 제약 <code>g(x) ≤ 0</code>이 있는 경우, 최적해는 두 가지 상황 중 하나에 놓입니다.</p>
+<ul>
+<li><strong>제약 영역 내부 (Interior Solution):</strong> 최적해가 제약 조건에 영향을 받지 않는 영역(<code>g(x) &lt; 0</code>)에 존재합니다. 이 경우 제약은 사실상 없는 것과 같으므로, 단순히 <code>∇f(x) = 0</code>인 지점을 찾으면 됩니다.</li>
+<li><strong>제약 경계 위 (Boundary Solution):</strong> 최적해가 제약 경계선(<code>g(x) = 0</code>) 위에 존재합니다. 이 경우는 등식 제약 문제와 동일하게 취급할 수 있습니다.</li>
+</ul>
+<p>이 두 가지 경우를 하나의 틀로 통합한 것이 바로 **카루시-쿤-터커(KKT) 조건**입니다. <em data-ref-id="1956689843195850756"></em></p>
+<h4>수학적 이론: KKT 조건의 네 가지 요소</h4>
+<p>최적화 문제 <code>minimize f(x)</code> subject to <code>gᵢ(x) ≤ 0</code> (for i=1,...,m)에서, 어떤 점 <code>x*</code>가 최적해라면 다음의 KKT 조건들을 만족해야 합니다 (일부 정규성 조건 하에).</p>
+<ol>
+<li><strong>정류성 (Stationarity):</strong> <code>∇f(x*) + Σμᵢ∇gᵢ(x*) = 0</code><br/>
+            라그랑지안 함수의 그래디언트가 0이 되어야 한다는 조건입니다. 등식 제약의 그래디언트 평행 조건과 유사하지만, 여러 부등식 제약의 그래디언트들을 조합하여 표현됩니다.</li>
+<li><strong>원시 타당성 (Primal Feasibility):</strong> <code>gᵢ(x*) ≤ 0</code> for all i<br/>
+            단순히 해가 모든 제약 조건을 만족해야 한다는 의미입니다.</li>
+<li><strong>쌍대 타당성 (Dual Feasibility):</strong> <code>μᵢ ≥ 0</code> for all i<br/>
+            부등식 제약에 해당하는 라그랑주 승수(쌍대 변수, dual variable) <code>μᵢ</code>는 항상 0 이상이어야 합니다. 이는 목적 함수 <code>f</code>의 그래디언트와 제약 함수 <code>g</code>의 그래디언트가 서로 반대 방향을 가리켜야 함을 의미합니다. (최소화 문제에서 <code>f</code>를 줄이는 방향은 제약 영역의 안쪽을 향해야 하므로)</li>
+<li><strong>상보성 여유 (Complementary Slackness):</strong> <code>μᵢ * gᵢ(x*) = 0</code> for all i<br/>
+<strong>이것이 KKT 조건의 핵심입니다.</strong> 이 간단한 곱셈식은 위에서 언급한 두 가지 경우(내부 해 vs. 경계 해)를 우아하게 통합합니다.
+                <ul>
+<li>만약 제약이 활성화(active)되어 경계에 있다면 (<code>gᵢ(x*) = 0</code>), 승수 <code>μᵢ</code>는 0보다 큰 값을 가질 수 있습니다 (<code>μᵢ ≥ 0</code>).</li>
+<li>만약 제약이 비활성화(inactive)되어 내부에 있다면 (<code>gᵢ(x*) &lt; 0</code>), 이 등식을 만족시키기 위해 승수 <code>μᵢ</code>는 반드시 0이어야 합니다. <code>μᵢ=0</code>이면 정류성 조건에서 해당 제약 항(<code>μᵢ∇gᵢ</code>)이 사라지므로, 그 제약이 최적화에 영향을 주지 않는다는 직관과 일치합니다.</li>
+</ul>
+</li>
+</ol>
+<h4>쌍대 변수(μ)의 경제학적 의미: 그림자 가격(Shadow Price)</h4>
+<p>라그랑주 승수 <code>μᵢ</code>는 단순히 계산을 위한 보조 변수가 아닙니다. 이는 &#39;제약 조건 <code>gᵢ(x) ≤ 0</code>을 <code>gᵢ(x) ≤ ε</code>으로 아주 조금 완화했을 때, 목적 함수 <code>f(x)</code>의 최적값이 얼마나 변하는가&#39;를 나타냅니다. 즉, <code>μᵢ ≈ -∂f*/∂ε</code> 입니다. 경제학에서는 이를 &#39;그림자 가격(Shadow Price)&#39;이라고 부릅니다. 예를 들어, 생산 예산 제약에 대한 <code>μ</code>값이 1.5라면, 예산을 1단위 늘리면 이익(목적 함수)이 약 1.5단위 증가할 것이라고 예측할 수 있습니다. 이 개념은 SVM에서 왜 경계선에 위치한 &#39;서포트 벡터&#39;만이 모델 결정에 중요한지를 설명하는 열쇠가 됩니다.</p>
+<h3 id="section-sec-4-1-3">4.1.3 투영 경사 하강법 (Projected Gradient Descent)</h3>
+<p>KKT 조건을 직접 푸는 것은 복잡할 수 있습니다. 특히 제약 조건이 많거나 비선형일 때 더욱 그렇습니다. 이에 대한 대안으로, 더 직관적이고 구현이 간단한 **투영 경사 하강법(Projected Gradient Descent)**이 있습니다. <em data-ref-id="1956689843195850757"></em></p>
+<p>이 방법의 아이디어는 매우 간단합니다.</p>
+<ol>
+<li><strong>Step 1: 일반적인 경사 하강법 스텝 수행</strong><br/>
+            일단 제약 조건을 무시하고, 평소처럼 경사 하강법을 이용해 파라미터를 업데이트합니다.<br/>
+<div class="math-formula">x&#39;<sub>t+1</sub> = x<sub>t</sub> - η∇f(x<sub>t</sub>)</div>
+</li>
+<li><strong>Step 2: 제약 집합으로의 투영(Projection)</strong><br/>
+            업데이트된 점 <code>x&#39;<sub>t+1</sub></code>이 만약 허용된 제약 집합 <code>C</code>를 벗어났다면(즉, 제약을 위반했다면), <code>C</code> 내에서 <code>x&#39;<sub>t+1</sub></code>과 가장 가까운 점으로 되돌려 보냅니다. 이 과정을 &#39;투영&#39;이라고 합니다.<br/>
+<div class="math-formula">x<sub>t+1</sub> = Proj<sub>C</sub>(x&#39;<sub>t+1</sub>)</div>
+            여기서 <code>Proj<sub>C</sub>(y) = argmin<sub>x∈C</sub> ||x - y||²</code> 입니다.
+            </li>
+</ol>
+<p>이 방법의 효율성은 &#39;투영&#39;이 얼마나 쉽게 계산될 수 있느냐에 달려 있습니다. 다행히도 많은 머신러닝 문제에서 사용되는 제약 집합(예: L2-norm ball, 상자 제약)은 투영이 매우 간단합니다.</p>
+<h4>사례: L2-Norm 제약으로의 투영</h4>
+<p>만약 제약 조건이 <code>||x||₂ ≤ R</code> (반지름 R인 원 또는 구 내부)이라면, 투영은 다음과 같이 간단히 계산됩니다.</p>
+<ul>
+<li>만약 업데이트된 점 <code>x&#39;</code>이 이미 제약 조건을 만족한다면 (<code>||x&#39;||₂ ≤ R</code>), 그대로 둡니다: <code>Proj(x&#39;) = x&#39;</code>.</li>
+<li>만약 <code>x&#39;</code>이 제약을 위반한다면 (<code>||x&#39;||₂ &gt; R</code>), 벡터의 방향은 유지한 채 크기만 R로 줄여줍니다: <code>Proj(x&#39;) = x&#39; * (R / ||x&#39;||₂)</code>.</li>
+</ul>
+<p>이처럼 투영 경사 하강법은 복잡한 최적화 이론을 간단한 기하학적 연산으로 대체하여 제약 문제를 효과적으로 풀 수 있는 실용적인 방법을 제공합니다.</p>
+<h2 id="section-sec-4-2">4.2 볼록성: 최적화의 유일 해를 보장하는 열쇠</h2>
+<p>핵심 질문: <strong>우리가 찾은 최적해가 수많은 &#39;지역 최적해(local minimum)&#39; 중 하나가 아니라, 유일한 &#39;전역 최적해(global minimum)&#39;라고 어떻게 확신할 수 있을까?</strong> 이 질문에 대한 답은 &#39;볼록성(Convexity)&#39;에 있습니다. 볼록성은 최적화 문제의 난이도를 결정하는 가장 중요한 성질 중 하나입니다.</p>
+<h3 id="section-sec-4-2-1">4.2.1 볼록 집합과 볼록 함수 (Convex Sets &amp; Convex Functions)</h3>
+<h4>정의와 시각화</h4>
+<ul>
+<li><strong>볼록 집합 (Convex Set):</strong> 어떤 집합 C에 속하는 임의의 두 점 x, y를 잇는 선분 위의 모든 점이 다시 집합 C에 속할 때, C를 볼록 집합이라고 합니다. 직관적으로, 움푹 들어간 곳이 없는 &#39;둥그스름한&#39; 형태의 집합입니다.
+                <div class="math-formula">∀x, y ∈ C,  ∀θ ∈ [0, 1]  ⇒  θx + (1-θ)y ∈ C</div>
+</li>
+<li><strong>볼록 함수 (Convex Function):</strong> 함수 f의 정의역이 볼록 집합이고, 그 그래프 위의 임의의 두 점을 잇는 선분이 항상 함수 그래프보다 위쪽(또는 동일)에 있을 때, f를 볼록 함수라고 합니다. 아래로 볼록한 그릇 모양을 상상하면 쉽습니다.
+                <div class="math-formula">f(θx + (1-θ)y) ≤ θf(x) + (1-θ)f(y)</div>
+</li>
+</ul>
+<figure>
+<img alt="볼록 함수와 비볼록 함수" src="https://picture-search.tiangong.cn/image/rt/1a7c6d285dc0f6cf4543078a7f28a3f1.jpg" style="max-height: 280px; max-width: 100%;"/>
+<figcaption>볼록 함수(아래)는 두 점을 잇는 선분이 항상 그래프 위에 있지만, 비볼록 함수(위)는 그렇지 않다.</figcaption>
+</figure>
+<h4>볼록성의 중요성: 전역 최적해의 보장</h4>
+<p>볼록성이 중요한 이유는 다음과 같은 강력한 정리 때문입니다.</p>
+<blockquote>
+<strong>핵심 정리:</strong> 볼록 함수 <code>f</code>에 대해, 어떤 점 <code>x*</code>가 지역 최적해(local minimum)이면, 그 점은 반드시 전역 최적해(global minimum)이다.
+        </blockquote>
+<p>이것이 왜 중요할까요? 비볼록 함수는 아래 그림처럼 여러 개의 계곡(지역 최적해)을 가질 수 있습니다. 경사 하강법은 가장 가까운 계곡 바닥으로 우리를 안내할 뿐, 그곳이 가장 깊은 계곡(전역 최적해)이라는 보장은 없습니다. 시작점에 따라 전혀 다른 해를 얻게 될 수 있습니다. 하지만 함수가 볼록하다면, 계곡은 단 하나뿐입니다. 따라서 어떤 시작점에서 출발하더라도 경사 하강법은 우리를 유일한 전역 최적해로 안정적으로 이끌어 줍니다. 이것이 바로 로지스틱 회귀나 SVM과 같은 모델들이 왜 신뢰성 있는 학습 결과를 내놓는지를 설명하는 수학적 근간입니다. <em data-ref-id="1956689843195850758"></em></p>
+<figure>
+<img alt="지역 최적해와 전역 최적해" src="https://picture-search.tiangong.cn/image/rt/c3974645512fee119af8b78f1b3e7276.jpg" style="max-height: 280px; max-width: 100%;"/>
+<figcaption>비볼록 함수는 여러 개의 지역 최적해(P1)와 안장점(P2)을 가질 수 있어, 전역 최적해(P3)를 찾는 것을 어렵게 만든다.</figcaption>
+</figure>
+<div class="chart-container" id="canvas-parent-1" style="height: 400px;">
+<canvas id="convexVsNonConvexChart"></canvas>
+</div>
+<script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const ctx = document.getElementById('convexVsNonConvexChart').getContext('2d');
+                const convexData = [];
+                const nonConvexData = [];
+                const labels = [];
+                for (let x = -5; x <= 5; x += 0.2) {
+                    labels.push(x.toFixed(1));
+                    convexData.push(x * x); // f(x) = x^2
+                    nonConvexData.push(Math.sin(x * 2) * 5 + 0.5 * x * x); // f(x) = 5*sin(2x) + 0.5x^2
+                }
+
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: '볼록 함수 (f(x) = x²)',
+                            data: convexData,
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            borderWidth: 2,
+                            tension: 0.1,
+                            pointRadius: 0
+                        }, {
+                            label: '비볼록 함수 (f(x) = 5sin(2x) + 0.5x²)',
+                            data: nonConvexData,
+                            borderColor: 'rgba(255, 99, 132, 1)',
+                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                            borderWidth: 2,
+                            tension: 0.1,
+                            pointRadius: 0
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: '볼록 함수와 비볼록 함수의 시각적 비교',
+                                font: { size: 18 }
+                            }
+                        },
+                        scales: {
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'x'
+                                }
+                            },
+                            y: {
+                                title: {
+                                    display: true,
+                                    text: 'f(x)'
+                                }
+                            }
+                        }
+                    }
+                });
+            });
+        </script>
+<h3 id="section-sec-4-2-2">4.2.2 볼록성 판정법 (How to Check for Convexity)</h3>
+<p>어떤 함수가 볼록한지 어떻게 수학적으로 확인할 수 있을까요? 몇 가지 유용한 판정법이 있습니다.</p>
+<ul>
+<li><strong>1계 조건 (First-Order Condition):</strong> 미분 가능한 함수 <code>f</code>가 볼록일 필요충분조건은 모든 <code>x, y</code>에 대해 다음이 성립하는 것입니다.
+                <div class="math-formula">f(y) ≥ f(x) + ∇f(x)ᵀ(y - x)</div>
+                이는 함수의 그래프가 임의의 점 <code>x</code>에서의 접선보다 항상 위쪽에 있다는 기하학적 의미를 가집니다.
+            </li>
+<li><strong>2계 조건 (Second-Order Condition):</strong> 두 번 미분 가능한 함수 <code>f</code>가 볼록일 필요충분조건은 함수의 **헤시안 행렬(Hessian Matrix) <code>∇²f(x)</code>**이 모든 <code>x</code>에 대해 **양의 준정부호(positive semidefinite, PSD)**인 것입니다.
+                <div class="math-formula">∇²f(x) ≽ 0</div>
+                헤시안 행렬은 모든 2차 편도함수를 모아놓은 행렬입니다. 행렬이 PSD라는 것은 모든 0이 아닌 벡터 <code>z</code>에 대해 <code>zᵀ(∇²f(x))z ≥ 0</code>임을 의미하며, 이는 모든 방향으로의 곡률이 0 이상(아래로 볼록)임을 뜻합니다. 만약 헤시안이 양의 정부호(positive definite, <code>zᵀHz &gt; 0</code>)이면, 함수는 **강한 볼록성(Strong Convexity)**을 가지며 유일한 전역 최적해를 가집니다. <em data-ref-id="1956689843195850759"></em>
+            </li>
+</ul>
+<p><strong>예제: <code>f(x₁, x₂) = x₁² + x₂²</code>의 볼록성 판정</strong></p>
+<ol>
+<li><strong>그래디언트 계산:</strong> <code>∇f = [2x₁, 2x₂]ᵀ</code></li>
+<li><strong>헤시안 행렬 계산:</strong>
+<div class="math-formula">
+                ∇²f(x) = 
+                <begin{pmatrix} &="" 0="" 2="" <="" \\="" \end{pmatrix}="" div="" ∂x₁²="" ∂x₁∂x₂="" ∂x₂²="" ∂x₂∂x₁="" ∂²f="">
+</begin{pmatrix}></div></li>
+<li><strong>양의 정부호 판정:</strong> 임의의 0이 아닌 벡터 <code>z = [z₁, z₂]ᵀ</code>에 대해,
+                <div class="math-formula">
+                zᵀ(∇²f)z = [z₁, z₂] 
+                <begin{pmatrix} &="" +="" 0="" 2="" 2z₂²="" <begin{pmatrix}="" \\="" \end{pmatrix}="2z₁²" z₁="" z₂=""> 0
+                </begin{pmatrix}></div>
+                헤시안 행렬이 양의 정부호이므로, 함수 <code>f</code>는 강한 볼록 함수입니다.
+            </li>
+</ol>
+<h3 id="section-sec-4-2-3">4.2.3 볼록 최적화 문제의 표준형 (Standard Form of Convex Problems)</h3>
+<p>볼록 최적화 문제는 다음과 같은 표준 형식으로 정의됩니다. <em data-ref-id="1956689843195850760"></em></p>
+<blockquote>
+<strong>minimize f₀(x)</strong><br/>
+<strong>subject to:</strong><br/>
+                 fᵢ(x) ≤ 0,    i = 1, ..., m<br/>
+                 Ax = b
+        </blockquote>
+<p>여기서 핵심 조건은 다음과 같습니다.</p>
+<ul>
+<li>목적 함수 <code>f₀(x)</code>는 볼록 함수여야 합니다.</li>
+<li>부등식 제약 함수 <code>fᵢ(x)</code>들도 모두 볼록 함수여야 합니다.</li>
+<li>등식 제약 함수 <code>hⱼ(x) = aⱼᵀx - bⱼ</code>는 아핀(affine) 함수여야 합니다 (선형 함수 + 상수).</li>
+</ul>
+<p>이러한 형태를 만족하는 문제들은 효율적으로 전역 최적해를 찾을 수 있는 알고리즘이 존재합니다. 대표적인 예로는 **선형 계획법(Linear Programming, LP)**과 **이차 계획법(Quadratic Programming, QP)**이 있으며, SVM은 QP 문제에 해당합니다.</p>
+<h4>머신러닝 예제: 로지스틱 회귀의 볼록성 증명</h4>
+<p>로지스틱 회귀는 왜 경사 하강법으로 안정적인 해를 찾을 수 있을까요? 그 이유는 손실 함수가 볼록 함수이기 때문입니다. 로지스틱 회귀의 손실 함수(음의 로그 가능도)는 다음과 같습니다.</p>
+<div class="math-formula">
+            L(w) = - Σ [ yᵢ log(σ(wᵀxᵢ)) + (1-yᵢ) log(1-σ(wᵀxᵢ)) ]
+        </div>
+<p>여기서 <code>σ(z) = 1 / (1 + exp(-z))</code>는 시그모이드 함수입니다. 이 함수의 헤시안 행렬을 계산하면 다음과 같은 형태가 됩니다.</p>
+<div class="math-formula">
+            ∇²L(w) = Σ σ(wᵀxᵢ)(1 - σ(wᵀxᵢ)) xᵢxᵢᵀ = XᵀDX
+        </div>
+<p>여기서 <code>X</code>는 데이터 행렬, <code>D</code>는 대각 원소가 <code>σ(wᵀxᵢ)(1 - σ(wᵀxᵢ))</code>인 대각 행렬입니다. 시그모이드 함수의 출력값은 항상 (0, 1) 사이이므로, <code>D</code>의 모든 대각 원소는 양수입니다. 따라서 임의의 벡터 <code>z</code>에 대해,</p>
+<div class="math-formula">
+            zᵀ(∇²L(w))z = zᵀXᵀDXz = (Xz)ᵀD(Xz) = Σ dᵢᵢ(Xz)ᵢ² ≥ 0
+        </div>
+<p>헤시안 행렬이 양의 준정부호(PSD)이므로, 로지스틱 회귀의 손실 함수는 볼록 함수입니다. 이는 경사 하강법을 통해 수렴하는 해가 전역 최적해임을 보장합니다. <em data-ref-id="1956689843195850761"></em></p>
+<h3 id="section-sec-4-2-4">4.2.4 사례 연구 (Case Studies)</h3>
+<ul>
+<li><strong>L2-Norm Ball로의 투영:</strong> 4.1.3절에서 다룬 L2-norm ball(<code>||x||₂ ≤ R</code>)은 대표적인 볼록 집합입니다. 따라서 이 집합 위에서 볼록 함수를 최적화하는 문제는 볼록 최적화 문제가 되며, 투영 경사 하강법은 해를 향해 안정적으로 수렴합니다.</li>
+<li><strong>확률 심플렉스(Probability Simplex) 상의 최적화:</strong> 확률 분포를 나타내는 변수 <code>x</code>는 <code>Σxᵢ = 1</code>과 <code>xᵢ ≥ 0</code>이라는 제약을 가집니다. 이 제약들이 정의하는 영역을 확률 심플렉스라고 하며, 이는 볼록 집합입니다. 따라서 확률 분포를 찾는 많은 문제(예: 토픽 모델링의 문서별 토픽 분포 추정)는 볼록 최적화 기법을 통해 해결될 수 있습니다.</li>
+</ul>
+<h2 id="section-summary">요약 및 다음 장으로의 연결</h2>
+<div class="key-points">
+<h4>핵심 내용 정리</h4>
+<ul>
+<li><strong>제약 최적화:</strong> 현실의 많은 문제는 제약 조건 하에서 최적해를 찾아야 합니다. 등식 제약은 라그랑주 승수법으로, 부등식 제약은 이를 일반화한 KKT 조건으로 해결할 수 있습니다.</li>
+<li><strong>KKT 조건의 정수:</strong> 특히 &#39;상보성 여유&#39; 조건은 제약이 최적해에 영향을 미치는지(활성) 아닌지(비활성)에 따라 최적점의 특성이 어떻게 달라지는지를 명확하게 설명하는 핵심적인 개념입니다.</li>
+<li><strong>볼록성의 힘:</strong> 볼록성은 &#39;모든 지역 최적해가 곧 전역 최적해&#39;임을 보장하는 매우 강력한 성질입니다. 이는 경사 하강법과 같은 알고리즘이 안정적으로 최적해를 찾을 수 있도록 하는 수학적磐石(반석)입니다.</li>
+<li><strong>볼록성 판별:</strong> 함수의 헤시안 행렬이 양의 준정부호(positive semidefinite)인지 확인함으로써 볼록성을 수학적으로 판별할 수 있습니다. 이를 통해 로지스틱 회귀와 같은 주요 머신러닝 모델이 볼록 최적화 문제임을 증명했습니다.</li>
+</ul>
+</div>
+<h4>다음 장 예고: 서포트 벡터 머신(SVM)으로의 연결</h4>
+<p>이번 4장에서 배운 제약 최적화와 볼록성 개념은 다음 챕터에서 다룰 **서포트 벡터 머신(SVM)**을 이해하는 데 결정적인 수학적 기반이 됩니다. SVM은 본질적으로 &#39;제약 볼록 최적화&#39; 문제의 정수(essence)를 보여주는 모델입니다.</p>
+<ul>
+<li><strong>목적 함수:</strong> SVM은 두 클래스 간의 마진(margin)을 최대화하는 것을 목표로 합니다. 이는 가중치 벡터 <code>w</code>의 L2-norm(<code>||w||²</code>)을 최소화하는 것과 같으며, 이는 명백한 **이차 계획법(QP)**, 즉 볼록 문제입니다.</li>
+<li><strong>제약 조건:</strong> 모든 데이터 포인트가 올바르게 분류되고 마진 경계 바깥쪽에 위치해야 한다는 부등식 제약(<code>yᵢ(wᵀxᵢ + b) ≥ 1</code>)을 가집니다.</li>
+</ul>
+<p>따라서 SVM의 최적해를 찾는 과정은 KKT 조건을 만족하는 해를 찾는 과정과 정확히 일치합니다. 특히, KKT 조건의 &#39;상보성 여유&#39;와 &#39;쌍대 변수(dual variable)&#39; 개념은 왜 경계선에 놓인 소수의 데이터, 즉 **서포트 벡터(support vectors)**만이 모델을 결정하는 데 중요한 역할을 하는지를 명확하게 설명해 줄 것입니다. 다음 장에서는 이 쌍대성(Duality)의 개념을 더 깊이 파고들어, 커널 트릭(Kernel Trick)이라는 강력한 기법으로 SVM이 어떻게 비선형 문제까지 확장될 수 있는지 탐구할 것입니다.</p>
+</begin{cases}></div>
+<div class="reference-container">
+			<div class="reference-section">
+				<h3 class="reference-title">참고 자료</h3>
+				<div class="reference-list">
+					
+					<div class="reference-item">
+						<span class="reference-number">[1]</span>
+						<div class="reference-content">
+							<div class="reference-text-container">
+								<span class="reference-text">2.7: Constrained Optimization - Lagrange Multipliers</span>
+									
+							</div>
+							<a href="https://math.libretexts.org/Bookshelves/Calculus/Vector_Calculus_(Corral)/02%3A_Functions_of_Several_Variables/2.07%3A_Constrained_Optimization_-_Lagrange_Multipliers" class="reference-link" target="_blank">
+								https://math.libretexts.org/Bookshelves/Calculus/Vector_Calculus_(Corral)/02%3A_Functions_of_Several_Variables/2.07%3A_Constrained_Optimization_-_Lagrange_Multipliers
+							</a>
+						</div>
+					</div>
+					
+					<div class="reference-item">
+						<span class="reference-number">[2]</span>
+						<div class="reference-content">
+							<div class="reference-text-container">
+								<span class="reference-text">Understanding the math: duality and Lagrange multipliers - SVM</span>
+									
+							</div>
+							<a href="https://www.svm-tutorial.com/2016/09/duality-lagrange-multipliers/" class="reference-link" target="_blank">
+								https://www.svm-tutorial.com/2016/09/duality-lagrange-multipliers/
+							</a>
+						</div>
+					</div>
+					
+					<div class="reference-item">
+						<span class="reference-number">[3]</span>
+						<div class="reference-content">
+							<div class="reference-text-container">
+								<span class="reference-text">An Idiot&#39;s guide to Support vector machines (SVMs)</span>
+									
+							</div>
+							<a href="https://web.mit.edu/6.034/wwwbob/svm-notes-long-08.pdf" class="reference-link" target="_blank">
+								https://web.mit.edu/6.034/wwwbob/svm-notes-long-08.pdf
+							</a>
+						</div>
+					</div>
+					
+					<div class="reference-item">
+						<span class="reference-number">[4]</span>
+						<div class="reference-content">
+							<div class="reference-text-container">
+								<span class="reference-text">5. Duality</span>
+									
+							</div>
+							<a href="https://see.stanford.edu/materials/lsocoee364a/05Duality.pdf" class="reference-link" target="_blank">
+								https://see.stanford.edu/materials/lsocoee364a/05Duality.pdf
+							</a>
+						</div>
+					</div>
+					
+					<div class="reference-item">
+						<span class="reference-number">[5]</span>
+						<div class="reference-content">
+							<div class="reference-text-container">
+								<span class="reference-text">Convex function</span>
+									
+							</div>
+							<a href="https://en.wikipedia.org/wiki/Convex_function" class="reference-link" target="_blank">
+								https://en.wikipedia.org/wiki/Convex_function
+							</a>
+						</div>
+					</div>
+					
+					<div class="reference-item">
+						<span class="reference-number">[6]</span>
+						<div class="reference-content">
+							<div class="reference-text-container">
+								<span class="reference-text">[PDF] Lecture 12: KKT conditions - Statistics &amp; Data Science</span>
+									
+							</div>
+							<a href="https://www.stat.cmu.edu/~ryantibs/convexopt-F16/scribes/kkt-scribed.pdf" class="reference-link" target="_blank">
+								https://www.stat.cmu.edu/~ryantibs/convexopt-F16/scribes/kkt-scribed.pdf
+							</a>
+						</div>
+					</div>
+					
+					<div class="reference-item">
+						<span class="reference-number">[7]</span>
+						<div class="reference-content">
+							<div class="reference-text-container">
+								<span class="reference-text">[PDF] Lecture 6: February 2nd 6.1 Projected Gradient Descent</span>
+									
+							</div>
+							<a href="https://www.stat.cmu.edu/~siva/teaching/725/lec6.pdf" class="reference-link" target="_blank">
+								https://www.stat.cmu.edu/~siva/teaching/725/lec6.pdf
+							</a>
+						</div>
+					</div>
+					
+				</div>
+			</div>
+		</div></div>
+</body></html>

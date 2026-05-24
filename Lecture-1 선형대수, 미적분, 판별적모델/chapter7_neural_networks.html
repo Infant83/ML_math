@@ -1,0 +1,569 @@
+<!DOCTYPE html><html lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>머신러닝 수학적 기초와 판별 모형의 이해 - Chapter 7</title>
+<style>.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 24px 40px;
+    background-color: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    }
+.chart-container {
+    position: relative;
+    margin: 3em auto;
+    max-width: 700px;
+    min-height: 200px;
+    max-height: 400px;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+    aspect-ratio: 7/5;}
+h5 {
+    font-size: 16px;
+    }
+body {
+    font-family: "Georgia", "Times New Roman", serif;
+    line-height: 1.8;
+    font-size: 16px;
+    color: #333;
+    background-color: #fdfdfd;
+    margin: 0 24px 0 24px;
+    padding: 0;
+    max-width: None;
+    }
+main {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-left: 1px solid #eee;
+    border-right: 1px solid #eee;
+    }
+h1, h2, h3, h4 {
+    font-family: "Helvetica Neue", "Arial", sans-serif;
+    line-height: 1.3;
+    color: #222;
+    font-size: 28px;
+    margin-top: 24px;
+    margin-bottom: 20px;
+    }
+h1 {
+    font-size: 28px;
+    text-align: center;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 0.5em;
+    margin-top: 24px;
+    }
+h2 {
+    font-size: 22px;
+    margin-top: 2em;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 0.3em;
+    }
+h3 {
+    font-size: 20px;
+    margin-top: 1.8em;
+    }
+h4 {
+    font-size: 18px;
+    margin-top: 1.5em;
+    }
+p {
+    margin-bottom: 1.2em;
+    }
+a {
+    color: #07c;
+    text-decoration: none;
+    }
+a:hover {
+    text-decoration: underline;
+    }
+code {
+    font-family: "Menlo", "Monaco", "Courier New", monospace;
+    background-color: #f5f5f5;
+    padding: 2px 5px;
+    border-radius: 4px;
+    font-size: 0.9em;
+    }
+pre {
+    background-color: #f5f5f5;
+    padding: 15px;
+    border-radius: 5px;
+    overflow-x: auto;
+    font-size: 0.9em;
+    }
+pre code {
+    padding: 0;
+    background-color: transparent;
+    border-radius: 0;
+    }
+blockquote {
+    border-left: 4px solid #ccc;
+    padding-left: 20px;
+    margin: 2em 0;
+    color: #555;
+    font-style: italic;
+    }
+figure {
+    margin: 2em 0;
+    text-align: center;
+    }
+img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    display: block;
+    overflow: hidden;
+    max-height: 280px;
+    margin: 1em auto;
+    }
+figcaption {
+    font-size: 0.9em;
+    color: #666;
+    margin-top: 0.5em;
+    font-style: italic;
+    }
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5em 0;
+    }
+th, td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+    }
+th {
+    background-color: #f9f9f9;
+    font-weight: bold;
+    }
+.toc {
+    background: #f9f9f9;
+    border: 1px solid #e0e0e0;
+    padding: 1em 2em;
+    margin-bottom: 2em;
+    border-radius: 5px;
+    }
+.toc h3 {
+    margin-top: 0;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 0.5em;
+    }
+.toc ul {
+    list-style-type: none;
+    padding-left: 0;
+    }
+.toc ul ul {
+    padding-left: 2em;
+    }
+        .chart-container canvas {
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: contain;
+}
+
+@media only screen and (max-device-width: 768px) {
+            body {
+                padding: 0;
+                margin: 0;
+                font-family: PingFang SC;
+                font-size: 15px;
+                line-height: 1.5;
+            }
+
+            .container {
+                padding: 0;
+                margin: 16px 20px 30px;
+                box-shadow: none;
+            }
+
+            h1,
+            h2,
+            h3,
+            h4 {
+                font-family: PingFang SC;
+            }
+
+            h1 {
+                font-size: 1.87em;
+                line-height: 1.6;
+                margin-bottom: 0.5em;
+                text-align: center;
+            }
+
+            h2 {
+                font-size: 1.6em;
+                font-weight: 600;
+                margin-top: 1.3em;
+                margin-bottom: 0.8em;
+                border-bottom: 1px solid #eee;
+                padding-bottom: 0.5em;
+            }
+
+            h3 {
+                font-size: 1.2em;
+                font-weight: 600;
+                margin-top: 1em;
+                margin-bottom: 0.6em;
+            }
+
+            h4 {
+                font-size: 1.1em;
+                font-weight: 500;
+                margin-top: 1em;
+                margin-bottom: 0.5em;
+                font-style: normal;
+            }
+
+            h5 {
+                font-size: 1em;
+                font-weight: 500;
+                margin-bottom: 1.2em;
+            }
+
+            ul,
+            ol {
+                font-size: 1em; /* Equivalent to 17.6px if base is 16px */
+                font-weight: 400;
+                margin-bottom: 1.2em;
+                line-height: 1.8;
+            }
+
+            p {
+                font-size: 1em;
+                line-height: 1.8; /* Equivalent to 17.6px if base is 16px */
+                font-weight: 400;
+                margin-top: 0.8em;
+                margin-bottom: 0.8em;
+            }
+
+            blockquote {
+                padding: 1em 1.2em;
+
+            p {
+                margin: 0;
+            }
+        }
+
+        figcaption {
+            margin-top: 0.5em;
+            font-size: 0.8em; /* Equivalent to 17.6px if base is 16px */
+            font-weight: 400;
+            text-align: center;
+            font-style: normal;
+            color: #7F8896;
+        }
+
+        img {
+            display: block;
+            overflow: hidden;
+            max-width: 100%;
+            max-height: 335px;
+            margin: 1em auto;
+            border-radius: 8px;
+        }
+        }</style>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link rel="stylesheet" href="https://static.skywork.ai/fe/skywork-site-assets/styles/doc_reference_style.css?v=1956697197354266624"/></head>
+<body><div class="container">
+<h1 id="section-1">머신러닝 수학적 기초와 판별 모형의 이해</h1>
+<nav class="toc">
+<h3 id="section-0-1">Chapter 7: 연쇄 미분과 신경망의 기초</h3>
+<ul>
+<li><a href="#section-intro">도입: 복잡한 모델의 기울기는 어떻게 계산할까?</a></li>
+<li><a href="#section-computational-graph">계산 그래프와 Forward/Backward Propagation</a>
+<ul>
+<li><a href="#section-what-is-computational-graph">계산 그래프 (Computational Graph)란?</a></li>
+<li><a href="#section-forward-propagation">순전파 (Forward Propagation)</a></li>
+<li><a href="#section-backward-propagation">역전파 (Backward Propagation)</a></li>
+</ul>
+</li>
+<li><a href="#section-stochastic-optimization">확률적 최적화 (Stochastic Optimization)</a>
+<ul>
+<li><a href="#section-batch-gd-limits">전통적 경사 하강법(Batch Gradient Descent)의 한계</a></li>
+<li><a href="#section-sgd">확률적 경사 하강법 (Stochastic Gradient Descent, SGD)</a></li>
+<li><a href="#section-minibatch-gd">미니배치 경사 하강법 (Mini-batch Gradient Descent)</a></li>
+<li><a href="#section-adam-optimizer">Adam 옵티마이저 (개념 수준)</a></li>
+</ul>
+</li>
+</ul>
+</nav>
+<h2 id="section-intro">도입: 복잡한 모델의 기울기는 어떻게 계산할까?</h2>
+<p>이전 챕터들에서 우리는 선형 회귀, 로지스틱 회귀와 같은 모델들을 학습시키기 위해 경사 하강법(Gradient Descent)을 사용했다. 경사 하강법의 핵심은 손실 함수(Loss Function)를 모델의 파라미터(가중치 `W`와 편향 `b`)로 미분하여 얻은 기울기(Gradient)를 이용해 파라미터를 최적화하는 것이다. 선형 모델의 경우 손실 함수가 비교적 단순한 형태를 띠므로 기울기를 해석적으로(analytically) 구하거나 계산하기가 용이했다.</p>
+<p>하지만 현대 머신러닝, 특히 딥러닝에서 다루는 모델은 훨씬 더 복잡한 구조를 가진다. 예를 들어, 신경망(Neural Network)은 여러 개의 함수가 중첩된 형태, 즉 합성 함수(Composite Function)로 표현된다. 가령, 가장 단순한 형태의 신경망조차 <code>Output = f(g(h(Input, W)))</code> 와 같이 여러 연산이 겹겹이 쌓인 구조를 갖는다. 이러한 복잡한 모델에서 최종 손실값에 대한 특정 가중치 <code>W</code>의 영향력, 즉 기울기 <code>∂L/∂W</code>를 어떻게 효율적으로 계산할 수 있을까? 모든 가중치에 대해 손으로 미분 공식을 유도하는 것은 거의 불가능에 가깝다.</p>
+<p>이 문제에 대한 해결의 실마리는 고등학교 미적분학에서 배운 **연쇄 법칙(Chain Rule)**에 있다. 연쇄 법칙은 합성 함수의 미분을 각 구성 함수의 미분의 곱으로 분해하여 계산할 수 있게 해준다. 이 장에서는 연쇄 법칙을 다변수 함수와 행렬(Matrix) 연산으로 확장하고, 이를 통해 복잡한 신경망의 기울기를 체계적이고 효율적으로 계산하는 알고리즘인 **역전파(Backpropagation)**의 원리를 탐구할 것이다. 또한, 대용량 데이터셋을 효과적으로 학습시키기 위한 다양한 최적화 기법들을 살펴보며 신경망 학습의 근본적인 메커니즘을 이해하는 것을 목표로 한다.</p>
+<h2 id="section-computational-graph">계산 그래프와 Forward/Backward Propagation</h2>
+<p>신경망의 복잡한 연산 과정을 직관적으로 이해하고 기울기 계산을 체계화하기 위해, 우리는 계산 그래프(Computational Graph)라는 강력한 도구를 사용한다. 이 섹션에서는 계산 그래프를 통해 신경망의 두 가지 핵심 과정인 순전파(Forward Propagation)와 역전파(Backward Propagation)의 원리를 깊이 있게 탐구한다.</p>
+<h3 id="section-what-is-computational-graph">계산 그래프 (Computational Graph)란?</h3>
+<p>**계산 그래프**는 복잡한 수학적 표현식이나 모델의 연산 과정을 노드(Node)와 엣지(Edge)로 구성된 방향성 그래프로 시각화하는 방법이다. 각 노드는 덧셈, 곱셈, 행렬 곱, 활성화 함수 등 특정 연산을 나타내고, 엣지는 연산에 사용되는 데이터나 변수(텐서)의 흐름을 나타낸다.</p>
+<p>예를 들어, <code>L = (x + y) * z</code> 라는 간단한 수식을 계산 그래프로 표현하면, 덧셈 노드 하나와 곱셈 노드 하나로 구성된 그래프가 만들어진다. 입력 `x`와 `y`가 덧셈 노드로 들어가 중간 결과 `q = x + y`를 만들고, 이 `q`와 또 다른 입력 `z`가 곱셈 노드로 들어가 최종 결과 `L`을 출력하는 방식이다.</p>
+<p>신경망은 본질적으로 행렬 곱셈, 편향 덧셈, 활성화 함수 적용 등 수많은 연산의 조합으로 이루어진 거대한 합성 함수다. 이를 계산 그래프로 표현하면 다음과 같은 장점이 있다:</p>
+<ul>
+<li><strong>모듈성(Modularity):</strong> 복잡한 전체 구조를 단순한 연산 단위(노드)로 분해하여 이해하기 쉽다.</li>
+<li><strong>체계적인 흐름 파악:</strong> 데이터가 입력층에서 출력층으로 흘러가는 과정(순전파)과, 기울기가 출력층에서 입력층으로 역으로 전파되는 과정(역전파)을 명확하게 시각화하고 추적할 수 있다.</li>
+</ul>
+<p>결론적으로 계산 그래프는 신경망의 동작 원리를 분석하고, 특히 역전파 알고리즘을 구현하는 데 있어 핵심적인 개념적 틀을 제공한다.</p>
+<h3 id="section-forward-propagation">순전파 (Forward Propagation)</h3>
+<p>**순전파**는 계산 그래프의 입력 노드에서 시작하여 출력 노드 방향으로, 정의된 연산을 순서대로 수행하여 최종 결과값(예: 예측값, 손실값)을 계산하는 과정이다. 이는 신경망이 주어진 입력에 대해 예측을 생성하는 과정 그 자체를 의미한다.</p>
+<p>신경망의 한 계층(layer)에서 일어나는 순전파 과정은 일반적으로 다음과 같은 수식으로 표현된다:</p>
+<ol>
+<li><strong>가중합(Weighted Sum):</strong> 입력 벡터 <code>x</code>에 가중치 행렬 <code>W</code>를 곱하고 편향 벡터 <code>b</code>를 더한다. <code>z = Wx + b</code></li>
+<li><strong>활성화(Activation):</strong> 가중합의 결과 <code>z</code>를 비선형 활성화 함수 <code>σ</code>(예: Sigmoid, ReLU)에 통과시켜 최종 출력 <code>a</code>를 얻는다. <code>a = σ(z)</code></li>
+</ol>
+<p>이 과정이 여러 계층에 걸쳐 반복되어 최종적으로 모델의 예측값이 산출된다.</p>
+<h4>사례 연구: 작은 네트워크로 XOR 문제 근사하기</h4>
+<p>선형 모델로는 해결할 수 없는 대표적인 비선형 문제인 XOR 논리 게이트를 예로 들어 순전파 과정을 살펴보자. XOR은 두 입력이 서로 다를 때만 1을 출력한다. 이를 2개의 입력 뉴런, 2개의 은닉 뉴런, 1개의 출력 뉴런을 가진 간단한 신경망으로 근사할 수 있다.</p>
+<figure>
+<img alt="간단한 신경망 구조" src="https://picture-search.tiangong.cn/image/rt/929d95a26d4843a7b74e0745d6ea473e.jpg" style="max-height: 280px; max-width: 100%;"/>
+<figcaption>2개의 입력, 2개의 은닉 뉴런, 2개의 출력 뉴런 및 편향을 가진 신경망의 기본 구조. XOR 예제에서는 출력 뉴런이 하나인 모델을 가정한다.</figcaption>
+</figure>
+<p>입력으로 <code>x = [1, 0]</code>, 목표 출력으로 <code>y_true = 1</code>을 가정하고, 가중치와 편향을 임의의 값으로 초기화했다고 하자. (활성화 함수는 시그모이드(σ)를 사용)</p>
+<ol>
+<li><strong>입력층 → 은닉층:</strong>
+<ul>
+<li>은닉 뉴런 1의 가중합: <code>z_h1 = w1*x1 + w3*x2 + b1</code></li>
+<li>은닉 뉴런 1의 출력: <code>a_h1 = σ(z_h1)</code></li>
+<li>은닉 뉴런 2의 가중합: <code>z_h2 = w2*x1 + w4*x2 + b1</code></li>
+<li>은닉 뉴런 2의 출력: <code>a_h2 = σ(z_h2)</code></li>
+</ul>
+</li>
+<li><strong>은닉층 → 출력층:</strong>
+<ul>
+<li>출력 뉴런의 가중합: <code>z_o1 = w5*a_h1 + w6*a_h2 + b2</code></li>
+<li>최종 예측값: <code>y_pred = a_o1 = σ(z_o1)</code></li>
+</ul>
+</li>
+<li><strong>손실 계산:</strong>
+<ul>
+<li>평균 제곱 오차(MSE)를 사용: <code>L = 1/2 * (y_true - y_pred)²</code></li>
+</ul>
+</li>
+</ol>
+<p>이처럼 순전파는 입력 데이터와 현재 모델의 파라미터(가중치, 편향)를 사용하여 예측값을 만들고, 이 예측값이 실제값과 얼마나 다른지를 나타내는 손실(Loss)을 계산하는 전 과정이다. 이 과정에서 계산된 모든 중간값들(<code>z_h1</code>, <code>a_h1</code>, <code>z_o1</code> 등)은 이후 역전파 과정에서 기울기를 계산하는 데 재사용된다.</p>
+<h3 id="section-backward-propagation">역전파 (Backward Propagation)</h3>
+<p>**역전파**는 순전파와 반대 방향으로, 출력층에서부터 입력층 쪽으로 이동하며 각 파라미터(가중치와 편향)가 최종 손실에 얼마나 영향을 미쳤는지를 연쇄 법칙을 이용해 계산하는 알고리즘이다. 즉, 손실 함수에 대한 모든 파라미터의 기울기(<code>∂L/∂W</code>, <code>∂L/∂b</code>)를 효율적으로 구하는 방법이다.</p>
+<h4>핵심 아이디어: 기울기의 연쇄적 전파</h4>
+<p>역전파의 핵심은 &#39;책임 전가&#39; 또는 &#39;기울기 전파&#39;에 비유할 수 있다. 최종적으로 계산된 손실(오류)은 네트워크의 모든 연산과 파라미터들이 함께 만들어낸 결과다. 역전파는 이 최종 오류에 대한 각자의 &#39;책임&#39;을 거꾸로 추적해 나가는 과정이다. 이 과정은 **국소 기울기(Local Gradient)**와 **상류 기울기(Upstream Gradient)**의 곱으로 이루어진다.</p>
+<ul>
+<li><strong>국소 기울기 (Local Gradient):</strong> 계산 그래프의 특정 노드에서, 해당 노드의 출력값이 입력값에 대해 얼마나 변하는지를 나타낸다. 예를 들어, <code>z = x + y</code>라는 덧셈 노드에서 <code>x</code>에 대한 국소 기울기는 <code>∂z/∂x = 1</code>이다. 이 값은 해당 노드의 연산 종류에 의해서만 결정된다.</li>
+<li><strong>상류 기울기 (Upstream Gradient):</strong> 최종 손실값 <code>L</code>이 특정 노드의 출력값에 대해 얼마나 변하는지를 나타낸다. 예를 들어, 위 덧셈 노드의 출력 <code>z</code>에 대한 상류 기울기는 <code>∂L/∂z</code>이다. 이 값은 그래프의 뒷단(출력층 방향)에서 계산되어 전달된다.</li>
+</ul>
+<p>연쇄 법칙에 따라, 우리가 궁극적으로 원하는 &#39;최종 손실에 대한 노드 입력의 기울기&#39;는 이 두 기울기의 곱으로 계산된다.
+        <br/><code>∂L/∂x = (∂L/∂z) * (∂z/∂x) = (상류 기울기) × (국소 기울기)</code></p>
+<h4>이론: 연쇄 법칙의 행렬 형식 (Matrix Form of Chain Rule)</h4>
+<p>신경망의 연산은 대부분 행렬과 벡터 단위로 이루어진다. 따라서 역전파를 효율적으로 구현하기 위해서는 연쇄 법칙을 스칼라가 아닌 행렬과 벡터에 대해 적용해야 한다. 이는 개별 원소에 대해 for문을 돌리는 대신, <a href="https://numpy.org/learn/" target="_blank">NumPy</a>와 같은 라이브러리가 제공하는 최적화된 행렬 연산을 통해 전체 계층의 기울기를 한 번에 계산할 수 있게 해준다.</p>
+<p>행렬 미분에서 자주 사용되는 핵심적인 연쇄 법칙 규칙은 다음과 같다. (자세한 유도는 <a href="https://cs231n.github.io/optimization-2/" target="_blank">CS231n 강의 노트</a> 등에서 확인할 수 있다.)</p>
+<ul>
+<li>입력 <code>X</code> (n x d), 가중치 <code>W</code> (d x p), 출력 <code>Y = XW</code> (n x p) 이고, 상류 기울기 <code>∂L/∂Y</code>가 주어졌을 때:
+                <ul>
+<li><code>∂L/∂W = Xᵀ * (∂L/∂Y)</code></li>
+<li><code>∂L/∂X = (∂L/∂Y) * Wᵀ</code></li>
+</ul>
+</li>
+<li>활성화 함수처럼 원소별(element-wise)로 적용되는 함수 <code>Y = f(X)</code>의 경우:
+                <ul>
+<li><code>∂L/∂X = (∂L/∂Y) ⊙ f&#39;(X)</code> (여기서 <code>⊙</code>는 원소별 곱셈, 즉 아다마르 곱(Hadamard product)을 의미한다.)</li>
+</ul>
+</li>
+</ul>
+<p>이러한 행렬 기반의 연쇄 법칙을 적용하면, 복잡한 신경망의 모든 가중치에 대한 기울기를 매우 효율적으로 계산할 수 있다.</p>
+<h4>예제: 주어진 가중치에서 한 샘플의 ∂L/∂W 계산</h4>
+<p>앞서 다룬 XOR 사례를 계속해서 사용해보자. 입력 <code>x=[1,0]</code>, 목표 <code>y_true=1</code>에 대해 순전파를 통해 예측값 <code>y_pred</code>와 손실 <code>L</code>을 계산했다고 가정하자. 이제 역전파를 통해 각 가중치에 대한 기울기를 구체적인 수치로 계산해본다.</p>
+<p><b>1단계: 순전파 결과값 저장</b><br/>
+        순전파 과정에서 계산된 모든 중간 변수들(<code>z_h1, a_h1, z_h2, a_h2, z_o1, y_pred</code>)의 값을 가지고 있다고 가정한다.</p>
+<p><b>2단계: 역전파 (출력층 → 은닉층)</b></p>
+<ul>
+<li><b><code>∂L/∂y_pred</code> 계산:</b> 손실 함수 <code>L = 1/2 * (y_true - y_pred)²</code>를 <code>y_pred</code>로 미분한다.
+            <br/><code>∂L/∂y_pred = -(y_true - y_pred)</code></li>
+<li><b><code>∂L/∂z_o1</code> 계산:</b> 연쇄 법칙을 적용한다. <code>∂L/∂z_o1 = (∂L/∂y_pred) * (∂y_pred/∂z_o1)</code>.
+            <br/>여기서 <code>∂y_pred/∂z_o1</code>는 시그모이드 함수의 미분인 <code>σ&#39;(z_o1) = σ(z_o1)(1-σ(z_o1)) = y_pred(1-y_pred)</code>이다.
+            <br/>따라서, <code>∂L/∂z_o1 = -(y_true - y_pred) * y_pred(1-y_pred)</code>. 이 값이 바로 출력층의 델타(δ) 또는 오류 신호가 된다.</li>
+<li><b><code>∂L/∂w5</code>, <code>∂L/∂w6</code> 계산:</b> 다시 연쇄 법칙을 적용한다.
+            <br/><code>∂L/∂w5 = (∂L/∂z_o1) * (∂z_o1/∂w5) = (∂L/∂z_o1) * a_h1</code>
+<br/><code>∂L/∂w6 = (∂L/∂z_o1) * (∂z_o1/∂w6) = (∂L/∂z_o1) * a_h2</code></li>
+<li><b><code>∂L/∂a_h1</code> 계산:</b> 이 기울기는 다음 계층(은닉층)으로 전달될 상류 기울기 역할을 한다.
+            <br/><code>∂L/∂a_h1 = (∂L/∂z_o1) * (∂z_o1/∂a_h1) = (∂L/∂z_o1) * w5</code></li>
+</ul>
+<p><b>3단계: 역전파 (은닉층 → 입력층)</b></p>
+<ul>
+<li><b><code>∂L/∂z_h1</code> 계산:</b> 출력층에서 전달받은 상류 기울기 <code>∂L/∂a_h1</code>를 이용한다.
+            <br/><code>∂L/∂z_h1 = (∂L/∂a_h1) * (∂a_h1/∂z_h1) = (∂L/∂a_h1) * a_h1(1-a_h1)</code></li>
+<li><b><code>∂L/∂w1</code> 계산:</b>
+<br/><code>∂L/∂w1 = (∂L/∂z_h1) * (∂z_h1/∂w1) = (∂L/∂z_h1) * x1</code></li>
+</ul>
+<p>이와 같은 방식으로 모든 가중치와 편향에 대한 기울기를 계산할 수 있다. 이렇게 얻어진 기울기 값들은 <code>w_new = w_old - η * (∂L/∂w)</code>와 같은 경사 하강법 업데이트 규칙에 사용되어 모델을 학습시킨다. 이 전체 과정이 바로 <a href="https://en.wikipedia.org/wiki/Backpropagation" target="_blank">역전파 알고리즘</a>의 핵심이다.</p>
+<blockquote>
+<h4>핵심 요점</h4>
+<p>역전파는 단순한 알고리즘이 아니라, 연쇄 법칙을 계산 그래프 상에서 효율적으로 구현하는 패러다임이다. 순전파 시 계산된 중간값들을 저장해두었다가, 역전파 시 출력층에서부터 입력층 방향으로 &#39;상류 기울기 × 국소 기울기&#39;를 연쇄적으로 계산하여 모든 파라미터에 대한 기울기를 한 번의 패스(pass)로 구해낸다. 이는 현대 딥러닝을 가능하게 한 가장 중요한 계산 기법 중 하나이다.</p>
+</blockquote>
+<h2 id="section-stochastic-optimization">확률적 최적화 (Stochastic Optimization)</h2>
+<p>역전파를 통해 기울기를 계산하는 방법을 알았다면, 이제 그 기울기를 이용해 어떻게 모델을 &#39;학습&#39;시킬지, 즉 최적화(Optimization)할지 알아봐야 한다. 특히 데이터셋의 규모가 매우 클 때, 전통적인 최적화 방법은 한계를 드러낸다. 이 섹션에서는 대용량 데이터셋을 효율적으로 학습시키기 위한 확률적 최적화 기법들을 소개한다.</p>
+<h3 id="section-batch-gd-limits">전통적 경사 하강법(Batch Gradient Descent)의 한계</h3>
+<p>가장 기본적인 경사 하강법은 **배치 경사 하강법(Batch Gradient Descent)**이라고도 불린다. 이 방법은 한 번의 파라미터 업데이트를 위해 **전체 학습 데이터셋(full batch)**을 모두 사용한다. 즉, 모든 학습 샘플에 대한 손실을 각각 계산하고, 이들의 평균 기울기를 구하여 파라미터를 단 한 번 업데이트한다.</p>
+<p>이 방식은 몇 가지 명확한 한계를 가진다:</p>
+<ul>
+<li><strong>엄청난 계산 비용:</strong> 데이터셋이 수백만, 수십억 개에 이르는 현대의 문제에서는 한 번의 스텝을 내딛기 위해 전체 데이터를 훑어야 하므로 학습 속도가 극도로 느려진다.</li>
+<li><strong>메모리 제약:</strong> 전체 데이터를 메모리에 올려야 하므로, 대용량 데이터셋의 경우 물리적으로 실행이 불가능할 수 있다.</li>
+</ul>
+<p>물론, 전체 데이터의 기울기를 사용하므로 손실 함수 표면에서 매우 안정적이고 부드럽게 최저점을 향해 이동한다는 장점은 있다. 하지만 현실적인 대규모 문제에서는 비효율성 때문에 거의 사용되지 않는다.</p>
+<h3 id="section-sgd">확률적 경사 하강법 (Stochastic Gradient Descent, SGD)</h3>
+<p>배치 경사 하강법의 계산 비효율성을 극복하기 위해 등장한 것이 **확률적 경사 하강법(SGD)**이다. SGD의 핵심 아이디어는 매우 간단하다: 전체 데이터의 정확한 기울기를 계산하는 대신, 무작위로 추출한 **단 하나의 데이터 샘플**에 대한 기울기만으로 전체 기울기를 &#39;근사&#39;하여 파라미터를 업데이트하는 것이다.</p>
+<h4>이론: 확률적 추정 (Stochastic Estimation)</h4>
+<p>하나의 샘플로 계산한 기울기는 당연히 전체 데이터로 계산한 실제 기울기와는 차이가 있다. 이는 마치 여론조사에서 단 한 명의 의견만으로 전체 유권자의 성향을 추정하려는 것과 같다. 하지만 이 과정이 &#39;확률적&#39;으로 의미를 갖는 이유는, 각 스텝에서 사용하는 샘플을 무작위로 추출하기 때문이다. 하나의 샘플로 계산된 기울기는 잡음(noise)이 섞인 부정확한 추정치이지만, 이 추정치들의 기댓값(expectation)은 실제 전체 데이터의 기울기와 일치한다. 따라서 여러 번의 업데이트를 거치면 전체적으로는 올바른 방향, 즉 손실이 줄어드는 방향으로 나아가게 된다.</p>
+<p>SGD의 장단점은 다음과 같다:</p>
+<ul>
+<li><strong>장점:</strong>
+<ul>
+<li><strong>빠른 업데이트:</strong> 한 샘플만 보고 바로 업데이트하므로 한 스텝의 속도가 매우 빠르다.</li>
+<li><strong>지역 최적점 탈출:</strong> 기울기의 무작위적인 변동(noise)이 때로는 모델을 얕은 지역 최적점(local minima)에서 탈출시켜 더 좋은 해를 찾도록 돕는 긍정적인 효과를 낳기도 한다.</li>
+</ul>
+</li>
+<li><strong>단점:</strong>
+<ul>
+<li><strong>불안정한 수렴 경로:</strong> 업데이트 방향이 매번 크게 변동하므로, 손실 값이 부드럽게 감소하지 않고 심하게 진동한다.</li>
+<li><strong>최적점 근처에서의 방황:</strong> 이 진동 때문에 전역 최적점(global minimum)에 정확히 수렴하지 못하고 그 주변을 계속 맴돌 수 있다.</li>
+</ul>
+</li>
+</ul>
+<h4>예제: 1-step SGD 업데이트 수치 계산</h4>
+<p>간단한 로지스틱 회귀 모델 <code>σ(wᵀx)</code>와 하나의 데이터 샘플 <code>(x, y)</code>, 그리고 현재 가중치 <code>w_old</code>가 주어졌다고 가정하자. 학습률 <code>η=0.1</code>일 때, SGD의 한 스텝은 다음과 같이 계산된다.</p>
+<ol>
+<li>예측값 계산: <code>y_pred = σ(w_oldᵀx)</code></li>
+<li>손실 기울기 계산 (Cross-Entropy Loss 사용): <code>∂L/∂w = (y_pred - y) * x</code></li>
+<li>가중치 업데이트: <code>w_new = w_old - η * (y_pred - y) * x</code></li>
+</ol>
+<p>이처럼 단 하나의 샘플만으로 기울기를 계산하고 즉시 파라미터를 업데이트하는 것이 SGD의 특징이다.</p>
+<h3 id="section-minibatch-gd">미니배치 경사 하강법 (Mini-batch Gradient Descent)</h3>
+<p>미니배치 경사 하강법은 배치 경사 하강법의 안정성과 SGD의 속도라는 두 마리 토끼를 모두 잡기 위한 절충안이다. 전체 데이터(Batch)도, 단 하나의 샘플(Stochastic)도 아닌, 적절한 크기(보통 2의 거듭제곱인 32, 64, 128 등)의 작은 묶음, 즉 **미니배치(mini-batch)**를 사용하여 기울기를 계산하고 파라미터를 업데이트한다.</p>
+<p>이 방법은 현대 딥러닝에서 가장 표준적으로 사용되는 최적화 방식으로, 다음과 같은 장점을 가진다:</p>
+<ul>
+<li><strong>안정성과 속도의 균형:</strong> SGD보다 기울기 추정치가 훨씬 안정적이어서 수렴 과정이 덜 불안정하며, 배치 경사 하강법보다는 훨씬 빠르게 파라미터를 업데이트한다.</li>
+<li><strong>벡터화 효율성 극대화:</strong> GPU와 같은 병렬 연산 장치는 단일 연산보다 행렬과 같은 묶음(벡터화된) 연산을 처리할 때 훨씬 높은 효율을 보인다. 미니배치 방식은 이러한 하드웨어의 장점을 최대한 활용할 수 있게 해준다.</li>
+</ul>
+<h4>사례 연구: 배치 vs 미니배치 학습 비교</h4>
+<p>두 방식의 차이는 손실 감소 그래프와 파라미터 업데이트 경로를 시각화하면 명확히 드러난다. 배치 경사 하강법은 매끄럽고 예측 가능한 경로로 최적점을 찾아가지만, 각 스텝이 매우 오래 걸린다. 반면, 미니배치 경사 하강법은 다소의 잡음과 함께 지그재그로 움직이지만, 훨씬 빠른 속도로 최적점 근처에 도달한다.</p>
+<figure>
+<img alt="경사 하강법 종류별 최적화 경로" src="https://picture-search.tiangong.cn/image/rt/7d94ffd433c684e58973019a867b01c5.jpg" style="max-height: 280px; max-width: 100%;"/>
+<figcaption>배치(Batch), 미니배치(Mini-Batch), 확률적(Stochastic) 경사 하강법의 최적화 경로 비교. 배치 GD는 부드럽게, SGD는 매우 불안정하게, 미니배치 GD는 그 중간 형태로 최적점에 접근한다.</figcaption>
+</figure>
+<div class="chart-container" id="canvas-parent-1">
+<canvas id="lossChart"></canvas>
+</div>
+<script>
+            const lossCtx = document.getElementById('lossChart').getContext('2d');
+            const lossChart = new Chart(lossCtx, {
+                type: 'line',
+                data: {
+                    labels: Array.from({length: 50}, (_, i) => `Epoch ${i + 1}`),
+                    datasets: [{
+                        label: 'Batch GD Loss',
+                        data: Array.from({length: 50}, (_, i) => 1 / (i * 0.2 + 1) + 0.1),
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        borderWidth: 2,
+                        pointRadius: 0,
+                        tension: 0.1
+                    }, {
+                        label: 'Mini-Batch GD Loss',
+                        data: Array.from({length: 50}, (_, i) => 1 / (i * 0.2 + 1) + 0.15 + (Math.random() - 0.5) * 0.1),
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        borderWidth: 2,
+                        pointRadius: 0,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: '배치(Batch) vs 미니배치(Mini-Batch) 손실 곡선 비교',
+                            font: { size: 16 }
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false
+                        }
+                    },
+                    scales: {
+                        x: {
+                            display: true,
+                            title: {
+                                display: true,
+                                text: 'Epochs'
+                            }
+                        },
+                        y: {
+                            display: true,
+                            title: {
+                                display: true,
+                                text: 'Loss'
+                            },
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        </script>
+<h3 id="section-adam-optimizer">Adam 옵티마이저 (개념 수준)</h3>
+<p>미니배치 경사 하강법도 학습률(learning rate)을 어떻게 설정하느냐에 따라 성능이 크게 좌우된다. 또한, 손실 함수의 표면이 어떤 방향으로는 경사가 급하고 다른 방향으로는 완만한 &#39;좁고 긴 계곡(pathological curvature)&#39; 형태일 때, 업데이트 경로가 계곡 양쪽을 오가며 진동하여 비효율적으로 탐색하는 문제가 발생한다. 이러한 문제들을 해결하기 위해 더 &#39;똑똑한&#39; 최적화 방법들이 제안되었고, 그 중 가장 대표적인 것이 **Adam(Adaptive Moment Estimation)** 옵티마이저이다.</p>
+<p>Adam은 두 가지 핵심 아이디어를 결합한 하이브리드 방식이다.</p>
+<h4>1. 모멘텀 (Momentum)</h4>
+<p>모멘텀은 마치 언덕을 굴러 내려오는 공에 관성을 적용하는 것과 같다. 현재 스텝의 방향을 결정할 때, 현재 위치의 기울기뿐만 아니라 바로 직전에 이동했던 방향과 속도를 함께 고려한다. 이를 위해 과거 기울기들의 **지수 이동 평균(exponentially weighted moving average)**을 계산하여 &#39;속도(velocity)&#39; 벡터를 유지한다.
+        <br/><b>효과:</b> 기울기 방향이 일관되게 유지되는 방향으로는 가속도가 붙어 더 빠르게 나아가고, 방향이 계속 바뀌며 진동하는 방향으로는 관성이 진동을 상쇄시켜 더 안정적인 움직임을 보인다.
+        <br/><b>개념적 업데이트 식:</b> <code>v ← β*v + ∇L</code>, <code>w ← w - η*v</code> (<code>v</code>는 속도, <code>β</code>는 마찰계수와 유사한 역할을 한다.)</p>
+<h4>2. 적응적 학습률 (Adaptive Learning Rate)</h4>
+<p>이 아이디어는 각 파라미터마다 개별적인 학습률을 적용하는 것이다. 핵심은 &#39;지금까지 많이 변한 파라미터는 조심스럽게, 적게 변한 파라미터는 과감하게&#39; 업데이트하는 것이다. 이를 위해 과거 기울기들의 **제곱값**에 대한 지수 이동 평균을 유지한다.
+        <br/><b>효과:</b> 변화가 잦고 컸던(기울기 제곱의 평균이 큰) 파라미터는 학습률을 줄여 안정성을 높이고, 변화가 거의 없었던(기울기 제곱의 평균이 작은) 파라미터는 학습률을 키워 학습을 촉진한다. 이는 손실 함수의 &#39;계곡&#39; 문제에 특히 효과적이다.</p>
+<h4>Adam: 모멘텀과 적응적 학습률의 결합</h4>
+<p>Adam은 이 두 가지 개념을 모두 채택한다. 즉, 기울기의 1차 모멘트(평균, 모멘텀 역할)와 2차 모멘트(제곱의 평균, 학습률 조절 역할)를 모두 추적한다. <a href="https://arxiv.org/abs/1412.6980" target="_blank">원 논문</a>에 따르면, Adam의 업데이트 식은 개념적으로 다음과 같이 요약할 수 있다.</p>
+<ol>
+<li>기울기의 이동 평균(1차 모멘트) 업데이트: <code>m ← β₁*m + (1-β₁)*∇L</code></li>
+<li>기울기 제곱의 이동 평균(2차 모멘트) 업데이트: <code>v ← β₂*v + (1-β₂)*(∇L)²</code></li>
+<li>파라미터 업데이트: <code>w ← w - η * m / (sqrt(v) + ε)</code></li>
+</ol>
+<p>결론적으로 Adam은 각 파라미터마다 독립적인 학습률을 계산하면서도, 모멘텀을 통해 수렴 속도를 높이는 강력한 최적화 알고리즘이다. 대부분의 딥러닝 문제에서 별도의 하이퍼파라미터 튜닝 없이도 빠르고 안정적인 성능을 보여주기 때문에 현재 가장 널리 사용되는 옵티마이저 중 하나로 자리 잡았다.</p>
+<blockquote>
+<h4>핵심 요점</h4>
+<p>대용량 데이터 학습 시, 전체 데이터를 사용하는 배치 경사 하강법은 비효율적이다. 단일 샘플을 사용하는 SGD는 빠르지만 불안정하며, 이 둘을 절충한 미니배치 경사 하강법이 표준으로 사용된다. Adam과 같은 적응적 최적화 알고리즘은 모멘텀과 적응적 학습률을 결합하여, 학습률 튜닝의 어려움을 줄이고 다양한 손실 함수 지형에서 더 빠르고 안정적으로 최적해를 찾아가는 강력한 방법을 제공한다.</p>
+</blockquote>
+<div class="reference-container">
+			<div class="reference-section">
+				<h3 class="reference-title">참고 자료</h3>
+				<div class="reference-list">
+					
+					<div class="reference-item">
+						<span class="reference-number">[1]</span>
+						<div class="reference-content">
+							<div class="reference-text-container">
+								<span class="reference-text">Computational Graphs, Forward Propagation, and ...</span>
+									
+							</div>
+							<a href="https://medium.com/@amehsunday178/computational-graphs-forward-propagation-and-backward-propagation-for-nueral-networks-1dfc33787047" class="reference-link" target="_blank">
+								https://medium.com/@amehsunday178/computational-graphs-forward-propagation-and-backward-propagation-for-nueral-networks-1dfc33787047
+							</a>
+						</div>
+					</div>
+					
+					<div class="reference-item">
+						<span class="reference-number">[2]</span>
+						<div class="reference-content">
+							<div class="reference-text-container">
+								<span class="reference-text">What is Adam Optimizer?</span>
+									
+							</div>
+							<a href="https://www.geeksforgeeks.org/deep-learning/adam-optimizer/" class="reference-link" target="_blank">
+								https://www.geeksforgeeks.org/deep-learning/adam-optimizer/
+							</a>
+						</div>
+					</div>
+					
+				</div>
+			</div>
+		</div></div>
+</body></html>

@@ -1,0 +1,656 @@
+<!DOCTYPE html><html lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Lecture Series 2 - Chapter 2: 정보이론과 손실함수</title>
+<style>.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 24px 40px;
+    background-color: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    }
+.chart-container {
+    position: relative;
+    margin: 3em auto;
+    max-width: 700px;
+    min-height: 200px;
+    max-height: 400px;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+    aspect-ratio: 7/5;}
+h5 {
+    font-size: 16px;
+    }
+body {
+    font-family: "Georgia", "Times New Roman", serif;
+    line-height: 1.8;
+    font-size: 16px;
+    color: #333;
+    background-color: #fdfdfd;
+    margin: 0 24px 0 24px;
+    padding: 0;
+    max-width: None;
+    }
+h1, h2, h3, h4 {
+    font-family: "Helvetica Neue", "Arial", sans-serif;
+    color: #222;
+    line-height: 1.4;
+    margin-top: 24px;
+    margin-bottom: 20px;
+    font-size: 28px;
+    }
+h1 {
+    font-size: 28px;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 10px;
+    margin-top: 24px;
+    margin-bottom: 20px;
+    }
+h2 {
+    font-size: 22px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 8px;
+    }
+h3 {
+    font-size: 20px;
+    }
+h4 {
+    font-size: 18px;
+    font-style: italic;
+    color: #555;
+    }
+p {
+    margin-bottom: 1.2em;
+    }
+a {
+    color: #07c;
+    text-decoration: none;
+    }
+a:hover {
+    text-decoration: underline;
+    }
+blockquote {
+    border-left: 4px solid #ccc;
+    padding-left: 20px;
+    margin: 2em 0;
+    color: #666;
+    font-style: italic;
+    }
+code, pre {
+    font-family: "Menlo", "Monaco", "Courier New", monospace;
+    background-color: #f5f5f5;
+    border-radius: 4px;
+    }
+code {
+    padding: 2px 4px;
+    font-size: 0.9em;
+    }
+pre {
+    padding: 1em;
+    overflow-x: auto;
+    line-height: 1.5;
+    }
+figure {
+    margin: 2em 0;
+    text-align: center;
+    }
+img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    display: block;
+    overflow: hidden;
+    max-height: 280px;
+    margin: 1em auto;
+    }
+figcaption {
+    font-size: 0.9em;
+    color: #777;
+    margin-top: 0.5em;
+    font-style: italic;
+    }
+.toc {
+    background: #f9f9f9;
+    border: 1px solid #e0e0e0;
+    padding: 15px 20px;
+    margin-bottom: 2em;
+    border-radius: 5px;
+    }
+.toc h2 {
+    margin-top: 0;
+    border-bottom: none;
+    font-size: 1.5em;
+    }
+.toc ul {
+    list-style-type: none;
+    padding-left: 0;
+    }
+.toc ul ul {
+    padding-left: 20px;
+    }
+.toc li {
+    margin-bottom: 8px;
+    }
+.math-formula {
+    font-family: "Latin Modern Math", "Cambria Math", serif;
+    font-size: 1.1em;
+    text-align: center;
+    margin: 1.5em auto;
+    padding: 1em;
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 4px;
+    overflow-x: auto;
+    }
+.example-box {
+    background-color: #eef7ff;
+    border: 1px solid #cce5ff;
+    padding: 1.5em;
+    margin: 2em 0;
+    border-radius: 5px;
+    }
+.example-box h4 {
+    margin-top: 0;
+    color: #004085;
+    }
+.key-point {
+    background-color: #fffbe6;
+    border-left: 5px solid #ffc107;
+    padding: 1em 1.5em;
+    margin: 2em 0;
+    }
+        .chart-container canvas {
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: contain;
+}
+
+@media only screen and (max-device-width: 768px) {
+            body {
+                padding: 0;
+                margin: 0;
+                font-family: PingFang SC;
+                font-size: 15px;
+                line-height: 1.5;
+            }
+
+            .container {
+                padding: 0;
+                margin: 16px 20px 30px;
+                box-shadow: none;
+            }
+
+            h1,
+            h2,
+            h3,
+            h4 {
+                font-family: PingFang SC;
+            }
+
+            h1 {
+                font-size: 1.87em;
+                line-height: 1.6;
+                margin-bottom: 0.5em;
+                text-align: center;
+            }
+
+            h2 {
+                font-size: 1.6em;
+                font-weight: 600;
+                margin-top: 1.3em;
+                margin-bottom: 0.8em;
+                border-bottom: 1px solid #eee;
+                padding-bottom: 0.5em;
+            }
+
+            h3 {
+                font-size: 1.2em;
+                font-weight: 600;
+                margin-top: 1em;
+                margin-bottom: 0.6em;
+            }
+
+            h4 {
+                font-size: 1.1em;
+                font-weight: 500;
+                margin-top: 1em;
+                margin-bottom: 0.5em;
+                font-style: normal;
+            }
+
+            h5 {
+                font-size: 1em;
+                font-weight: 500;
+                margin-bottom: 1.2em;
+            }
+
+            ul,
+            ol {
+                font-size: 1em; /* Equivalent to 17.6px if base is 16px */
+                font-weight: 400;
+                margin-bottom: 1.2em;
+                line-height: 1.8;
+            }
+
+            p {
+                font-size: 1em;
+                line-height: 1.8; /* Equivalent to 17.6px if base is 16px */
+                font-weight: 400;
+                margin-top: 0.8em;
+                margin-bottom: 0.8em;
+            }
+
+            blockquote {
+                padding: 1em 1.2em;
+
+            p {
+                margin: 0;
+            }
+        }
+
+        figcaption {
+            margin-top: 0.5em;
+            font-size: 0.8em; /* Equivalent to 17.6px if base is 16px */
+            font-weight: 400;
+            text-align: center;
+            font-style: normal;
+            color: #7F8896;
+        }
+
+        img {
+            display: block;
+            overflow: hidden;
+            max-width: 100%;
+            max-height: 335px;
+            margin: 1em auto;
+            border-radius: 8px;
+        }
+        }</style>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link rel="stylesheet" href="https://static.skywork.ai/fe/skywork-site-assets/styles/doc_reference_style.css?v=1956741458799996928"/></head>
+<body>
+<div class="container">
+<h1 id="section-1">Lecture Series 2 – Probabilistic &amp; Information: Theoretic Foundations<br/>Chapter 2. 정보이론과 손실함수</h1>
+<nav class="toc" id="table-of-contents">
+<h2 id="section-1">목차</h2>
+<ul>
+<li><a href="#section-intro">도입: 예측의 &#39;좋고 나쁨&#39;을 어떻게 측정할까?</a></li>
+<li><a href="#section-section-entropy">정보량의 측정: 엔트로피와 교차 엔트로피</a>
+<ul>
+<li><a href="#section-case-study-1">사례 (Case Study): 날씨 예측 모델 비교하기</a></li>
+<li><a href="#section-theory-1">이론 (Theory): 정보량, 엔트로피, 그리고 교차 엔트로피의 정의</a></li>
+<li><a href="#section-example-1">예제 (Example): 날씨 예측 모델의 교차 엔트로피 계산</a></li>
+</ul>
+</li>
+<li><a href="#section-section-kld">두 분포의 거리: 쿨백-라이블러 발산 (Kullback-Leibler Divergence)</a>
+<ul>
+<li><a href="#section-case-study-2">사례 (Case Study): 스팸 메일 필터의 성능 평가</a></li>
+<li><a href="#section-theory-2">이론 (Theory): KL 발산의 정의와 특성</a></li>
+<li><a href="#section-example-2">예제 (Example): 두 베르누이 분포의 KLD 계산</a></li>
+</ul>
+</li>
+<li><a href="#section-section-logistic">정보이론으로 해석하는 로지스틱 회귀</a>
+<ul>
+<li><a href="#section-case-study-3">사례 (Case Study): 로지스틱 회귀 학습 과정의 재해석</a></li>
+<li><a href="#section-theory-3">이론 (Theory): 우도, 에너지, 그리고 사전분포의 연결</a></li>
+<li><a href="#section-example-3">예제 (Example): 로짓(Logit)과 확률(Probability)의 상호 변환</a></li>
+</ul>
+</li>
+<li><a href="#section-summary">요약 및 다음 챕터 예고</a></li>
+</ul>
+</nav>
+<h2 id="section-intro">도입: 예측의 &#39;좋고 나쁨&#39;을 어떻게 측정할까?</h2>
+<p>이번 챕터에서는 머신러닝 모델, 특히 확률을 출력하는 분류 모델의 성능을 어떻게 정량적으로 평가하고 최적화하는지 학습합니다. 이를 위해 정보이론의 핵심 개념들을 빌려와 &#39;손실 함수(Loss Function)&#39;를 이해하는 여정을 시작합니다. 손실 함수는 모델의 예측이 실제 값과 얼마나 다른지를 나타내는 척도로, 모델 학습의 나침반 역할을 합니다. <a href="https://www.datacamp.com/tutorial/loss-function-in-machine-learning" target="_blank">DataCamp의 설명에 따르면</a>, 손실 함수는 모델의 성능과 정확성을 측정 가능한 방식으로 제공하여 학습 과정을 안내합니다.</p>
+<p>Lecture 1에서 배운 확률의 개념을 바탕으로, 이제 우리는 한 단계 더 나아가 모델이 예측한 &#39;확률 분포&#39;가 실제 데이터의 &#39;확률 분포&#39;와 얼마나 다른지, 즉 예측의 &#39;오차&#39;를 측정하는 방법을 탐구할 것입니다. 이 오차를 최소화하는 과정이 바로 머신러닝 모델의 &#39;학습&#39;입니다.</p>
+<blockquote>
+<strong>핵심 질문:</strong> &#34;모델 A는 내일 비가 올 확률을 80%로, 모델 B는 60%로 예측했습니다. 실제로 비가 왔을 때, 어떤 모델이 얼마나 더 &#39;좋은&#39; 예측을 한 것일까요?&#34;
+        </blockquote>
+<p>이 질문에 답하기 위해서는 직관을 넘어선 체계적인 평가 도구가 필요합니다. 정보이론은 바로 이 &#39;예측의 좋고 나쁨&#39;을 수학적으로 정의하고 측정하는 강력한 프레임워크를 제공하며, 이는 현대 머신러닝에서 사용되는 손실 함수의 근간을 이룹니다. 이번 챕터를 통해 우리는 이 질문에 대한 명확한 답을 찾는 방법을 배우게 될 것입니다.</p>
+<h2 id="section-section-entropy">정보량의 측정: 엔트로피와 교차 엔트로피</h2>
+<p>이 파트에서는 정보의 양을 측정하는 기본 단위부터 시작하여, 두 확률 분포 간의 차이를 측정하는 교차 엔트로피의 개념을 학습합니다. 그리고 이것이 왜 분류 모델의 손실 함수로 사용되는지 그 본질을 파헤칩니다.</p>
+<h3 id="section-case-study-1">사례 (Case Study): 날씨 예측 모델 비교하기</h3>
+<p>내일의 날씨가 &#39;비(Rain)&#39; 또는 &#39;맑음(Clear)&#39; 두 가지 경우만 있다고 가정해 봅시다. 그리고 실제 관측 결과, 내일은 &#39;비&#39;가 왔습니다. 두 명의 예보관(모델)이 다음과 같이 예측했습니다.</p>
+<ul>
+<li><strong>모델 A (초보 예보관):</strong> 비가 올 확률 P(Rain|A) = 0.6, 맑을 확률 P(Clear|A) = 0.4</li>
+<li><strong>모델 B (전문 예보관):</strong> 비가 올 확률 P(Rain|B) = 0.9, 맑을 확률 P(Clear|B) = 0.1</li>
+</ul>
+<p>직관적으로 실제 결과인 &#39;비&#39;에 더 높은 확률을 부여한 모델 B가 더 나은 예측을 한 것으로 보입니다. 하지만 이 &#39;더 나음&#39;을 어떻게 수치로 표현하고, 두 모델의 예측 품질 차이를 정량적으로 비교할 수 있을까요? 이 질문에 답하기 위해, 우리는 먼저 &#39;정보&#39;를 측정하는 방법부터 알아봐야 합니다. 이 필요성이 바로 교차 엔트로피 개념으로 이어집니다.</p>
+<h3 id="section-theory-1">이론 (Theory): 정보량, 엔트로피, 그리고 교차 엔트로피의 정의</h3>
+<h4>1. 정보량 (Information Content / Self-Information)</h4>
+<p>정보이론의 창시자 <a href="https://en.wikipedia.org/wiki/Claude_Shannon" target="_blank">클로드 섀넌(Claude Shannon)</a>은 정보량을 &#39;놀라움의 정도(degree of surprise)&#39;로 정의했습니다. 드물게 발생하는 사건(확률이 낮은 사건)일수록, 그 사건이 실제로 발생했다는 것을 알게 되었을 때 우리는 더 많이 놀라게 되며, 이는 더 많은 정보량을 얻었음을 의미합니다. 예를 들어, &#39;해가 동쪽에서 떴다&#39;는 소식보다 &#39;해가 서쪽에서 떴다&#39;는 소식이 훨씬 더 큰 정보량을 가집니다.</p>
+<p>어떤 사건 <code>x</code>가 발생할 확률이 <code>P(x)</code>일 때, 이 사건의 정보량 <code>I(x)</code>는 다음과 같이 정의됩니다.</p>
+<div class="math-formula">
+            I(x) = -log(P(x))
+        </div>
+<p>로그 함수의 밑(base)은 정보량의 단위를 결정합니다. 밑이 2이면 비트(bit), 자연상수 e이면 내트(nat)를 사용합니다. 확률 <code>P(x)</code>가 1에 가까울수록 정보량은 0에 수렴하고, <code>P(x)</code>가 0에 가까울수록 정보량은 무한대로 발산합니다. <a href="https://jonathan-hui.medium.com/information-theory-basic-for-machine-learning-38e45921bc55" target="_blank">이는 사건이 예측 가능할수록 새로운 정보가 없다는 직관과 일치합니다.</a></p>
+<h4>2. 엔트로피 (Entropy)</h4>
+<p>엔트로피는 어떤 확률 분포 <code>P</code>가 가지는 불확실성의 기댓값, 즉 평균 정보량을 의미합니다. 확률 변수 <code>X</code>가 가질 수 있는 모든 사건 <code>x</code>에 대해, 각 사건의 정보량과 그 사건이 일어날 확률을 곱한 값을 모두 더하여 계산합니다.</p>
+<div class="math-formula">
+            H(P) = E<sub>x~P</sub>[I(x)] = - ∑<sub>x</sub> P(x)log(P(x))
+        </div>
+<p>엔트로피는 분포의 &#39;무질서도&#39; 또는 &#39;예측하기 어려움&#39;의 정도로 해석할 수 있습니다. 예를 들어, 앞면과 뒷면이 나올 확률이 각각 0.5인 공정한 동전은, 던지기 전까지 결과를 예측하기 가장 어렵기 때문에 엔트로피가 최대가 됩니다. 반면, 앞면만 나오는 동전은 결과가 100% 확실하므로 엔트로피가 0입니다.</p>
+<div class="chart-container" id="canvas-parent-1" data-sk-source-container="chart" data-sk-source-id="DLE9G7" data-sk-source-type="web_search">
+<canvas id="entropyChart"></canvas>
+</div>
+<figcaption style="text-align:center; font-size:0.9em; color:#777; margin-top:0.5em;">그림 1: 베르누이 분포(p)의 엔트로피. 확률 p가 0.5일 때 불확실성이 최대가 되어 엔트로피 값이 가장 높다.</figcaption>
+<h4>3. 교차 엔트로피 (Cross-Entropy)</h4>
+<p>교차 엔트로피는 정보이론과 머신러닝을 잇는 핵심적인 다리입니다. 실제 확률 분포가 <code>P</code>인 사건들에 대해, 우리가 만든 모델이 예측한 확률 분포 <code>Q</code>를 사용하여 정보량을 계산했을 때의 평균 정보량을 의미합니다. 즉, &#39;잘못된&#39; 예측 분포 <code>Q</code>를 가지고 실제 사건들을 얼마나 잘 설명하는지를 측정하는 것입니다.</p>
+<div class="math-formula">
+            H(P, Q) = E<sub>x~P</sub>[-log(Q(x))] = - ∑<sub>x</sub> P(x)log(Q(x))
+        </div>
+<p>만약 모델의 예측 분포 <code>Q</code>가 실제 분포 <code>P</code>와 완벽하게 동일하다면, 교차 엔트로피는 실제 분포의 엔트로피 <code>H(P)</code>와 같아집니다. 하지만 <code>Q</code>가 <code>P</code>와 다를수록, 교차 엔트로피 값은 <code>H(P)</code>보다 커지게 됩니다. 이 &#39;추가적인&#39; 정보량이 바로 모델의 예측 오차를 나타냅니다.</p>
+<div class="key-point">
+<h4>핵심 연결고리: 교차 엔트로피와 음의 로그 우도(Negative Log-Likelihood)</h4>
+<p>분류 문제에서 교차 엔트로피가 손실 함수로 사용되는 이유를 이해하는 것은 매우 중요합니다. 이 관계는 최대우도추정(Maximum Likelihood Estimation, MLE)과 깊이 연결됩니다.</p>
+<ol>
+<li><strong>실제 정답(P)의 표현:</strong> 분류 문제에서 실제 정답 레이블은 특정 클래스 하나만 1이고 나머지는 0인 &#39;원-핫(one-hot)&#39; 벡터로 표현할 수 있습니다. 이는 해당 클래스가 발생할 확률이 100%인 확률 분포 <code>P</code>로 볼 수 있습니다. 예를 들어, &#39;고양이&#39; 이미지는 [고양이=1, 개=0, 새=0]으로 표현됩니다.</li>
+<li><strong>모델 예측(Q)의 표현:</strong> 모델은 각 클래스에 대한 확률을 출력합니다 (예: Softmax 함수를 통해). 이는 모델이 예측한 확률 분포 <code>Q</code>입니다. 예를 들어, [고양이=0.7, 개=0.2, 새=0.1]과 같습니다.</li>
+<li><strong>교차 엔트로피 계산:</strong> 이 두 분포 <code>P</code>와 <code>Q</code>에 대해 교차 엔트로피를 계산해 봅시다.
+                    <div class="math-formula">
+                        H(P, Q) = - ∑<sub>i=1</sub><sup>C</sup> P(class<sub>i</sub>) * log(Q(class<sub>i</sub>))
+                    </div>
+                    P는 원-핫 벡터이므로 정답 클래스 <code>k</code>에 대해서만 <code>P(class_k)=1</code>이고 나머지는 0입니다. 따라서 위 식은 다음과 같이 단순화됩니다.
+                    <div class="math-formula">
+                        H(P, Q) = - (1 * log(Q(class<sub>k</sub>)) + 0 * ... ) = -log(Q(class<sub>k</sub>))
+                    </div>
+</li>
+<li><strong>음의 로그 우도(NLL):</strong> 한편, 주어진 데이터에 대해 모델의 우도(Likelihood)는 모델이 실제 정답을 맞힐 확률, 즉 <code>Q(class_k)</code>입니다. <a href="https://glassboxmedicine.com/2019/12/07/connections-log-likelihood-cross-entropy-kl-divergence-logistic-regression-and-neural-networks/" target="_blank">최대우도추정(MLE)은 이 우도를 최대화하는 것을 목표로 합니다.</a> 로그 변환은 단조 증가 함수이므로, 우도를 최대화하는 것은 로그 우도 <code>log(Q(class_k))</code>를 최대화하는 것과 같습니다. 그리고 최적화 문제는 보통 &#39;최소화&#39; 문제로 다루므로, 이는 음의 로그 우도 <code>-log(Q(class_k))</code>를 최소화하는 것과 동일합니다.</li>
+</ol>
+<p>결론적으로, <strong>분류 모델에서 교차 엔트로피 손실을 최소화하는 것은 모델의 로그 우도를 최대화하는 것과 수학적으로 동일한 목표</strong>를 가집니다. 이것이 교차 엔트로피가 분류 문제의 표준 손실 함수로 자리 잡은 근본적인 이유입니다.</p>
+</div>
+<figure>
+<img alt="우도 계산 예시" src="https://picture-search.tiangong.cn/image/rt/798ceb6700e9db74276315c8b8296eb7.jpg" style="max-height: 280px; max-width: 100%;"/>
+<figcaption>모델의 예측 확률(ŷ)과 실제 정답(y)을 이용한 우도 계산 예시. 정답 클래스에 해당하는 예측 확률이 곧 해당 관측치의 우도가 된다</figcaption>
+</figure>
+<h3 id="section-example-1">예제 (Example): 날씨 예측 모델의 교차 엔트로피 계산</h3>
+<div class="example-box">
+<h4>문제</h4>
+<p>앞선 사례에서 제시된 모델 A와 모델 B의 교차 엔트로피 손실을 각각 계산하고, 어느 모델의 손실이 더 낮은지 비교하시오. (실제 정답 분포 P = [Rain=1, Clear=0])</p>
+<h4>풀이 과정</h4>
+<p>교차 엔트로피 공식 <code>H(P, Q) = - Σ P(x)log(Q(x))</code>를 적용합니다. 여기서 P는 실제 분포, Q는 모델의 예측 분포입니다.</p>
+<ul>
+<li>
+<strong>모델 A의 손실 (Q<sub>A</sub> = [0.6, 0.4]):</strong>
+<div class="math-formula">
+                        L<sub>A</sub> = H(P, Q<sub>A</sub>) = - [1 * log(0.6) + 0 * log(0.4)] = -log(0.6) ≈ 0.5108
+                    </div>
+</li>
+<li>
+<strong>모델 B의 손실 (Q<sub>B</sub> = [0.9, 0.1]):</strong>
+<div class="math-formula">
+                        L<sub>B</sub> = H(P, Q<sub>B</sub>) = - [1 * log(0.9) + 0 * log(0.1)] = -log(0.9) ≈ 0.1054
+                    </div>
+</li>
+</ul>
+<h4>결론</h4>
+<p>모델 B의 손실 값(약 0.1054)이 모델 A의 손실 값(약 0.5108)보다 현저히 낮습니다. 이는 모델 B가 실제 결과를 더 높은 확률로 예측했기 때문이며, 교차 엔트로피를 통해 이 &#39;더 나음&#39;을 정량적으로 평가할 수 있음을 보여줍니다. 머신러닝 모델은 학습 과정에서 이 손실 값을 최소화하는 방향으로 파라미터를 조정하게 됩니다.</p>
+</div>
+<h2 id="section-section-kld">두 분포의 거리: 쿨백-라이블러 발산 (Kullback-Leibler Divergence)</h2>
+<p>교차 엔트로피가 손실 함수로 사용되는 이유를 더 깊이 이해하기 위해, 두 확률 분포 사이의 &#39;거리&#39; 개념인 쿨백-라이블러 발산(Kullback-Leibler Divergence, KLD)을 탐구합니다. KLD는 한 확률 분포를 다른 확률 분포로 근사할 때 발생하는 정보 손실량을 측정합니다.</p>
+<h3 id="section-case-study-2">사례 (Case Study): 스팸 메일 필터의 성능 평가</h3>
+<p>우리가 스팸 메일 필터를 개발한다고 상상해 봅시다. 이 필터의 성능은 정상 메일과 스팸 메일을 얼마나 잘 구분하는지에 달려 있습니다.</p>
+<ul>
+<li><strong>P (실제 분포):</strong> 실제 세상의 모든 정상 메일에서 &#39;광고&#39;, &#39;무료&#39;, &#39;당첨&#39;과 같은 특정 단어들이 나타나는 실제 확률 분포입니다. 이는 우리가 완벽히 알 수는 없지만 존재하는 &#39;참 분포&#39;입니다.</li>
+<li><strong>Q (모델의 예측 분포):</strong> 우리가 가진 데이터로 학습한 스팸 필터 모델이 추정한, 정상 메일에서의 단어 확률 분포입니다.</li>
+</ul>
+<p>여기서 핵심 질문은 &#34;우리 모델(Q)이 실제(P)를 얼마나 잘못 이해하고 있는가?&#34; 입니다. 이 두 분포 간의 &#39;차이&#39; 또는 모델이 P를 Q로 근사하면서 잃어버린 &#39;정보 손실량&#39;을 어떻게 측정할 수 있을까요? 이 질문에 대한 답이 바로 KL 발산입니다. <a href="https://medium.com/@hosamedwee/kullback-leibler-kl-divergence-with-examples-part-2-9123bff5dc10" target="_blank">KL 발산은 모델의 추정 분포 Q가 실제 분포 P를 얼마나 잘 근사하는지 측정하는 데 사용될 수 있습니다.</a></p>
+<h3 id="section-theory-2">이론 (Theory): KL 발산의 정의와 특성</h3>
+<h4>1. KL 발산(KLD)의 정의</h4>
+<p>쿨백-라이블러 발산은 두 확률 분포 <code>P</code>와 <code>Q</code>에 대해 정의되며, 분포 <code>Q</code>를 사용하여 분포 <code>P</code>의 정보를 인코딩할 때 발생하는 평균적인 추가 정보량(비트 수)을 의미합니다. 즉, <code>P</code>를 기준으로 할 때 <code>Q</code>가 얼마나 비효율적인지를 나타냅니다. &#39;상대적 엔트로피(Relative Entropy)&#39;라고도 불립니다.</p>
+<div class="math-formula">
+            D<sub>KL</sub>(P || Q) = ∑<sub>x</sub> P(x) log( P(x) / Q(x) )
+        </div>
+<p>이 식은 각 사건 <code>x</code>에 대해 <code>P(x)</code>와 <code>Q(x)</code>의 확률 비율에 로그를 취한 값의 기댓값으로 해석할 수 있습니다. 만약 모든 <code>x</code>에 대해 <code>P(x) = Q(x)</code>라면, 로그 안의 값은 1이 되어 <code>log(1) = 0</code>이므로, KLD는 0이 됩니다.</p>
+<h4>2. KLD와 교차 엔트로피의 관계 (핵심)</h4>
+<p>KLD의 정의를 로그의 성질을 이용해 분해하면 교차 엔트로피와의 명확한 관계를 도출할 수 있습니다. 이는 머신러닝에서 교차 엔트로피를 손실 함수로 사용하는 이론적 기반이 됩니다.</p>
+<div class="math-formula">
+            D<sub>KL</sub>(P || Q) = ∑ P(x) [log(P(x)) - log(Q(x))] <br/>
+            = ∑ P(x)log(P(x)) - ∑ P(x)log(Q(x)) <br/>
+            = -H(P) + H(P, Q)
+        </div>
+<p>따라서, 우리는 다음과 같은 매우 중요한 관계식을 얻습니다.</p>
+<div class="key-point">
+<h4>H(P, Q) = D<sub>KL</sub>(P || Q) + H(P)</h4>
+<p><strong>교차 엔트로피 = KL 발산 + 실제 분포의 엔트로피</strong></p>
+<p>머신러닝 모델을 학습시킬 때, 우리의 목표는 모델의 예측 분포 <code>Q</code>를 실제 데이터의 분포 <code>P</code>에 가깝게 만드는 것입니다. 여기서 실제 데이터의 분포 <code>P</code>는 주어져 있으며 변하지 않으므로, 그 엔트로피 <code>H(P)</code>는 상수 값입니다. 따라서, <strong>교차 엔트로피 <code>H(P, Q)</code>를 최소화하는 것은 KL 발산 <code>D_KL(P || Q)</code>를 최소화하는 것과 완벽하게 동일한 최적화 목표</strong>를 가집니다. <a href="https://leimao.github.io/blog/Cross-Entropy-KL-Divergence-MLE/" target="_blank">이것이 바로 우리가 계산이 더 간단한 교차 엔트로피를 손실 함수로 사용하는 근본적인 이유입니다.</a></p>
+</div>
+<figure>
+<figcaption>쿨백-라이블러 발산(D_KL)은 교차 엔트로피(H)에서 원본 분포의 엔트로피를 뺀 값과 같다</figcaption>
+</figure>
+<h4>3. KLD의 주요 특성</h4>
+<ul>
+<li><strong>비대칭성 (Asymmetry):</strong> <code>D_KL(P || Q) ≠ D_KL(Q || P)</code> 입니다. 이는 KLD가 수학적 의미의 엄격한 &#39;거리(distance metric)&#39;가 아님을 의미합니다. <code>D_KL(P || Q)</code>는 P를 기준으로 Q의 차이를 측정하는 반면, <code>D_KL(Q || P)</code>는 Q를 기준으로 P의 차이를 측정합니다. 최적화 관점에서 이는 다른 결과를 낳을 수 있습니다. 예를 들어, 실제 분포 P가 여러 개의 봉우리(multi-modal)를 가질 때, <code>D_KL(P || Q)</code>를 최소화하는 모델 Q는 모든 봉우리를 어중간하게 포함하려는 경향(평균을 찾는 경향)을 보이고, <code>D_KL(Q || P)</code>를 최소화하는 모델 Q는 여러 봉우리 중 하나에 집중하려는 경향(하나의 모드를 찾는 경향)을 보입니다.</li>
+<li><strong>음이 아닌 값 (Non-negativity):</strong> 깁스 부등식(Gibbs&#39; inequality)에 의해 <code>D_KL(P || Q) ≥ 0</code> 이 항상 성립합니다. 두 분포가 완전히 동일할 때만 KLD 값은 0이 됩니다.</li>
+</ul>
+<h3 id="section-example-2">예제 (Example): 두 베르누이 분포의 KLD 계산</h3>
+<div class="example-box">
+<h4>문제</h4>
+<p>동전 던지기에서 앞면이 나올 실제 확률 분포 P는 P(앞면)=0.8, P(뒷면)=0.2인 베르누이 분포를 따른다고 합니다. 한 모델이 예측한 확률 분포 Q는 Q(앞면)=0.5, Q(뒷면)=0.5인 베르누이 분포입니다. 이 때, <code>D_KL(P || Q)</code>를 계산하시오. (로그의 밑은 자연로그 e를 사용)</p>
+<h4>풀이 과정</h4>
+<p>KLD 공식에 따라 각 사건(앞면, 뒷면)에 대한 값을 계산하여 더합니다.</p>
+<div class="math-formula">
+                D<sub>KL</sub>(P || Q) = P(앞면) * log( P(앞면) / Q(앞면) ) + P(뒷면) * log( P(뒷면) / Q(뒷면) )
+            </div>
+<p>값을 대입하면 다음과 같습니다.</p>
+<div class="math-formula">
+                = 0.8 * log(0.8 / 0.5) + 0.2 * log(0.2 / 0.5) <br/>
+                = 0.8 * log(1.6) + 0.2 * log(0.4) <br/>
+                ≈ 0.8 * (0.470) + 0.2 * (-0.916) <br/>
+                ≈ 0.376 - 0.1832 = 0.1928
+            </div>
+<h4>결론</h4>
+<p>모델의 예측 분포 Q를 사용하여 실제 분포 P를 표현할 때 발생하는 평균 정보 손실량은 약 0.1928 내트(nats)입니다. 이 값이 0보다 크다는 것은 두 분포가 다르다는 것을 의미하며, 모델 학습은 이 값을 0에 가깝게 만드는 과정이라고 할 수 있습니다.</p>
+</div>
+<h2 id="section-section-logistic">정보이론으로 해석하는 로지스틱 회귀</h2>
+<p>이제 앞서 배운 정보이론의 개념들을 로지스틱 회귀(Logistic Regression)라는 구체적인 모델에 적용해 보겠습니다. 이를 통해 모델의 학습 과정이 정보이론적 관점에서 어떻게 해석될 수 있는지 통합적으로 이해할 수 있습니다.</p>
+<h3 id="section-case-study-3">사례 (Case Study): 로지스틱 회귀 학습 과정의 재해석</h3>
+<p>날씨 데이터(온도, 습도 등)를 입력받아 내일 비가 올지(1) 안 올지(0)를 예측하는 로지스틱 회귀 모델의 학습 과정을 정보이론적 관점에서 단계별로 다시 살펴보겠습니다.</p>
+<ol>
+<li><strong>확률 예측:</strong> 모델은 입력 데이터 <code>x</code>와 가중치 <code>w</code>를 선형 결합한 후, 시그모이드(Sigmoid) 함수를 통과시켜 &#39;비가 올 확률&#39; <code>p = σ(wᵀx)</code>를 출력합니다. 이는 모델이 예측한 베르누이 확률 분포 <code>Q</code>입니다.</li>
+<li><strong>손실 계산:</strong> 이 예측 확률 <code>p</code>와 실제 결과 <code>y</code> (1 또는 0) 사이의 <strong>교차 엔트로피 손실(Cross-Entropy Loss)</strong>을 계산합니다. 이 손실은 모델 예측 분포 <code>Q</code>와 실제 데이터 분포 <code>P</code>(y=1일 확률이 100% 또는 0%인 분포) 사이의 차이를 나타냅니다.</li>
+<li><strong>가중치 업데이트:</strong> 경사 하강법(Gradient Descent)을 이용해 이 <strong>손실을 최소화</strong>하는 방향으로 모델의 가중치 <code>w</code>를 업데이트합니다.</li>
+<li><strong>정보이론적 해석:</strong> 이 전체 과정은 결국 모델의 예측 분포 <code>Q</code>가 실제 데이터의 분포 <code>P</code>와의 <strong>KL 발산을 최소화</strong>하는 과정과 수학적으로 동일합니다. 즉, 로지스틱 회귀의 학습은 정보 손실을 줄여나가는 과정으로 재해석될 수 있습니다.</li>
+</ol>
+<p><a href="https://www.researchgate.net/publication/307656309_Prediction_of_Rainfall_Using_Logistic_Regression" target="_blank">실제 강우 예측 연구에서도 로지스틱 회귀는</a> 주어진 기상 데이터를 바탕으로 비가 올 확률을 모델링하는 데 효과적으로 사용됩니다.</p>
+<h3 id="section-theory-3">이론 (Theory): 우도, 에너지, 그리고 사전분포의 연결</h3>
+<h4>1. 로지스틱 회귀와 우도 (Likelihood)</h4>
+<p>로지스틱 회귀의 학습 과정을 이해하는 핵심은 최대우도추정(MLE)입니다. 모델의 목표는 주어진 데이터를 가장 잘 설명하는, 즉 데이터가 관측될 확률(우도)을 최대로 만드는 파라미터를 찾는 것입니다.</p>
+<ul>
+<li><strong>베르누이 분포로서의 출력:</strong> 로지스틱 회귀의 출력 <code>p</code>는 각 데이터 포인트에 대한 베르누이 분포의 파라미터(성공 확률)로 해석할 수 있습니다. 실제 레이블이 <code>y</code> (0 또는 1)일 때, 해당 데이터 포인트의 확률은 <code>p^y * (1-p)^(1-y)</code>로 표현됩니다.</li>
+<li><strong>우도 함수:</strong> 전체 데이터셋에 대한 우도 함수 <code>L(w)</code>는 모든 데이터 포인트의 확률들의 곱으로 정의됩니다 (데이터가 독립적이라고 가정).</li>
+<div class="math-formula">
+                L(w) = ∏<sub>i=1</sub><sup>N</sup> p<sub>i</sub><sup>y<sub>i</sub></sup> (1-p<sub>i</sub>)<sup>(1-y<sub>i</sub>)</sup>
+</div>
+<li><strong>로그 우도와 교차 엔트로피:</strong> 우도 함수에 로그를 취하면 곱셈이 덧셈으로 바뀌어 계산이 용이해집니다. 이를 로그 우도(Log-Likelihood)라고 합니다.
+            <div class="math-formula">
+                log L(w) = ∑<sub>i=1</sub><sup>N</sup> [y<sub>i</sub> log(p<sub>i</sub>) + (1-y<sub>i</sub>) log(1-p<sub>i</sub>)]
+            </div>
+            이 식에 음수를 취하고 평균을 내면, <code>- (1/N) * log L(w)</code>, 이는 정확히 이진 교차 엔트로피(Binary Cross-Entropy) 손실 함수의 정의와 일치합니다. <a href="https://medium.com/@ashisharora2204/logistic-regression-maximum-likelihood-estimation-gradient-descent-a7962a452332" target="_blank">따라서, 교차 엔트로피 손실을 최소화하는 것은 우도를 최대화하는 것과 같습니다.</a></li>
+</ul>
+<h4>2. 정규화(Regularization)와 사전 분포(Prior Distribution)</h4>
+<p>과적합을 방지하기 위해 사용되는 정규화는 베이지안 통계학의 관점에서 흥미롭게 해석될 수 있습니다. 이는 모델 파라미터에 대한 우리의 &#39;사전 믿음(prior belief)&#39;을 반영하는 과정입니다.</p>
+<ul>
+<li><strong>MAP (Maximum A Posteriori) 추정:</strong> 베이즈 정리에 따르면, 사후 확률은 우도와 사전 확률의 곱에 비례합니다: <code>P(w|D) ∝ P(D|w) * P(w)</code>. MAP는 이 사후 확률을 최대화하는 파라미터 <code>w</code>를 찾는 것을 목표로 합니다.</li>
+<li><strong>L2 정규화와 가우시안 사전 분포:</strong> 손실 함수에 추가되는 L2 정규화 항(<code>λ||w||²</code>)은 모델의 가중치(<code>w</code>)가 평균이 0이고 분산이 특정 값인 가우시안 분포를 따른다는 <strong>사전 믿음</strong>을 부여하는 것과 수학적으로 동일합니다. 즉, 가중치 값들이 0에 가깝게 분포할 것이라고 가정하는 것입니다. <a href="https://codingrabbit.tistory.com/21" target="_blank">이는 가중치 값이 비정상적으로 커지는 것을 방지하여 모델을 더 일반화시키는 효과를 낳습니다.</a></li>
+<li><strong>결론:</strong> 따라서 정규화는 단순히 과적합을 막는 기술적 트릭을 넘어, 모델 파라미터에 대한 확률론적 가정을 추가하는 베이지안적 해석이 가능합니다. 이는 MLE(빈도주의적 관점)를 MAP(베이지안적 관점)로 확장하는 것으로 볼 수 있습니다.</li>
+</ul>
+<figure>
+<img alt="베이지안 추론 과정" src="https://picture-search.tiangong.cn/image/rt/a20ad0af06e6792d3c0754021fe5e71e.jpg" style="max-height: 280px; max-width: 100%;"/>
+<figcaption>베이지안 추론에서 사후 분포(Posterior)는 사전 분포(Prior)와 우도(Likelihood)의 결합으로 업데이트된다</figcaption>
+</figure>
+<h3 id="section-example-3">예제 (Example): 로짓(Logit)과 확률(Probability)의 상호 변환</h3>
+<div class="example-box">
+<h4>문제 1</h4>
+<p>로지스틱 회귀 모델의 선형 결합 결과(로짓)가 <code>z = 1.5</code>로 계산되었습니다. 이 때, 해당 샘플이 클래스 1에 속할 확률은 얼마인가요?</p>
+<h4>풀이</h4>
+<p>로짓 값을 확률로 변환하기 위해 시그모이드 함수를 사용합니다.</p>
+<div class="math-formula">
+                p = σ(z) = 1 / (1 + e<sup>-z</sup>) <br/>
+                p = 1 / (1 + e<sup>-1.5</sup>) ≈ 1 / (1 + 0.2231) ≈ 0.8176
+            </div>
+<p>따라서 해당 샘플이 클래스 1에 속할 확률은 약 81.76%입니다.</p>
+<hr/>
+<h4>문제 2</h4>
+<p>어떤 샘플이 클래스 1에 속할 확률을 90%(p=0.9)로 만들고 싶습니다. 모델의 로짓 값은 얼마가 되어야 하나요?</p>
+<h4>풀이</h4>
+<p>확률 값을 로짓으로 변환하기 위해 로짓 함수(로그 오즈)를 사용합니다.</p>
+<div class="math-formula">
+                z = logit(p) = log(p / (1-p)) <br/>
+                z = log(0.9 / (1-0.9)) = log(0.9 / 0.1) = log(9) ≈ 2.197
+            </div>
+<p>모델의 로짓 값은 약 2.197이 되어야 합니다.</p>
+<p>이 예제들은 로지스틱 회귀 모델 내부에서 선형적인 로짓 값과 비선형적인 확률 값이 어떻게 상호 변환되는지 보여주며, 모델의 작동 방식에 대한 구체적인 이해를 돕습니다. <a href="https://aws.amazon.com/ko/what-is/logistic-regression/" target="_blank">AWS의 설명에 따르면</a>, 로짓 함수는 y를 x의 시그모이드 함수로 매핑합니다.</p>
+</div>
+<h2 id="section-summary">요약 및 다음 챕터 예고</h2>
+<div class="key-point">
+<h4>핵심 내용 정리</h4>
+<ul>
+<li><strong>정보이론</strong>은 불확실성을 정량화하는 수학적 도구이며, 정보량, 엔트로피, 교차 엔트로피, KL 발산이 핵심 개념입니다.</li>
+<li>분류 문제의 손실 함수로 널리 쓰이는 <strong>교차 엔트로피(Cross-Entropy)</strong>는 수학적으로 <strong>음의 로그 우도(Negative Log-Likelihood)</strong>와 동일하며, 이를 최소화하는 것은 모델의 우도를 최대화하는 것과 같습니다.</li>
+<li>교차 엔트로피를 최소화하는 것은 실제 데이터 분포와 모델 예측 분포 간의 <strong>KL 발산(Kullback-Leibler Divergence)</strong>을 최소화하는 것과 동일한 목표를 가집니다. 이는 모델 학습의 정보이론적 본질입니다.</li>
+<li><strong>로지스틱 회귀</strong>의 학습은 결국 모델의 예측 분포와 실제 데이터 분포 간의 KL 발산을 줄여나가는 과정으로 해석할 수 있습니다.</li>
+<li><strong>정규화(Regularization)</strong>는 과적합을 방지하는 기술을 넘어, 베이지안 관점에서 모델 파라미터에 대한 <strong>사전 분포(Prior Distribution)</strong>를 가정하는 것과 같습니다. (예: L2 정규화 ↔ 가우시안 사전 분포)</li>
+</ul>
+</div>
+<p>이번 챕터에서 다룬 개념들은 이진 분류를 중심으로 설명되었지만, 다중 클래스 분류 문제로 자연스럽게 확장됩니다. 이 경우 시그모이드 함수 대신 소프트맥스(Softmax) 함수를 사용하고, 손실 함수로는 범주형 교차 엔트로피(Categorical Cross-Entropy)를 사용하게 됩니다. 원리는 동일하게 적용됩니다.</p>
+<p>다음 챕터에서는 이렇게 정의된 손실 함수를 실제로 어떻게 최소화하는지, 즉 최적의 모델 파라미터를 찾아가는 &#39;최적화(Optimization)&#39;의 세계로 떠나보겠습니다. 가장 기본적인 경사 하강법의 원리부터 시작하여, 학습 속도와 안정성을 개선하기 위한 다양한 심화 기법들까지 다룰 것입니다.</p>
+<div class="reference-container">
+			<div class="reference-section">
+				<h3 class="reference-title">참고 자료</h3>
+				<div class="reference-list">
+					
+					<div class="reference-item">
+						<span class="reference-number">[1]</span>
+						<div class="reference-content">
+							<div class="reference-text-container">
+								<span class="reference-text">A Brief Overview of Cross Entropy Loss | by Chris Hughes - Medium</span>
+									
+							</div>
+							<a href="https://medium.com/@chris.p.hughes10/a-brief-overview-of-cross-entropy-loss-523aa56b75d5" class="reference-link" target="_blank">
+								https://medium.com/@chris.p.hughes10/a-brief-overview-of-cross-entropy-loss-523aa56b75d5
+							</a>
+						</div>
+					</div>
+					
+					<div class="reference-item">
+						<span class="reference-number">[2]</span>
+						<div class="reference-content">
+							<div class="reference-text-container">
+								<span class="reference-text">Introduction to Kullback-Leibler Divergence | by Yian Chen</span>
+									
+							</div>
+							<a href="https://medium.com/@yian.chen261/introduction-to-kullback-leibler-divergence-2d76979d1d8c" class="reference-link" target="_blank">
+								https://medium.com/@yian.chen261/introduction-to-kullback-leibler-divergence-2d76979d1d8c
+							</a>
+						</div>
+					</div>
+					
+					<div class="reference-item">
+						<span class="reference-number">[3]</span>
+						<div class="reference-content">
+							<div class="reference-text-container">
+								<span class="reference-text">Maximum Likelihood Estimation and Loss Functions</span>
+									
+							</div>
+							<a href="https://rish-01.github.io/blog/posts/ml_estimation/" class="reference-link" target="_blank">
+								https://rish-01.github.io/blog/posts/ml_estimation/
+							</a>
+						</div>
+					</div>
+					
+					<div class="reference-item">
+						<span class="reference-number">[4]</span>
+						<div class="reference-content">
+							<div class="reference-text-container">
+								<span class="reference-text">Understanding MLE and Cross Entropy in Logistic Regression</span>
+									
+							</div>
+							<a href="https://medium.com/@bhavtoshrath.umn/mle-and-cross-entropy-in-logistic-regression-9f784613237d" class="reference-link" target="_blank">
+								https://medium.com/@bhavtoshrath.umn/mle-and-cross-entropy-in-logistic-regression-9f784613237d
+							</a>
+						</div>
+					</div>
+					
+					<div class="reference-item">
+						<span class="reference-number">[5]</span>
+						<div class="reference-content">
+							<div class="reference-text-container">
+								<span class="reference-text">Connections: Log Likelihood, Cross Entropy, KL Divergence ...</span>
+									
+							</div>
+							<a href="https://glassboxmedicine.com/2019/12/07/connections-log-likelihood-cross-entropy-kl-divergence-logistic-regression-and-neural-networks/" class="reference-link" target="_blank">
+								https://glassboxmedicine.com/2019/12/07/connections-log-likelihood-cross-entropy-kl-divergence-logistic-regression-and-neural-networks/
+							</a>
+						</div>
+					</div>
+					
+				</div>
+			</div>
+		</div></div>
+<script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Entropy Chart
+            const ctx = document.getElementById('entropyChart').getContext('2d');
+            const labels = [];
+            const data = [];
+            for (let i = 0.01; i < 1; i += 0.01) {
+                labels.push(i.toFixed(2));
+                // H(p) = -p*log2(p) - (1-p)*log2(1-p)
+                let entropy = -i * Math.log2(i) - (1 - i) * Math.log2(1 - i);
+                data.push(entropy);
+            }
+
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Entropy H(p)',
+                        data: data,
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderWidth: 2,
+                        pointRadius: 0,
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Probability (p)'
+                            },
+                            ticks: {
+                                maxTicksLimit: 11
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Entropy (bits)'
+                            },
+                            beginAtZero: true,
+                            max: 1.1
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top',
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+
+</body></html>

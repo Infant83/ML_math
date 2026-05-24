@@ -1,0 +1,698 @@
+<!DOCTYPE html><html lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Lecture Series 2, Chapter 3: 베이즈 의사결정과 판별</title>
+<style>.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 24px 40px;
+    background-color: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    }
+.chart-container {
+    position: relative;
+    margin: 3em auto;
+    max-width: 700px;
+    min-height: 200px;
+    max-height: 400px;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+    aspect-ratio: 7/5;}
+h5 {
+    font-size: 16px;
+    }
+body {
+    font-family: "Georgia", "serif", "Apple SD Gothic Neo", "Malgun Gothic";
+    line-height: 1.8;
+    font-size: 16px;
+    color: #333;
+    background-color: #fdfdfd;
+    margin: 0 24px 0 24px;
+    padding: 0;
+    max-width: None;
+    }
+main {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+h1, h2, h3, h4 {
+    font-family: "Helvetica Neue", "Helvetica", "Arial", "sans-serif";
+    color: #1a1a1a;
+    line-height: 1.3;
+    margin-top: 24px;
+    margin-bottom: 20px;
+    font-size: 28px;
+    }
+h1 {
+    font-size: 28px;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 0.3em;
+    margin-top: 24px;
+    margin-bottom: 20px;
+    }
+h2 {
+    font-size: 22px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 0.3em;
+    }
+h3 {
+    font-size: 20px;
+    }
+h4 {
+    font-size: 18px;
+    }
+p {
+    margin-bottom: 1.2em;
+    }
+a {
+    color: #07c;
+    text-decoration: none;
+    }
+a:hover {
+    text-decoration: underline;
+    }
+blockquote {
+    border-left: 4px solid #ccc;
+    padding-left: 20px;
+    margin: 2em 0;
+    color: #555;
+    font-style: italic;
+    }
+pre {
+    background-color: #f5f5f5;
+    padding: 1.5em;
+    border-radius: 5px;
+    overflow-x: auto;
+    font-family: "Menlo", "Monaco", "Courier New", "monospace";
+    font-size: 0.9em;
+    line-height: 1.5;
+    }
+code {
+    font-family: "Menlo", "Monaco", "Courier New", "monospace";
+    background-color: #f0f0f0;
+    padding: 2px 5px;
+    border-radius: 3px;
+    }
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 2em 0;
+    }
+th, td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+    }
+th {
+    background-color: #f9f9f9;
+    font-weight: bold;
+    }
+figure {
+    margin: 2em 0;
+    text-align: center;
+    }
+img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    display: block;
+    overflow: hidden;
+    max-height: 280px;
+    margin: 1em auto;
+    }
+figcaption {
+    margin-top: 0.8em;
+    font-size: 0.9em;
+    color: #666;
+    font-style: italic;
+    }
+.key-points {
+    background-color: #eef7ff;
+    border: 1px solid #bce8f1;
+    padding: 20px;
+    margin: 2em 0;
+    border-radius: 5px;
+    }
+.key-points h4 {
+    margin-top: 0;
+    color: #31708f;
+    }
+nav#toc {
+    background: #f9f9f9;
+    border: 1px solid #eaeaea;
+    padding: 15px 20px;
+    margin-bottom: 2em;
+    border-radius: 5px;
+    }
+nav#toc h3 {
+    margin-top: 0;
+    }
+nav#toc ul {
+    list-style-type: none;
+    padding-left: 0;
+    }
+nav#toc ul li {
+    margin: 5px 0;
+    }
+nav#toc ul ul {
+    padding-left: 20px;
+    }
+        .chart-container canvas {
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: contain;
+}
+
+@media only screen and (max-device-width: 768px) {
+            body {
+                padding: 0;
+                margin: 0;
+                font-family: PingFang SC;
+                font-size: 15px;
+                line-height: 1.5;
+            }
+
+            .container {
+                padding: 0;
+                margin: 16px 20px 30px;
+                box-shadow: none;
+            }
+
+            h1,
+            h2,
+            h3,
+            h4 {
+                font-family: PingFang SC;
+            }
+
+            h1 {
+                font-size: 1.87em;
+                line-height: 1.6;
+                margin-bottom: 0.5em;
+                text-align: center;
+            }
+
+            h2 {
+                font-size: 1.6em;
+                font-weight: 600;
+                margin-top: 1.3em;
+                margin-bottom: 0.8em;
+                border-bottom: 1px solid #eee;
+                padding-bottom: 0.5em;
+            }
+
+            h3 {
+                font-size: 1.2em;
+                font-weight: 600;
+                margin-top: 1em;
+                margin-bottom: 0.6em;
+            }
+
+            h4 {
+                font-size: 1.1em;
+                font-weight: 500;
+                margin-top: 1em;
+                margin-bottom: 0.5em;
+                font-style: normal;
+            }
+
+            h5 {
+                font-size: 1em;
+                font-weight: 500;
+                margin-bottom: 1.2em;
+            }
+
+            ul,
+            ol {
+                font-size: 1em; /* Equivalent to 17.6px if base is 16px */
+                font-weight: 400;
+                margin-bottom: 1.2em;
+                line-height: 1.8;
+            }
+
+            p {
+                font-size: 1em;
+                line-height: 1.8; /* Equivalent to 17.6px if base is 16px */
+                font-weight: 400;
+                margin-top: 0.8em;
+                margin-bottom: 0.8em;
+            }
+
+            blockquote {
+                padding: 1em 1.2em;
+
+            p {
+                margin: 0;
+            }
+        }
+
+        figcaption {
+            margin-top: 0.5em;
+            font-size: 0.8em; /* Equivalent to 17.6px if base is 16px */
+            font-weight: 400;
+            text-align: center;
+            font-style: normal;
+            color: #7F8896;
+        }
+
+        img {
+            display: block;
+            overflow: hidden;
+            max-width: 100%;
+            max-height: 335px;
+            margin: 1em auto;
+            border-radius: 8px;
+        }
+        }</style>
+<link rel="stylesheet" href="https://static.skywork.ai/fe/skywork-site-assets/styles/doc_reference_style.css?v=1956744327947202560"/></head>
+<body><div class="container">
+<h1 id="section-1">Lecture Series 2 – Probabilistic &amp; Information: Theoretic Foundations</h1>
+<nav id="toc">
+<h3 id="section-0-1">목차</h3>
+<ul>
+<li><a href="#section-chapter3">Chapter 3. 베이즈 의사결정과 판별 (Bayesian Decision and Discrimination)</a>
+<ul>
+<li><a href="#section-chapter3-overview">강의 개요 (Chapter Overview)</a></li>
+</ul>
+</li>
+<li><a href="#section-part-a">A. 베이즈 위험과 비용민감 학습 (Bayes Risk and Cost-Sensitive Learning)</a>
+<ul>
+<li><a href="#section-part-a-1">A.1. 사례: 의료 진단의 비대칭적 비용 (Case: Asymmetric Costs in Medical Diagnosis)</a></li>
+<li><a href="#section-part-a-2">A.2. 이론: 결정 규칙, 임계값 최적화, 정규화 사전의 역할 (Theory: Decision Rule, Threshold Optimization, Role of Regularization Prior)</a></li>
+<li><a href="#section-part-a-3">A.3. 예제(퀴즈): 최적 임계값 선택 (Example(Quiz): Select the Optimal Threshold)</a></li>
+</ul>
+</li>
+<li><a href="#section-part-b">B. 일반화 선형모형(GLM)과 링크함수 (Generalized Linear Models (GLM) and Link Functions)</a>
+<ul>
+<li><a href="#section-part-b-1">B.1. 사례: 다양한 데이터 유형에 대한 회귀 분석 (Case: Regression for Various Data Types)</a></li>
+<li><a href="#section-part-b-2">B.2. 이론: 지수족, 캐노니컬 링크, MLE (Theory: Exponential Family, Canonical Link, MLE)</a></li>
+<li><a href="#section-part-b-3">B.3. 예제(퀴즈): 지수족 로그우도 형태 식별 (Example(Quiz): Identify Exponential Family Form)</a></li>
+</ul>
+</li>
+<li><a href="#section-part-c">C. 보정(calibration)과 예측확률의 품질 (Calibration and Quality of Predicted Probabilities)</a>
+<ul>
+<li><a href="#section-part-c-1">C.1. 사례: 날씨 예측의 신뢰도 (Case: Reliability of Weather Forecasts)</a></li>
+<li><a href="#section-part-c-2">C.2. 이론: 브라이어 점수 / ECE 개념 (Theory: Brier Score / ECE Concept)</a></li>
+<li><a href="#section-part-c-3">C.3. 예제(퀴즈): 주어진 버킷의 Brier 계산 (Example(Quiz): Calculate Brier Score for a Given Bucket)</a></li>
+</ul>
+</li>
+<li><a href="#section-chapter-summary">챕터 요약 및 다음 단계 (Chapter Summary &amp; Next Steps)</a></li>
+</ul>
+</nav>
+<h2 id="section-chapter3">Chapter 3. 베이즈 의사결정과 판별 (Bayesian Decision and Discrimination)</h2>
+<h3 id="section-chapter3-overview">강의 개요 (Chapter Overview)</h3>
+<p>이전 챕터에서 우리는 확률 모델을 통해 데이터의 불확실성을 표현하는 방법을 배웠습니다. 이번 챕터에서는 한 걸음 더 나아가, 그 확률적 예측을 바탕으로 &#39;최적의 의사결정&#39;을 내리는 방법을 탐구합니다. 현실 세계의 문제는 단순히 예측 정확도만으로 평가되지 않습니다. 잘못된 결정이 초래하는 &#39;비용&#39;이나 &#39;위험&#39;을 고려해야 하며, 모델이 제시하는 &#39;확률&#39;의 신뢰도를 평가하는 것 또한 중요합니다.</p>
+<p>본 챕터에서는 다음 세 가지 핵심 주제를 통해 확률 모델을 실제 의사결정에 적용하는 과정을 학습합니다.</p>
+<ol>
+<li><strong>베이즈 위험과 비용민감 학습</strong>: 모든 오류가 동일한 비용을 갖지 않는 현실적인 문제(예: 의료 진단)에서, 총 기대 비용(위험)을 최소화하는 최적의 결정 경계를 찾는 방법을 배웁니다.</li>
+<li><strong>일반화 선형 모형(GLM)</strong>: 반응 변수가 정규분포를 따르지 않는 다양한 데이터(예: 사건 발생 횟수, 성공/실패)를 모델링하기 위한 통합된 프레임워크를 학습합니다.</li>
+<li><strong>보정(Calibration)</strong>: 모델이 예측한 확률이 실제 발생 빈도와 얼마나 일치하는지, 즉 예측 확률의 &#39;품질&#39;을 정량적으로 평가하고 보정하는 방법을 다룹니다.</li>
+</ol>
+<hr/>
+<h2 id="section-part-a">A. 베이즈 위험과 비용민감 학습 (Bayes Risk and Cost-Sensitive Learning)</h2>
+<blockquote>
+<strong>핵심 질문</strong>: 모델의 예측 오류 유형에 따라 손실의 크기가 다를 때, 어떻게 총 손실을 최소화하는 최적의 결정을 내릴 수 있을까?
+        </blockquote>
+<h3 id="section-part-a-1">A.1. 사례: 의료 진단의 비대칭적 비용 (Case: Asymmetric Costs in Medical Diagnosis)</h3>
+<p>암 진단 모델을 개발하는 상황을 가정해 보겠습니다. 모델은 환자의 의료 데이터를 기반으로 종양이 &#39;악성(Positive)&#39;인지 &#39;정상(Negative)&#39;인지를 예측합니다. 이러한 예측에는 두 가지 유형의 심각한 오류가 발생할 수 있습니다.</p>
+<ul>
+<li><strong>False Positive (FP)</strong>: 실제로는 정상이지만 악성으로 오진하는 경우입니다. 이로 인해 환자는 불필요한 추가 검사(예: 조직 검사)를 받게 되고, 상당한 정신적 고통과 경제적 부담을 겪을 수 있습니다.</li>
+<li><strong>False Negative (FN)</strong>: 실제로는 악성이지만 정상으로 오진하는 경우입니다. 이는 훨씬 더 치명적인 결과를 초래할 수 있습니다. 치료 시기를 놓쳐 환자의 생명을 위협할 수 있기 때문입니다.</li>
+</ul>
+<p>이처럼 두 오류가 초래하는 사회적, 의학적, 경제적 비용은 명백히 비대칭적입니다. 일반적으로 FN의 비용은 FP의 비용보다 훨씬 큽니다. 이러한 비대칭적 비용 구조를 정량적으로 표현하기 위해 <strong>비용 행렬(Cost Matrix)</strong>을 도입할 수 있습니다. 비용은 잘못된 결정에 대한 벌점(penalty)으로 생각할 수 있으며, 올바른 결정의 비용은 0으로 설정하는 것이 일반적입니다. <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC9748575/" target="_blank">의료 분야의 리스크 예측 모델 연구</a>에 따르면, 이러한 비용의 차이를 모델링에 반영하는 것이 매우 중요합니다.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>예측: 악성 (Positive)</th>
+<th>예측: 정상 (Negative)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>실제: 악성 (Positive)</strong></td>
+<td>C(TP) = 0 (비용 없음)</td>
+<td>C(FN) (매우 큰 비용)</td>
+</tr>
+<tr>
+<td><strong>실제: 정상 (Negative)</strong></td>
+<td>C(FP) (상대적으로 작은 비용)</td>
+<td>C(TN) = 0 (비용 없음)</td>
+</tr>
+</tbody>
+</table>
+<p>이러한 상황에서 단순히 전체 예측 중 맞은 비율인 정확도(Accuracy)를 높이는 것만으로는 최적의 모델이라고 할 수 없습니다. 예를 들어, 100명 중 99명이 정상이고 1명이 악성인 데이터셋에서, 모델이 모든 환자를 &#39;정상&#39;으로 예측하면 정확도는 99%에 달하지만, 가장 치명적인 오류인 FN을 놓치게 됩니다. 따라서 우리는 총 기대 비용, 즉 **&#39;위험(Risk)&#39;**을 최소화하는 새로운 최적화 목표가 필요하며, 이를 **비용민감 학습(Cost-Sensitive Learning)**이라 부릅니다. <a href="https://link.springer.com/article/10.1007/s10462-023-10652-8" target="_blank">의료 데이터의 불균형 문제에 대한 연구</a>들은 비용민감 학습이 소수 클래스에 대한 성능을 개선하는 효과적인 접근법임을 강조합니다.</p>
+<h3 id="section-part-a-2">A.2. 이론: 결정 규칙, 임계값 최적화, 정규화 사전의 역할 (Theory: Decision Rule, Threshold Optimization, Role of Regularization Prior)</h3>
+<h4>결정 규칙 (Decision Rule)의 정의</h4>
+<p>분류 모델은 보통 특정 클래스(예: 악성 종양)에 속할 사후 확률(posterior probability) $P(Y=1 | X=x)$를 출력합니다. 이 확률값을 바탕으로 최종적인 &#39;결정&#39;을 내리기 위해서는 특정 <strong>임계값(threshold)</strong> $\tau$와 비교하는 규칙이 필요합니다.</p>
+<pre><code>If P(Y=1|x) &gt; τ, predict Positive.
+Else, predict Negative.</code></pre>
+<p>일반적으로 임계값은 0.5로 설정되지만, 이는 두 종류의 오류 비용이 같다고 암묵적으로 가정하는 것과 같습니다. 비용이 비대칭적인 경우, 이 임계값을 최적화해야 합니다.</p>
+<h4>베이즈 위험 (Bayes Risk)</h4>
+<p>베이즈 위험은 특정 결정 규칙을 따를 때 발생하는 기대 비용(expected cost)을 의미합니다. 어떤 데이터 $x$가 주어졌을 때, 각 결정에 대한 **조건부 위험(Conditional Risk)**은 다음과 같이 계산됩니다.</p>
+<ul>
+<li>&#39;Positive&#39;로 예측할 때의 조건부 위험: <br/> $R(\text{predict Positive} | x) = C(FP) \cdot P(Y=0|x) + C(TP) \cdot P(Y=1|x)$</li>
+<li>&#39;Negative&#39;로 예측할 때의 조건부 위험: <br/> $R(\text{predict Negative} | x) = C(FN) \cdot P(Y=1|x) + C(TN) \cdot P(Y=0|x)$</li>
+</ul>
+<p><strong>베이즈 결정 규칙(Bayes Decision Rule)</strong>은 모든 $x$에 대해 이 조건부 위험을 최소화하는 결정을 내리는 것입니다. 즉, $R(\text{predict Positive} | x) &lt; R(\text{predict Negative} | x)$일 때 &#39;Positive&#39;로 예측하는 것이 최적의 선택입니다.</p>
+<h4>최적 임계값($\tau^*$) 도출</h4>
+<p>위험 최소화 조건을 수식으로 풀어 최적의 임계값을 도출할 수 있습니다. 올바른 예측에 대한 비용 $C(TP)$와 $C(TN)$을 0으로 가정하면, 조건은 다음과 같이 단순화됩니다.</p>
+<pre><code>C(FP) * P(Y=0|x) &lt; C(FN) * P(Y=1|x)</code></pre>
+<p>$P(Y=0|x) = 1 - P(Y=1|x)$ 관계를 이용하여 식을 정리하면 다음과 같습니다.</p>
+<pre><code>C(FP) * (1 - P(Y=1|x)) &lt; C(FN) * P(Y=1|x)
+C(FP) &lt; C(FP) * P(Y=1|x) + C(FN) * P(Y=1|x)
+C(FP) &lt; (C(FP) + C(FN)) * P(Y=1|x)</code></pre>
+<p>따라서, &#39;Positive&#39;로 예측하는 조건은 다음과 같습니다.</p>
+<pre><code>P(Y=1|x) &gt; \frac{C(FP)}{C(FP) + C(FN)}</code></pre>
+<p>이는 최적의 임계값 $\tau^*$가 비용 구조에 의해 결정됨을 의미합니다. 이 값은 더 이상 0.5가 아니며, FN의 비용이 FP보다 훨씬 크다면 임계값은 0.5보다 훨씬 낮아져 모델이 더 쉽게 &#39;;Positive&#39;로 예측하도록 유도합니다. 이는 소수의 오류(FP)를 감수하더라도 치명적인 오류(FN)를 피하려는 전략입니다.</p>
+<h4>정규화 사전(Regularization Prior)의 역할</h4>
+<p>베이지안 관점에서 모델 파라미터 $\theta$에 대한 **사전 분포(Prior Distribution)** $P(\theta)$는 우리의 사전 지식이나 믿음을 나타냅니다. MAP(Maximum A Posteriori) 추정에서 이 사전 분포는 정규화(Regularization) 항으로 작용하여 모델의 과적합을 방지합니다.</p>
+<pre><code>P(θ|Data) ∝ P(Data|θ) * P(θ)
+Posterior ∝ Likelihood × Prior</code></pre>
+<p>예를 들어, L2 정규화는 파라미터 $\theta$가 평균이 0인 가우시안 사전 분포를 따른다고 가정하는 것과 같습니다. 이는 파라미터 값들이 너무 커지지 않도록 제한하여 모델을 더 부드럽게(less complex) 만듭니다. <a href="https://niceguy1575.medium.com/mle%EC%99%80-map%EC%9D%98-%EC%B0%A8%EC%9D%B4-7d2cc0bee9c" target="_blank">MLE와 MAP의 비교</a>에서 볼 수 있듯이, MAP는 사전 정보를 통해 추정치를 조절합니다.</p>
+<p>비용민감 학습의 맥락에서, 잘 설정된 사전 분포(정규화)는 중요한 역할을 합니다. 데이터가 부족하거나 노이즈가 많은 상황에서 모델이 특정 데이터에 과도하게 반응하여 예측 확률이 0 또는 1과 같은 극단적인 값으로 치우치는 것을 방지합니다. 이로써 모델이 더 안정적이고 신뢰할 수 있는 확률을 출력하게 하여, 위험 기반의 의사결정 과정 전체의 안정성을 높여줍니다. 이는 <a href="https://domybestinlife.tistory.com/353" target="_blank">빈도주의와 베이지안 접근법의 비교</a>에서 논의되는 베이지안 접근의 유연성과 관련이 있습니다.</p>
+<div class="key-points">
+<h4>핵심 요약</h4>
+<ul>
+<li><strong>베이즈 위험</strong>은 예측 오류의 비대칭적 비용을 고려한 기대 손실입니다.</li>
+<li><strong>최적 결정 규칙</strong>은 각 예측에 대한 조건부 위험을 최소화하는 것이며, 이는 비용 구조에 따라 결정되는 <strong>최적 임계값($\tau^*$)</strong>을 통해 구현됩니다.</li>
+<li><strong>정규화</strong>는 베이지안 관점에서 사전 분포에 해당하며, 모델의 과적합을 방지하고 예측 확률의 안정성을 높여 위험 기반 의사결정의 신뢰도를 향상시킵니다.</li>
+</ul>
+</div>
+<h3 id="section-part-a-3">A.3. 예제(퀴즈): 최적 임계값 선택 (Example(Quiz): Select the Optimal Threshold)</h3>
+<p><strong>문제</strong>: 어떤 질병에 대한 진단 모델이 개발되었습니다. 이 질병의 유병률(사전 확률)은 2% ($P(Y=1)=0.02$)입니다. 오진에 따른 비용이 다음과 같은 비용 행렬로 주어졌을 때, 총 기대 비용(베이즈 위험)을 최소화하는 최적의 확률 임계값 $\tau^*$를 계산하세요.</p>
+<ul>
+<li><strong>비용 행렬</strong>:
+                <ul>
+<li>$C(FN)$ (실제 환자를 정상으로 오진): 100</li>
+<li>$C(FP)$ (실제 정상을 환자로 오진): 5</li>
+<li>$C(TP) = C(TN) = 0$</li>
+</ul>
+</li>
+</ul>
+<p><strong>풀이 과정</strong>:</p>
+<ol>
+<li>베이즈 결정 규칙은 $R(\text{predict Positive} | x) &lt; R(\text{predict Negative} | x)$일 때 &#39;Positive&#39;로 예측하는 것입니다.</li>
+<li>이를 비용과 확률로 표현하면: $C(FP) \cdot P(Y=0|x) &lt; C(FN) \cdot P(Y=1|x)$</li>
+<li>주어진 비용 값을 대입하고 $P(Y=0|x) = 1 - P(Y=1|x)$를 이용해 정리합니다:
+                <pre><code>5 * (1 - P(Y=1|x)) &lt; 100 * P(Y=1|x)</code></pre>
+</li>
+<li>부등식을 $P(Y=1|x)$에 대해 풉니다:
+                <pre><code>5 - 5 * P(Y=1|x) &lt; 100 * P(Y=1|x)
+5 &lt; 105 * P(Y=1|x)
+P(Y=1|x) &gt; 5 / 105</code></pre>
+</li>
+<li>최적 임계값을 계산합니다: $\tau^* = 5 / 105 \approx 0.0476$</li>
+</ol>
+<p><strong>정답</strong>: 최적 임계값 $\tau^*$는 약 <strong>0.0476</strong> 입니다. 이는 모델이 예측한 질병 확률이 4.76%만 넘어도 &#39;환자&#39;로 결정하는 것이 총 기대 비용을 최소화하는 가장 합리적인 전략임을 의미합니다. FN의 비용이 매우 높기 때문에, 약간의 의심만 있어도 일단 &#39;환자&#39;로 분류하여 더 정밀한 검사를 받도록 하는 것이 더 낫다는 결론입니다.</p>
+<hr/>
+<h2 id="section-part-b">B. 일반화 선형모형(GLM)과 링크함수 (Generalized Linear Models (GLM) and Link Functions)</h2>
+<blockquote>
+<strong>핵심 질문</strong>: 결과값이 특정 구간(예: 0 또는 1)이나 형태(예: 0 이상의 정수)를 가질 때, 어떻게 선형 모델의 예측력을 유연하게 확장할 수 있을까?
+        </blockquote>
+<h3 id="section-part-b-1">B.1. 사례: 다양한 데이터 유형에 대한 회귀 분석 (Case: Regression for Various Data Types)</h3>
+<p>전통적인 선형 회귀는 반응 변수(Y)가 연속적이고 정규분포를 따른다고 가정합니다. 하지만 현실의 데이터는 훨씬 다양합니다.</p>
+<h4>시나리오 1: 포아송 회귀 (Poisson Regression)</h4>
+<p><strong>문제</strong>: 한 시간 동안 특정 교차로를 통과하는 차량의 수, 하루 동안 웹사이트에서 발생하는 클릭 수, 또는 특정 지역의 연간 범죄 발생 건수와 같은 &#39;카운트 데이터(count data)&#39;를 예측하고자 합니다. 이러한 데이터는 0 이상의 정수 값을 가지며, 음수가 될 수 없습니다. 일반 선형 회귀 모델 $Y = \mathbf{X\beta} + \epsilon$을 사용하면 예측값이 음수가 나올 수 있어 현실을 제대로 반영하지 못합니다.</p>
+<p><strong>해결책</strong>: 이 경우, 반응 변수가 포아송 분포를 따른다고 가정하는 것이 더 합리적입니다. 포아송 회귀는 예측값의 로그(log)를 선형 모델에 연결하여 항상 양수의 예측값을 보장합니다. 즉, $\log(E[Y]) = \mathbf{X\beta}$ 입니다.</p>
+<h4>시나리오 2: 로지스틱 회귀 (Logistic Regression)</h4>
+<p><strong>문제</strong>: 내일 비가 올지(1) 안 올지(0), 이메일이 스팸인지(1) 아닌지(0), 혹은 환자가 특정 질병을 가지고 있는지(1) 아닌지(0)와 같은 &#39;이항(binomial) 데이터&#39;를 예측하고자 합니다. 이 경우 결과는 &#39;확률&#39;로 해석되어야 하므로 0과 1 사이의 값을 가져야 합니다. 일반 선형 회귀는 이 범위를 벗어나는 예측을 할 수 있습니다.</p>
+<p><strong>해결책</strong>: 반응 변수가 베르누이 분포를 따른다고 가정하고, 성공 확률 $p$의 로짓(logit) 변환 값을 선형 모델에 연결하는 로지스틱 회귀를 사용합니다. 즉, $\text{logit}(p) = \log(\frac{p}{1-p}) = \mathbf{X\beta}$ 입니다. 이 변환을 통해 선형 예측자의 결과($-\infty$ ~ $+\infty$)를 확률(0 ~ 1)로 매핑할 수 있습니다.</p>
+<figure>
+<img alt="시그모이드 함수와 계단 함수 비교" src="https://picture-search.tiangong.cn/image/rt/e9d509d515ea9a6b6ed108ec89d04226.jpg" style="max-height: 280px; max-width: 100%;"/>
+<figcaption>시그모이드 함수(좌)는 선형 모델의 출력을 0과 1 사이의 부드러운 확률 값으로 변환하여 로지스틱 회귀에 사용되며, 이는 불연속적인 계단 함수(우)와 대조됩니다</figcaption>
+</figure>
+<p>이처럼 다양한 유형의 데이터를 다루기 위해 매번 새로운 모델을 개발하는 것은 비효율적입니다. <strong>일반화 선형 모형(Generalized Linear Models, GLM)</strong>은 이러한 문제들을 하나의 통합된 프레임워크로 해결하기 위해 등장했습니다. <a href="https://www.sjsu.edu/faculty/guangliang.chen/Math261a/Ch13slides-generalized-linear-models.pdf" target="_blank">GLM에 대한 강의 자료</a>는 이러한 모델들이 어떻게 선형 회귀를 확장하는지 잘 보여줍니다.</p>
+<h3 id="section-part-b-2">B.2. 이론: 지수족, 캐노니컬 링크, MLE (Theory: Exponential Family, Canonical Link, MLE)</h3>
+<p>GLM은 세 가지 핵심 요소로 구성됩니다.</p>
+<ol>
+<li><strong>확률 요소 (Random Component)</strong>: 반응 변수 $Y$가 따르는 확률 분포를 지정합니다. 이 분포는 반드시 <strong>지수족(Exponential Family)</strong>에 속해야 합니다.</li>
+<li><strong>체계적 요소 (Systematic Component)</strong>: 설명 변수 $X$들의 선형 결합으로 정의되는 <strong>선형 예측자(linear predictor)</strong> $\eta = \mathbf{X\beta}$ 입니다.</li>
+<li><strong>연결 함수 (Link Function)</strong>: 확률 요소의 기댓값 $\mu = E[Y]$와 체계적 요소 $\eta$를 연결하는 미분 가능한 함수 $g(\cdot)$입니다. 즉, $g(\mu) = \eta = \mathbf{X\beta}$ 입니다.</li>
+</ol>
+<h4>지수족 (Exponential Family)</h4>
+<p>지수족은 많은 중요한 확률 분포(정규, 베르누이, 이항, 포아송, 감마 등)를 포괄하는 일반적인 형태의 분포 클래스입니다. 그 확률(밀도) 함수는 다음과 같은 형태로 표현될 수 있습니다.</p>
+<pre><code>f(y; θ) = h(y) * exp(η(θ) * T(y) - A(θ))</code></pre>
+<ul>
+<li>$\theta$: 분포의 자연 모수(natural parameter)</li>
+<li>$\eta(\theta)$: 자연 모수를 캐노니컬 파라미터로 변환하는 함수</li>
+<li>$T(y)$: 충분 통계량(sufficient statistic)</li>
+<li>$A(\theta)$: 로그 분할 함수(log-partition function)</li>
+</ul>
+<p>분포가 지수족에 속하면 우도 함수가 다루기 좋은 형태가 되어, GLM의 이론적 기반을 제공하고 최대우도추정(MLE)을 통한 파라미터 추정을 용이하게 합니다.</p>
+<h4>캐노니컬 링크 (Canonical Link)</h4>
+<p>캐노니컬 링크는 각 지수족 분포에서 가장 자연스럽게 유도되는 &#39;표준&#39; 연결 함수입니다. 이는 선형 예측자 $\eta$가 분포의 자연 모수 $\theta$와 같아지도록($\eta = \theta$) 하는 링크 함수를 의미합니다. 캐노니컬 링크를 사용하면 수학적 계산이 간편해지고 통계적으로도 좋은 성질을 가집니다.</p>
+<table>
+<thead>
+<tr>
+<th>분포 (확률 요소)</th>
+<th>기댓값 $\mu$</th>
+<th>캐노니컬 링크 $g(\mu)$</th>
+<th>모델 이름</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>정규분포</td>
+<td>$\mu$</td>
+<td>$g(\mu) = \mu$ (항등 함수)</td>
+<td>선형 회귀</td>
+</tr>
+<tr>
+<td>베르누이/이항분포</td>
+<td>$p$ (성공 확률)</td>
+<td>$g(p) = \log(\frac{p}{1-p})$ (로짓 함수)</td>
+<td>로지스틱 회귀</td>
+</tr>
+<tr>
+<td>포아송분포</td>
+<td>$\lambda$ (평균 발생률)</td>
+<td>$g(\lambda) = \log(\lambda)$ (로그 함수)</td>
+<td>포아송 회귀</td>
+</tr>
+</tbody>
+</table>
+<h4>최대우도추정 (Maximum Likelihood Estimation, MLE)</h4>
+<p>GLM의 회귀 계수 $\beta$는 주어진 데이터가 현재 모델 하에서 나타날 가능성, 즉 **우도(Likelihood)**를 최대로 만드는 값으로 추정됩니다. <a href="https://ysyblog.tistory.com/324" target="_blank">로지스틱 회귀의 계수 추정</a>에서 설명하듯이, 이 과정은 일반적으로 로그 우도 함수(log-likelihood function) $\ell(\beta; \mathbf{y}) = \log L(\beta; \mathbf{y})$를 최적화하는 방식으로 이루어집니다.</p>
+<p>로그 우도 함수를 $\beta$에 대해 미분하여 그 값이 0이 되는 지점을 찾음으로써 최적의 $\beta$를 구할 수 있습니다. 하지만 대부분의 GLM에서는 이 방정식이 닫힌 형태(closed-form)로 풀리지 않기 때문에, 경사 하강법(Gradient Descent)과 같은 수치적 최적화 알고리즘을 사용하여 해를 찾습니다. <a href="https://hyunlee103.tistory.com/12" target="_blank">MLE를 통한 로지스틱 회귀 모델 추정</a>은 이러한 최적화 과정의 중요성을 잘 보여줍니다.</p>
+<h3 id="section-part-b-3">B.3. 예제(퀴즈): 지수족 로그우도 형태 식별 (Example(Quiz): Identify Exponential Family Form)</h3>
+<p><strong>문제</strong>: 포아송 분포의 확률 질량 함수(PMF)는 $P(Y=y) = \frac{\lambda^y e^{-\lambda}}{y!}$ 입니다. 이 식을 지수족의 일반 형태 $f(y; \lambda) = h(y) \exp(\eta(\lambda) T(y) - A(\lambda))$로 변환하고, 각 구성요소 $h(y), \eta(\lambda), T(y), A(\lambda)$를 식별하세요.</p>
+<p><strong>풀이 과정</strong>:</p>
+<ol>
+<li>주어진 PMF를 $\exp$ 함수를 사용하여 재정리합니다. 지수와 로그의 관계($a = \exp(\log a)$)를 이용합니다.
+                <pre><code>P(Y=y) = \frac{\lambda^y e^{-\lambda}}{y!} = \frac{1}{y!} \cdot \exp(\log(\lambda^y)) \cdot \exp(-\lambda)</code></pre>
+</li>
+<li>$\exp$ 항들을 하나로 합칩니다.
+                <pre><code>P(Y=y) = \frac{1}{y!} \exp(y \log \lambda - \lambda)</code></pre>
+</li>
+<li>이 식을 지수족 일반 형태 $h(y) \exp(\eta(\lambda) T(y) - A(\lambda))$와 비교합니다.
+                <ul>
+<li>$y$에만 의존하는 항: $h(y) = \frac{1}{y!}$</li>
+<li>$y$와 $\lambda$가 곱해진 항의 계수: $\eta(\lambda) = \log \lambda$ (이것이 캐노니컬 파라미터입니다.)</li>
+<li>$\eta(\lambda)$에 곱해지는 $y$의 함수: $T(y) = y$ (충분 통계량)</li>
+<li>$\lambda$에만 의존하는 항: $A(\lambda) = \lambda$</li>
+</ul>
+</li>
+</ol>
+<p><strong>정답</strong>: 각 구성요소는 다음과 같습니다: $h(y) = 1/y!$, $\eta(\lambda) = \log \lambda$, $T(y) = y$, $A(\lambda) = \lambda$. 여기서 캐노니컬 파라미터와 기댓값($\mu=\lambda$)의 관계를 나타내는 캐노니컬 링크 함수는 $\eta = \log \lambda$ 이므로, 포아송 분포의 캐노니컬 링크는 로그 링크임을 확인할 수 있습니다.</p>
+<hr/>
+<h2 id="section-part-c">C. 보정(calibration)과 예측확률의 품질 (Calibration and Quality of Predicted Probabilities)</h2>
+<blockquote>
+<strong>핵심 질문</strong>: 모델이 &#34;비가 올 확률 80%&#34;라고 예측했을 때, 우리는 이 80%라는 숫자를 얼마나 신뢰할 수 있는가?
+        </blockquote>
+<h3 id="section-part-c-1">C.1. 사례: 날씨 예측의 신뢰도 (Case: Reliability of Weather Forecasts)</h3>
+<p>기상청에서 개발한 강수 예측 모델이 &#34;내일 비가 올 확률은 30%&#34;라고 예보했다고 가정해 봅시다. 이 예측은 단순히 &#39;비가 온다/안 온다&#39;는 이진 분류를 넘어, 불확실성의 정도를 정량적으로 제시합니다. 하지만 이 30%라는 숫자는 얼마나 신뢰할 수 있을까요?</p>
+<p>모델이 **&#39;잘 보정(well-calibrated)&#39;**되었다는 것은 예측된 확률이 실제 사건의 발생 빈도와 일치함을 의미합니다. 즉, 모델이 30%의 강수 확률을 예측했던 모든 날들을 모아봤을 때, 실제로 그 중 약 30%의 날에 비가 왔어야 합니다. 만약 실제로는 10%의 날에만 비가 왔다면 모델은 과신(over-confident)하는 경향이 있고, 50%의 날에 비가 왔다면 과소평가(under-confident)하는 경향이 있는 것입니다. <a href="https://www.worldclimateservice.com/2021/09/06/forecast-calibration/" target="_blank">예보 보정(Forecast Calibration)</a>은 이러한 예측 확률을 실제 관측과 일치시키는 과정을 의미합니다.</p>
+<p>이러한 보정 상태를 시각적으로 평가하는 도구가 바로 **신뢰도 다이어그램(Reliability Diagram)**입니다. 이 다이어그램은 모델의 예측 확률을 여러 구간(bin)으로 나눈 뒤, 각 구간별 평균 예측 확률과 실제 결과의 비율을 비교하여 그립니다.</p>
+<ul>
+<li><strong>X축</strong>: 예측된 확률 구간의 평균값 (예: 0.25, 0.75)</li>
+<li><strong>Y축</strong>: 해당 구간에 속한 예측들 중 실제 양성(positive) 결과의 비율</li>
+</ul>
+<p>완벽하게 보정된 모델의 경우, 모든 점들이 $y=x$ 대각선(perfect calibration line) 위에 위치하게 됩니다.</p>
+<figure>
+<img alt="완벽한 보정 곡선" src="https://picture-search.tiangong.cn/image/rt/009d9924f15cb865b55b81223a7b6cab.jpg" style="max-height: 280px; max-width: 100%;"/>
+<figcaption>완벽하게 보정된 모델의 신뢰도 다이어그램. 예측 확률(X축)과 실제 양성 비율(Y축)이 일치하여 y=x 대각선을 따른다</figcaption>
+</figure>
+<p>아래는 실제 모델의 신뢰도 다이어그램을 시각화한 예시입니다. 모델의 예측이 대각선에서 얼마나 벗어나는지를 통해 보정 상태를 직관적으로 파악할 수 있습니다.</p>
+<div class="chart-container" id="canvas-parent-1" data-sk-source-container="chart" data-sk-source-id="A562PI" data-sk-source-type="web_search">
+<canvas id="reliabilityDiagram"></canvas>
+</div>
+<h3 id="section-part-c-2">B.2. 이론: 브라이어 점수 / ECE 개념 (Theory: Brier Score / ECE Concept)</h3>
+<p>정확도(Accuracy)나 AUC(Area Under the ROC Curve)와 같은 전통적인 분류 지표는 모델이 클래스를 얼마나 잘 &#39;구분&#39;하는지, 즉 순위 결정 능력은 보여주지만, 예측된 확률 값 자체의 신뢰도를 직접적으로 측정하지는 못합니다. 예를 들어, 두 모델이 동일한 AUC 점수를 갖더라도 한 모델은 잘 보정된 확률을 제공하는 반면 다른 모델은 그렇지 않을 수 있습니다. 따라서 예측 확률의 품질을 평가하기 위한 별도의 지표가 필요합니다.</p>
+<h4>브라이어 점수 (Brier Score)</h4>
+<p><strong>브라이어 점수</strong>는 예측 확률의 정확도를 측정하는 대표적인 지표로, 본질적으로 예측 확률과 실제 결과 사이의 평균 제곱 오차(Mean Squared Error)입니다. <a href="https://neptune.ai/blog/brier-score-and-model-calibration" target="_blank">Brier Score에 대한 설명</a>에 따르면, 이 점수는 일종의 비용 함수로, 낮을수록 좋습니다.</p>
+<p>이진 분류 문제에 대한 Brier Score의 공식은 다음과 같습니다.</p>
+<pre><code>BS = (1/N) * Σ(pᵢ - oᵢ)²  (i=1 to N)</code></pre>
+<ul>
+<li>$N$: 전체 예측의 수</li>
+<li>$p_i$: $i$번째 예측의 확률 (예: 0.7)</li>
+<li>$o_i$: $i$번째 실제 결과 (사건 발생 시 1, 미발생 시 0)</li>
+</ul>
+<p>Brier Score는 0에서 1 사이의 값을 가지며, 0에 가까울수록 완벽한 예측을 의미합니다. 이 점수는 모델의 **보정(calibration)** 능력과 **해상도(resolution)**, 즉 다른 결과를 가진 사례들에 대해 얼마나 다른 확률을 부여하는지 두 가지 요소를 종합적으로 반영합니다.</p>
+<h4>기대 보정 오차 (Expected Calibration Error, ECE)</h4>
+<p><strong>기대 보정 오차(ECE)</strong>는 신뢰도 다이어그램의 아이디어를 수치화한 것으로, 모델의 보정 정도만을 순수하게 측정하기 위한 지표입니다. ECE는 예측 확률과 실제 빈도 사이의 차이를 정량화합니다.</p>
+<p>ECE의 계산 과정은 다음과 같습니다.</p>
+<ol>
+<li>모든 예측을 확률값에 따라 $M$개의 구간(bin)으로 나눕니다. (예: 10개의 구간, [0, 0.1], (0.1, 0.2], ...)</li>
+<li>각 구간 $B_m$에 대해, 평균 예측 확률(confidence)과 실제 양성 비율(accuracy)을 계산합니다.
+                <ul>
+<li>구간의 평균 신뢰도: $\text{conf}(B_m) = \frac{1}{|B_m|} \sum_{i \in B_m} p_i$</li>
+<li>구간의 실제 정확도: $\text{acc}(B_m) = \frac{1}{|B_m|} \sum_{i \in B_m} o_i$</li>
+</ul>
+</li>
+<li>전체 구간에 대해 신뢰도와 정확도 차이의 가중 평균을 계산합니다.
+                <pre><code>ECE = Σ (|Bₘ|/N) * |acc(Bₘ) - conf(Bₘ)|  (m=1 to M)</code></pre>
+</li>
+</ol>
+<p>ECE 값이 0에 가까울수록 모델이 더 잘 보정되었음을 의미합니다. 이는 신뢰도 다이어그램에서 점들이 대각선에 얼마나 가까운지를 나타내는 수치적 척도입니다.</p>
+<h3 id="section-part-c-3">C.3. 예제(퀴즈): 주어진 버킷의 Brier 계산 (Example(Quiz): Calculate Brier Score for a Given Bucket)</h3>
+<p><strong>문제</strong>: 날씨 예측 모델이 10일 동안 특정 지역의 강수 확률을 예측했습니다. 이 10개의 예측은 모두 0.7에서 0.8 사이의 확률 구간(bucket)에 속했으며, 이 구간의 평균 예측 확률(confidence)은 0.75였습니다. 10일 중 실제로 비가 온 날은 8일이었습니다. 이 10개 예측에 대한 Brier Score를 계산하세요.</p>
+<p><strong>풀이 과정</strong>:</p>
+<ol>
+<li>Brier Score 공식은 $BS = \frac{1}{N} \sum_{i=1}^{N} (p_i - o_i)^2$ 입니다. 문제의 편의를 위해 모든 예측 확률 $p_i$가 구간의 평균인 0.75라고 가정하겠습니다.</li>
+<li>실제로 비가 온 8일($o_i=1$)에 대한 오차 제곱의 합을 계산합니다:
+                <pre><code>8 * (0.75 - 1)² = 8 * (-0.25)² = 8 * 0.0625 = 0.5</code></pre>
+</li>
+<li>실제로 비가 오지 않은 2일($o_i=0$)에 대한 오차 제곱의 합을 계산합니다:
+                <pre><code>2 * (0.75 - 0)² = 2 * (0.75)² = 2 * 0.5625 = 1.125</code></pre>
+</li>
+<li>모든 오차 제곱의 합을 구합니다:
+                <pre><code>Total Squared Error = 0.5 + 1.125 = 1.625</code></pre>
+</li>
+<li>전체 예측 수(N=10)로 나누어 평균, 즉 Brier Score를 계산합니다:
+                <pre><code>Brier Score = 1.625 / 10 = 0.1625</code></pre>
+</li>
+</ol>
+<p><strong>정답</strong>: 이 10개 예측에 대한 Brier Score는 <strong>0.1625</strong>입니다.</p>
+<hr/>
+<h2 id="section-chapter-summary">챕터 요약 및 다음 단계 (Chapter Summary &amp; Next Steps)</h2>
+<p>이번 챕터에서는 확률적 예측을 실제 의사결정에 연결하는 세 가지 중요한 개념을 학습했습니다.</p>
+<ul>
+<li><strong>베이즈 위험</strong>을 통해 오류의 비대칭적 비용을 고려하여 최적의 결정 임계값을 찾는 방법을 배웠습니다. 이를 통해 우리는 현실 세계의 문제에서 총 기대 손실을 최소화하는 합리적인 결정을 내릴 수 있습니다.</li>
+<li><strong>일반화 선형 모형(GLM)</strong>을 통해 반응 변수가 정규분포를 따르지 않는 다양한 데이터 유형(카운트, 이진 데이터 등)을 일관된 프레임워크 안에서 모델링하는 유연성을 확보했습니다.</li>
+<li><strong>보정(Calibration)</strong>과 관련 지표(Brier Score, ECE)를 통해 모델이 출력하는 확률 값의 신뢰도를 정량적으로 평가하는 방법을 익혔습니다. 이는 모델의 예측을 맹신하는 것이 아니라, 그 예측의 품질을 비판적으로 검토하는 데 필수적입니다.</li>
+</ul>
+<p>이로써 우리는 단순히 &#39;정확하게 맞추는&#39; 모델을 넘어, 불확실성과 비용을 고려하여 &#39;현명한 결정&#39;을 내리는 모델을 설계하고 평가할 수 있는 견고한 이론적 토대를 마련했습니다. 다음 챕터에서는 이러한 개념들을 바탕으로, 더 복잡한 비선형 관계를 모델링할 수 있는 고급 모델 구조와 학습 알고리즘에 대해 탐구할 것입니다.</p>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const ctx = document.getElementById('reliabilityDiagram').getContext('2d');
+            
+            // Hypothetical data for the reliability diagram
+            const predicted_probabilities = [0.05, 0.15, 0.25, 0.35, 0.45, 0.55, 0.65, 0.75, 0.85, 0.95];
+            const observed_frequencies = [0.02, 0.10, 0.28, 0.30, 0.50, 0.52, 0.60, 0.80, 0.83, 0.98];
+
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: predicted_probabilities.map(p => p.toFixed(2)),
+                    datasets: [{
+                        label: '모델 신뢰도 곡선 (Model Reliability)',
+                        data: observed_frequencies,
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        fill: false,
+                        tension: 0.1,
+                        pointRadius: 5,
+                        pointBackgroundColor: 'rgba(54, 162, 235, 1)',
+                    }, {
+                        label: '완벽한 보정선 (Perfect Calibration)',
+                        data: predicted_probabilities,
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        borderDash: [5, 5],
+                        fill: false,
+                        pointRadius: 0,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: '신뢰도 다이어그램 (Reliability Diagram)',
+                            font: {
+                                size: 18
+                            }
+                        },
+                        legend: {
+                            position: 'top',
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: '평균 예측 확률 (Mean Predicted Probability)'
+                            },
+                            min: 0,
+                            max: 1
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: '실제 양성 비율 (Fraction of Positives)'
+                            },
+                            min: 0,
+                            max: 1
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+<div class="reference-container">
+			<div class="reference-section">
+				<h3 class="reference-title">참고 자료</h3>
+				<div class="reference-list">
+					
+					<div class="reference-item">
+						<span class="reference-number">[1]</span>
+						<div class="reference-content">
+							<div class="reference-text-container">
+								<span class="reference-text">Generalized Linear Models in R</span>
+									
+							</div>
+							<a href="https://www.datacamp.com/doc/r/glm" class="reference-link" target="_blank">
+								https://www.datacamp.com/doc/r/glm
+							</a>
+						</div>
+					</div>
+					
+					<div class="reference-item">
+						<span class="reference-number">[2]</span>
+						<div class="reference-content">
+							<div class="reference-text-container">
+								<span class="reference-text">Brier Score: Understanding Model Calibration</span>
+									
+							</div>
+							<a href="https://neptune.ai/blog/brier-score-and-model-calibration" class="reference-link" target="_blank">
+								https://neptune.ai/blog/brier-score-and-model-calibration
+							</a>
+						</div>
+					</div>
+					
+					<div class="reference-item">
+						<span class="reference-number">[3]</span>
+						<div class="reference-content">
+							<div class="reference-text-container">
+								<span class="reference-text">Generalized Linear Models (GLMs)</span>
+									
+							</div>
+							<a href="https://www.sjsu.edu/faculty/guangliang.chen/Math261a/Ch13slides-generalized-linear-models.pdf" class="reference-link" target="_blank">
+								https://www.sjsu.edu/faculty/guangliang.chen/Math261a/Ch13slides-generalized-linear-models.pdf
+							</a>
+						</div>
+					</div>
+					
+				</div>
+			</div>
+		</div></div>
+</body></html>

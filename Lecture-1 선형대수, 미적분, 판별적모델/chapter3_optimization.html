@@ -1,0 +1,994 @@
+<!DOCTYPE html><html lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>챕터 3: 미분과 최적화 기초 - 머신러닝 수학적 기초와 판별 모형의 이해</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
+<style>.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 24px 40px;
+    background-color: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    }
+.chart-container {
+    position: relative;
+    margin: 3em auto;
+    max-width: 700px;
+    min-height: 200px;
+    max-height: 400px;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+    aspect-ratio: 7/5;}
+h5 {
+    font-size: 16px;
+    }
+body {
+    font-family: "Georgia", "Times New Roman", serif;
+    line-height: 1.8;
+    font-size: 16px;
+    color: #333;
+    background-color: #fdfdfd;
+    margin: 0 24px 0 24px;
+    padding: 0;
+    max-width: None;
+    }
+main {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-left: 1px solid #eee;
+    border-right: 1px solid #eee;
+    }
+h1, h2, h3, h4 {
+    font-family: "Helvetica Neue", "Arial", sans-serif;
+    color: #222;
+    line-height: 1.3;
+    font-size: 28px;
+    margin-top: 24px;
+    margin-bottom: 20px;
+    }
+h1 {
+    font-size: 28px;
+    text-align: center;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #333;
+    padding-bottom: 0.3em;
+    margin-top: 24px;
+    }
+h2 {
+    font-size: 22px;
+    margin-top: 2em;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 0.3em;
+    }
+h3 {
+    font-size: 20px;
+    margin-top: 1.8em;
+    }
+h4 {
+    font-size: 18px;
+    margin-top: 1.5em;
+    font-style: italic;
+    color: #555;
+    }
+p, ul, ol {
+    margin-bottom: 1.2em;
+    }
+ul, ol {
+    padding-left: 1.5em;
+    }
+li {
+    margin-bottom: 0.5em;
+    }
+blockquote {
+    border-left: 4px solid #ccc;
+    padding-left: 1em;
+    margin-left: 0;
+    font-style: italic;
+    color: #666;
+    }
+code {
+    font-family: "Menlo", "Monaco", "Courier New", monospace;
+    background-color: #f4f4f4;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.9em;
+    }
+pre {
+    background-color: #f4f4f4;
+    padding: 1em;
+    border-radius: 4px;
+    overflow-x: auto;
+    }
+pre code {
+    padding: 0;
+    background-color: transparent;
+    }
+a {
+    color: #07c;
+    text-decoration: none;
+    }
+a:hover {
+    text-decoration: underline;
+    }
+figure {
+    margin: 2em 0;
+    text-align: center;
+    }
+img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    display: block;
+    overflow: hidden;
+    max-height: 280px;
+    margin: 1em auto;
+    }
+figcaption {
+    font-size: 0.9em;
+    color: #666;
+    margin-top: 0.5em;
+    font-style: italic;
+    }
+.summary-box {
+    background-color: #f9f9f9;
+    border: 1px solid #e0e0e0;
+    border-left: 5px solid #07c;
+    padding: 1.5em;
+    margin: 2em 0;
+    border-radius: 5px;
+    }
+.summary-box h4 {
+    margin-top: 0;
+    color: #07c;
+    }
+.math-formula {
+    background-color: #f0f8ff;
+    padding: 1em;
+    border-radius: 5px;
+    margin: 1.5em 0;
+    text-align: center;
+    font-size: 1.1em;
+    overflow-x: auto;
+    }
+        .chart-container canvas {
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: contain;
+}
+
+@media only screen and (max-device-width: 768px) {
+            body {
+                padding: 0;
+                margin: 0;
+                font-family: PingFang SC;
+                font-size: 15px;
+                line-height: 1.5;
+            }
+
+            .container {
+                padding: 0;
+                margin: 16px 20px 30px;
+                box-shadow: none;
+            }
+
+            h1,
+            h2,
+            h3,
+            h4 {
+                font-family: PingFang SC;
+            }
+
+            h1 {
+                font-size: 1.87em;
+                line-height: 1.6;
+                margin-bottom: 0.5em;
+                text-align: center;
+            }
+
+            h2 {
+                font-size: 1.6em;
+                font-weight: 600;
+                margin-top: 1.3em;
+                margin-bottom: 0.8em;
+                border-bottom: 1px solid #eee;
+                padding-bottom: 0.5em;
+            }
+
+            h3 {
+                font-size: 1.2em;
+                font-weight: 600;
+                margin-top: 1em;
+                margin-bottom: 0.6em;
+            }
+
+            h4 {
+                font-size: 1.1em;
+                font-weight: 500;
+                margin-top: 1em;
+                margin-bottom: 0.5em;
+                font-style: normal;
+            }
+
+            h5 {
+                font-size: 1em;
+                font-weight: 500;
+                margin-bottom: 1.2em;
+            }
+
+            ul,
+            ol {
+                font-size: 1em; /* Equivalent to 17.6px if base is 16px */
+                font-weight: 400;
+                margin-bottom: 1.2em;
+                line-height: 1.8;
+            }
+
+            p {
+                font-size: 1em;
+                line-height: 1.8; /* Equivalent to 17.6px if base is 16px */
+                font-weight: 400;
+                margin-top: 0.8em;
+                margin-bottom: 0.8em;
+            }
+
+            blockquote {
+                padding: 1em 1.2em;
+
+            p {
+                margin: 0;
+            }
+        }
+
+        figcaption {
+            margin-top: 0.5em;
+            font-size: 0.8em; /* Equivalent to 17.6px if base is 16px */
+            font-weight: 400;
+            text-align: center;
+            font-style: normal;
+            color: #7F8896;
+        }
+
+        img {
+            display: block;
+            overflow: hidden;
+            max-width: 100%;
+            max-height: 335px;
+            margin: 1em auto;
+            border-radius: 8px;
+        }
+        }</style>
+<link rel="stylesheet" href="https://static.skywork.ai/fe/skywork-site-assets/styles/doc_reference_style.css?v=1956673113920745472"/></head>
+<body><div class="container">
+<h1 id="section-1">머신러닝 수학적 기초와 판별 모형의 이해</h1>
+<nav id="toc">
+<h2 id="section-1">목차</h2>
+<ul>
+<li><a href="#section-chapter-3">챕터 3: 미분과 최적화 기초</a>
+<ul>
+<li><a href="#section-intro">도입: 왜 머신러닝에서 최적화가 중요한가?</a></li>
+<li><a href="#section-multivar-diff">다변수 미분: 손실 함수의 지형도 읽기</a></li>
+<li><a href="#section-gd">수치 최적화 1: 경사하강법 (Gradient Descent)</a></li>
+<li><a href="#section-newton">수치 최적화 2: 뉴턴법 (Newton&#39;s Method)</a></li>
+<li><a href="#section-summary">요약 및 다음 챕터 예고</a></li>
+</ul>
+</li>
+</ul>
+</nav>
+<h2 id="section-chapter-3">챕터 3: 미분과 최적화 기초</h2>
+<h3 id="section-intro">도입: 왜 머신러닝에서 최적화가 중요한가?</h3>
+<p>머신러닝 모델의 &#39;학습&#39; 과정은 본질적으로 &#39;최적화(Optimization)&#39; 문제를 푸는 것과 같습니다. 모델이 주어진 데이터에 가장 잘 부합하도록 만드는 것은, 모델의 예측과 실제 값 사이의 오차를 나타내는 <strong>손실 함수(Loss Function)</strong>의 값을 최소화하는 최적의 파라미터(가중치) 집합을 찾는 여정입니다. 이 과정은 마치 안개 낀 산속에서 가장 낮은 계곡 지점을 찾아 내려가는 것과 비유할 수 있습니다.</p>
+<p>이때, 우리가 어느 방향으로 발걸음을 옮겨야 가장 효율적으로 하산할 수 있을지 알려주는 나침반 역할을 하는 것이 바로 <strong>미분(Differentiation)</strong>입니다. 미분은 특정 지점에서 함수의 순간적인 변화율, 즉 기울기를 알려주어 우리가 가야 할 가장 가파른 내리막길의 방향을 제시합니다. 손실 함수라는 복잡한 지형도 위에서, 미분은 우리가 나아갈 방향과 보폭을 결정하는 핵심적인 수학적 도구입니다.</p>
+<p>본 챕터에서는 손실 함수의 지형을 이해하기 위한 다변수 미분 개념, 즉 <strong>그래디언트(Gradient)</strong>와 <strong>헤시안(Hessian)</strong>을 학습합니다. 이를 바탕으로, 가장 효율적인 하산길을 찾는 다양한 최적화 알고리즘, 대표적으로 <strong>경사하강법(Gradient Descent)</strong>과 <strong>뉴턴법(Newton&#39;s Method)</strong>의 원리를 수학적 이론과 직관적인 시각화를 통해 깊이 있게 탐구하는 것을 목표로 합니다.</p>
+<hr/>
+<h3 id="section-multivar-diff">다변수 미분: 손실 함수의 지형도 읽기</h3>
+<p>손실 함수는 일반적으로 수많은 파라미터를 변수로 갖는 다변수 함수입니다. 이러한 고차원 함수의 형태를 분석하고 최저점을 찾기 위해서는 일변수 함수를 다룰 때보다 더 정교한 도구가 필요합니다. 여기서는 손실 함수의 &#39;지형도&#39;를 읽기 위한 핵심 도구인 그래디언트와 헤시안에 대해 학습합니다.</p>
+<h4 id="multivar-case">사례: 2차원 산의 가장 낮은 계곡을 찾아서</h4>
+<p>가장 간단한 형태의 다변수 함수인 2변수 이차함수를 통해 최적화의 기본 개념을 시각적으로 이해해 보겠습니다. 예를 들어, <code>f(x, y) = x² + y²</code>와 같은 함수를 생각해 봅시다. 이 함수의 3D 그래프는 마치 그릇 모양과 같으며, 등고선(Contour Plot)은 원점을 중심으로 하는 동심원들로 나타납니다. 최저점은 명백히 원점 (0, 0)입니다.</p>
+<p>여기서 두 가지 중요한 직관을 얻을 수 있습니다.</p>
+<ul>
+<li><strong>등고선과 그래디언트:</strong> 특정 지점에서 등고선에 수직인 방향은 경사가 가장 가파른 방향입니다. 이 방향이 바로 그래디언트 벡터(∇f)가 가리키는 방향입니다. 따라서 최저점을 향해 가장 빠르게 내려가는 길은 그래디언트의 반대 방향, 즉 음의 그래디언트(<code>-∇f</code>) 방향임을 알 수 있습니다.</li>
+<li><strong>계곡의 모양과 헤시안:</strong> 만약 함수가 <code>f(x, y) = x² + 10y²</code>처럼 변수 앞의 계수가 다르다면, 등고선은 한쪽으로 길쭉한 타원 형태가 됩니다. 이는 각 방향으로의 &#39;곡률(Curvature)&#39;, 즉 휘어진 정도가 다름을 의미합니다. 이처럼 함수 표면의 곡률 정보를 담고 있는 것이 바로 헤시안 행렬(Hessian Matrix)입니다. 곡률은 최적화 알고리즘의 수렴 속도에 지대한 영향을 미칩니다.</li>
+</ul>
+<div class="chart-container" id="canvas-parent-1" style="height: 550px;" data-sk-source-container="chart" data-sk-source-id="1JJSX9" data-sk-source-type="web_search">
+<canvas id="contourChart"></canvas>
+</div>
+<figcaption style="text-align: center;">두 가지 이차함수의 등고선. 왼쪽(x²+y²)은 원형, 오른쪽(x²+10y²)은 타원형을 띤다. 타원형 등고선은 방향에 따라 곡률이 다르며, 이는 최적화 난이도를 높인다.</figcaption>
+<h4 id="multivar-theory">이론: 그래디언트와 헤시안의 수학적 의미</h4>
+<h5>다변수 미분과 그래디언트 (Gradient, ∇f)</h5>
+<p>그래디언트는 다변수 함수를 각 변수로 편미분한 결과를 벡터 형태로 나타낸 것입니다. n개의 변수 <code>x = (x₁, x₂, ..., xₙ)</code>를 갖는 함수 <code>f(x)</code>의 그래디언트는 다음과 같이 정의됩니다.</p>
+<div class="math-formula">
+            ∇f(x) = [ ∂f/∂x₁, ∂f/∂x₂, ..., ∂f/∂xₙ ]ᵀ
+        </div>
+<p>기하학적으로 그래디언트 벡터 <code>∇f(a)</code>는 특정 지점 <code>a</code>에서 함수 값을 가장 빠르게 증가시키는 방향을 가리키며, 그 벡터의 크기(norm) <code>||∇f(a)||</code>는 해당 방향으로의 변화율을 나타냅니다. 따라서 최적화에서는 함수 값을 감소시켜야 하므로, 그래디언트의 반대 방향 <code>-∇f(a)</code>로 파라미터를 업데이트합니다. </p>
+<h5>테일러 근사 (Taylor Approximation)</h5>
+<p>복잡한 함수를 특정 지점 근처에서 더 간단한 다항함수로 근사하는 것은 최적화 알고리즘을 이해하는 데 매우 중요합니다. </p>
+<ul>
+<li><strong>1차 테일러 근사:</strong> 점 <code>a</code> 근처에서 함수 <code>f(x)</code>는 선형 함수로 근사할 수 있습니다. 이는 경사하강법의 이론적 기반이 됩니다.
+                <div class="math-formula">f(x) ≈ f(a) + ∇f(a)ᵀ(x-a)</div>
+</li>
+<li><strong>2차 테일러 근사:</strong> 2차 정보까지 사용하면 함수를 이차 함수로 더 정밀하게 근사할 수 있습니다. 이는 뉴턴법의 이론적 기반이 됩니다.
+                <div class="math-formula">f(x) ≈ f(a) + ∇f(a)ᵀ(x-a) + ½(x-a)ᵀH(a)(x-a)</div>
+</li>
+</ul>
+<figure>
+<figcaption>함수 L(x)와 점 xn-1에서의 2차 테일러 근사 h(x). 뉴턴법은 이 근사 함수(파란색 포물선)의 최저점으로 이동한다</figcaption>
+</figure>
+<h5>헤시안 행렬 (Hessian Matrix, H)</h5>
+<p>헤시안 행렬은 함수의 모든 이계 편미분(second-order partial derivatives)을 행렬 형태로 나타낸 것입니다. 이는 함수 표면의 &#39;곡률(curvature)&#39;에 대한 정보를 담고 있습니다. </p>
+<div class="math-formula">
+            H<sub>ij</sub> = ∂²f / ∂xᵢ∂xⱼ
+        </div>
+<p>헤시안은 그래디언트가 각 방향으로 얼마나 변하는지를 측정하여, 함수가 해당 지점에서 위로 볼록한지(최소점 후보), 아래로 볼록한지(최대점 후보), 아니면 방향에 따라 볼록성이 변하는 안장점(saddle point) 형태인지를 결정합니다.</p>
+<h5>헤시안과 임계점(Critical Point) 판정</h5>
+<p>그래디언트가 0인 지점<code>∇f=0</code>), 즉 임계점에서 헤시안 행렬의 고유값(eigenvalues)을 통해 그 지점의 성격을 판별할 수 있습니다. </p>
+<ul>
+<li><strong>양의 정부호 (Positive Definite):</strong> 헤시안의 모든 고유값이 양수이면, 그 지점은 <strong>지역 최소점(local minimum)</strong>입니다. 모든 방향에서 위로 볼록한 그릇 모양입니다.</li>
+<li><strong>음의 정부호 (Negative Definite):</strong> 모든 고유값이 음수이면, <strong>지역 최대점(local maximum)</strong>입니다.</li>
+<li><strong>부정부호 (Indefinite):</strong> 양수와 음수 고유값을 모두 가지면, <strong>안장점(saddle point)</strong>입니다. 말안장처럼 어떤 방향에서는 최소값, 다른 방향에서는 최대값을 가집니다.</li>
+</ul>
+<figure>
+<figcaption>안장점(Saddle Point)의 등고선. 특정 방향으로는 함수값이 증가하고 다른 방향으로는 감소하는 형태를 보인다</figcaption>
+</figure>
+<h4 id="multivar-example">예제: 그래디언트와 헤시안 직접 계산하기</h4>
+<p>함수 <code>f(x, y) = 2x² + 3xy + y²</code>가 주어졌을 때, 그래디언트와 헤시안을 계산해 봅시다.</p>
+<ol>
+<li><strong>그래디언트 계산:</strong>
+<ul>
+<li><code>∂f/∂x = 4x + 3y</code></li>
+<li><code>∂f/∂y = 3x + 2y</code></li>
+</ul>
+<p>따라서 그래디언트 벡터는 다음과 같습니다.</p>
+<div class="math-formula">∇f(x, y) = [ 4x + 3y, 3x + 2y ]ᵀ</div>
+</li>
+<li><strong>헤시안 행렬 계산:</strong>
+<ul>
+<li><code>∂²f/∂x² = 4</code></li>
+<li><code>∂²f/∂y² = 2</code></li>
+<li><code>∂²f/∂x∂y = 3</code></li>
+<li><code>∂²f/∂y∂x = 3</code></li>
+</ul>
+<p>따라서 헤시안 행렬은 다음과 같습니다.</p>
+<div class="math-formula">
+                    H = 
+                    [ 4  3 ]
+                    <br/>
+                    [ 3  2 ]
+                </div>
+</li>
+<li><strong>특정 점 (1, 1)에서의 해석:</strong>
+<ul>
+<li><code>∇f(1, 1) = [7, 5]ᵀ</code>: 점 (1, 1)에서는 (7, 5) 방향으로 함수 값이 가장 가파르게 증가합니다.</li>
+<li>헤시안 행렬 <code>H</code>의 고유값을 계산하면 (det(H-λI) = (4-λ)(2-λ)-9 = λ²-6λ-1=0), λ는 3 ± √10 입니다. 양수와 음수 고유값을 모두 가지므로, 이 함수는 원점(임계점)에서 안장점을 가집니다.</li>
+</ul>
+</li>
+</ol>
+<hr/>
+<h3 id="section-gd">수치 최적화 1: 경사하강법 (Gradient Descent)</h3>
+<p>경사하강법은 손실 함수의 최저점을 찾기 위해 가장 널리 사용되는 기본 최적화 알고리즘입니다. 그래디언트가 가리키는 방향의 반대쪽으로 조금씩 이동하는 과정을 반복하여 점진적으로 최소값에 근접합니다.</p>
+<h4 id="gd-case">사례: 길고 좁은 계곡에서 지그재그로 헤매는 등산가</h4>
+<p>손실 함수의 등고선이 한쪽으로 길쭉한 타원형(예: <code>f(x,y) = x² + 25y²</code>)일 경우를 상상해 봅시다. 이런 지형은 &#39;조건수(Condition Number)&#39;가 높다고 표현하며, 최적화하기 까다로운 문제입니다. 일반적인 경사하강법(GD)은 매 스텝마다 현재 위치에서 가장 가파른 방향(등고선에 수직인 방향)으로만 이동하기 때문에, 좁고 긴 계곡의 양쪽 벽을 반복적으로 부딪히며 지그재그 형태로 매우 느리게 하산하게 됩니다.</p>
+<p>반면, <strong>모멘텀(Momentum)</strong>을 적용한 경사하강법은 이전에 이동하던 방향과 속도를 &#39;관성&#39;처럼 유지하려는 성질이 있습니다. 이 관성 덕분에 좌우로 진동하는 움직임은 상쇄되고, 계곡의 바닥을 따라 내려가는 주된 흐름은 가속되어 훨씬 더 빠르고 부드럽게 최저점에 도달할 수 있습니다.</p>
+<figure>
+<img alt="경사하강법과 모멘텀의 수렴 궤적 비교" src="https://picture-search.tiangong.cn/image/rt/732bbe1b103e8bba21c729cdabc3d561.jpg" style="max-height: 280px; max-width: 100%;"/>
+<figcaption>타원형 등고선에서의 최적화 경로. 빨간색 경로는 일반 경사하강법의 지그재그 움직임을, 녹색 경로는 모멘텀을 적용하여 더 부드럽게 수렴하는 모습을 보여준다</figcaption>
+</figure>
+<h4 id="gd-theory">이론: 경사하강법의 작동 원리와 한계</h4>
+<h5>경사하강법 알고리즘</h5>
+<p>경사하강법의 업데이트 규칙은 매우 간단합니다. 현재 파라미터 위치 <code>w_t</code>에서 손실 함수 <code>f(w)</code>의 그래디언트 <code>∇f(w_t)</code>를 계산하고, 그 반대 방향으로 학습률(learning rate) <code>η</code>만큼 이동하여 다음 위치 <code>w_{t+1}</code>을 결정합니다. </p>
+<div class="math-formula">
+            w<sub>t+1</sub> = w<sub>t</sub> - η∇f(w<sub>t</sub>)
+        </div>
+<h5>학습률 (Learning Rate, η)의 중요성</h5>
+<p>학습률 <code>η</code>는 한 번에 얼마나 이동할지, 즉 보폭을 결정하는 매우 중요한 하이퍼파라미터입니다.</p>
+<ul>
+<li><strong>너무 큰 학습률:</strong> 최저점을 지나쳐 반대편으로 건너뛰는 현상이 반복되면서 값이 점점 커져 발산(diverge)할 수 있습니다.</li>
+<li><strong>너무 작은 학습률:</strong> 수렴은 보장되지만, 최저점까지 도달하는 데 너무 많은 시간이 걸려 학습이 비효율적입니다.</li>
+</ul>
+<p>최적의 학습률을 찾는 것은 &#39;라인 서치(Line Search)&#39;와 같은 이론적 방법론이 있지만, 실제로는 경험적으로 여러 값을 시도해보며 결정하는 경우가 많습니다.</p>
+<figure>
+<img alt="높은 학습률로 인한 발산" src="https://picture-search.tiangong.cn/image/rt/6439f0e274feecb14f0d98b6c823d22a.jpg" style="max-height: 280px; max-width: 100%;"/>
+<figcaption>학습률이 너무 클 때 경사하강법의 궤적. 오차(Mean Squared Error)가 감소하지 않고 오히려 폭발적으로 증가하며 발산하는 모습을 보여준다</figcaption>
+</figure>
+<h5>수렴률과 조건수 (Condition Number, κ)</h5>
+<p>최적화 문제의 &#39;난이도&#39;를 나타내는 척도가 바로 조건수(κ)입니다. 이는 손실 함수의 헤시안 행렬의 가장 큰 고유값<code>λ_max</code>)과 가장 작은 고유값<code>λ_min</code>)의 비율로 정의됩니다. </p>
+<div class="math-formula">κ = λ<sub>max</sub> / λ<sub>min</sub></div>
+<p>조건수는 등고선의 형태와 직접적인 관련이 있습니다. <code>κ=1</code>이면 등고선이 원형에 가까워 어느 방향에서 시작하든 최저점을 향해 직선으로 빠르게 수렴합니다. 반면, <code>κ</code>가 매우 크면 등고선이 길쭉한 타원형이 되어, 대부분의 방향에서 그래디언트가 실제 최저점이 아닌, 계곡의 가파른 벽 쪽을 향하게 됩니다. 이로 인해 지그재그 현상이 발생하며 수렴이 매우 느려집니다.</p>
+<h5>모멘텀 (Momentum)</h5>
+<p>모멘텀은 이러한 지그재그 현상을 완화하기 위해 제안된 기법입니다. 핵심 아이디어는 &#39;관성&#39;을 도입하는 것입니다. 즉, 과거에 이동했던 방향을 일정 비율(<code>β</code>)만큼 기억하고, 이를 현재 스텝의 이동 방향에 더해줍니다.</p>
+<div class="math-formula">
+            v<sub>t</sub> = βv<sub>t-1</sub> + ∇f(w<sub>t</sub>) <br/>
+            w<sub>t+1</sub> = w<sub>t</sub> - ηv<sub>t</sub>
+</div>
+<p>여기서 <code>v_t</code>는 이동 방향과 속도를 담은 &#39;속도&#39; 벡터입니다. 이 방식은 그래디언트의 방향이 자주 바뀌는 축(좁은 계곡의 벽)에서는 이전의 반대 방향 이동과 현재 이동이 상쇄되어 진동을 줄여주고, 그래디언트 방향이 일관된 축(계곡의 바닥)에서는 이동이 누적되어 가속되는 효과를 낳습니다. </p>
+<h4 id="gd-example">예제: 학습률에 따른 수렴/발산 판단</h4>
+<p>1차원 이차함수 <code>f(x) = 5x²</code>에 대해 시작점 <code>x₀ = 10</code>에서 경사하강법을 적용해 봅시다.</p>
+<ol>
+<li><strong>그래디언트 계산:</strong> <code>∇f(x) = f&#39;(x) = 10x</code></li>
+<li><strong>업데이트 규칙 유도:</strong> <code>x_{t+1} = x_t - η(10x_t) = (1 - 10η)x_t</code></li>
+<li><strong>수렴 조건:</strong> 수렴하기 위해서는 공비 <code>|1 - 10η|</code>가 1보다 작아야 합니다.
+                <p><code>-1 &lt; 1 - 10η &lt; 1</code></p>
+<p><code>-2 &lt; -10η &lt; 0</code></p>
+<p><code>0 &lt; 10η &lt; 2</code></p>
+<p>따라서 수렴을 위한 학습률의 범위는 <code>0 &lt; η &lt; 0.2</code> 입니다.</p>
+</li>
+<li><strong>학습률에 따른 계산:</strong>
+<ul>
+<li><strong>η = 0.1 (수렴):</strong> <code>x_{t+1} = (1 - 1)x_t = 0</code>. 한 번에 최저점으로 수렴합니다.
+                        <p><code>x₁ = 0</code></p>
+</li>
+<li><strong>η = 0.25 (발산):</strong> <code>x_{t+1} = (1 - 2.5)x_t = -1.5x_t</code>.
+                        <p><code>x₁ = -1.5 * 10 = -15</code></p>
+<p><code>x₂ = -1.5 * (-15) = 22.5</code></p>
+<p><code>x₃ = -1.5 * 22.5 = -33.75</code></p>
+<p>값이 점점 진동하며 커지는 것을 볼 수 있습니다.</p>
+</li>
+</ul>
+</li>
+</ol>
+<hr/>
+<h3 id="section-newton">수치 최적화 2: 뉴턴법 (Newton&#39;s Method)</h3>
+<p>뉴턴법은 경사하강법보다 훨씬 정교한 최적화 기법입니다. 1차 정보인 기울기(그래디언트)뿐만 아니라 2차 정보인 곡률(헤시안)까지 활용하여 손실 함수의 최저점을 훨씬 빠르고 정확하게 찾아냅니다.</p>
+<h4 id="newton-case">사례: 한 걸음에 계곡 중심으로 점프하기</h4>
+<p>경사하강법이 현재 위치에서 가장 가파른 내리막길로 한 걸음씩 나아가는 &#39;근시안적인&#39; 방법이라면, 뉴턴법은 주변 지형 전체를 조망하고 가장 낮은 지점으로 &#39;점프&#39;하는 것과 같습니다. 동일한 타원형 등고선 위에서 시작하더라도, 경사하강법은 등고선에 수직인 방향으로 조금 이동하는 반면, 뉴턴법은 현재 지점 주변의 함수를 이차함수로 근사한 뒤, 그 근사된 이차함수의 최저점으로 한 번에 이동합니다. 대부분의 경우, 이 한 번의 점프가 경사하강법의 수십, 수백 걸음보다 훨씬 더 목표점에 가깝게 도달합니다.</p>
+<div class="chart-container" id="canvas-parent-2" style="height: 550px;">
+<canvas id="newtonVsGdChart"></canvas>
+</div>
+<figcaption style="text-align: center;">동일한 시작점(빨간 점)에서 경사하강법(파란색 화살표)과 뉴턴법(녹색 화살표)의 첫 스텝 비교. 뉴턴법이 한 번에 최저점에 훨씬 가깝게 이동한다.</figcaption>
+<h4 id="newton-theory">이론: 2차 근사를 활용한 최적화</h4>
+<h5>뉴턴법의 핵심 아이디어</h5>
+<p>뉴턴법의 핵심은 손실 함수 <code>f(w)</code>를 현재 지점 <code>w_t</code> 근처에서 2차 테일러 근사를 통해 이차함수로 모델링하는 것입니다. 그 후, 실제 함수 <code>f(w)</code>를 최소화하는 대신, 이 간단한 근사 이차함수를 최소화하는 지점을 다음 스텝 <code>w_{t+1}</code>로 삼습니다. </p>
+<h5>업데이트 규칙</h5>
+<p>2차 테일러 근사식 <code>f(w) ≈ f(w_t) + ∇f(w_t)ᵀ(w-w_t) + ½(w-w_t)ᵀH(w_t)(w-w_t)</code>을 <code>w</code>에 대해 미분하여 0으로 놓으면 근사 함수의 최저점을 찾을 수 있습니다.</p>
+<div class="math-formula">∇f(w_t) + H(w_t)(w-w_t) = 0</div>
+<p>이 식을 <code>w</code>에 대해 정리하면 뉴턴법의 업데이트 규칙이 유도됩니다.</p>
+<div class="math-formula">
+            w<sub>t+1</sub> = w<sub>t</sub> - H(w<sub>t</sub>)⁻¹∇f(w<sub>t</sub>)
+        </div>
+<p>여기서 <code>H(w_t)⁻¹∇f(w_t)</code>를 &#39;뉴턴 스텝(Newton step)&#39;이라고 부릅니다. 이는 그래디언트를 헤시안의 역행렬로 변환하여 이동 방향과 거리를 조절하는 것을 의미합니다. 이 변환은 길고 좁은 계곡 지형을 원형 지형으로 바꾸어주는 효과가 있어 지그재그 문제를 근본적으로 해결합니다.</p>
+<h5>장점과 단점 (계산 비용 트레이드오프)</h5>
+<p>뉴턴법은 강력하지만 현실적인 제약이 따릅니다. </p>
+<ul>
+<li><strong>장점:</strong>
+<ul>
+<li><strong>빠른 수렴 속도:</strong> 최저점 근처에서 수렴 속도가 매우 빠릅니다(이차 수렴, Quadratic convergence).</li>
+<li><strong>학습률 불필요:</strong> 이상적으로는 학습률 같은 하이퍼파라미터 튜닝이 필요 없습니다.</li>
+</ul>
+</li>
+<li><strong>단점:</strong>
+<ul>
+<li><strong>높은 계산 비용:</strong> 파라미터 개수가 n일 때, 헤시안 행렬을 계산하는 데 <code>O(n²)</code>, 그 역행렬을 계산하는 데 <code>O(n³)</code>의 엄청난 계산 비용이 발생합니다. 파라미터가 수백만 개 이상인 현대 딥러닝 모델에는 사실상 적용이 불가능합니다.</li>
+<li><strong>안정성 문제:</strong> 헤시안이 양의 정부호가 아니거나 (안장점 근처), 특이 행렬(singular)에 가까우면 뉴턴 스텝이 불안정해지거나 발산할 수 있습니다.</li>
+</ul>
+</li>
+</ul>
+<h5>준뉴턴법 (Quasi-Newton Method) 직관</h5>
+<p>뉴턴법의 엄청난 계산량을 해결하기 위한 대안으로 준뉴턴법이 제안되었습니다. 그중 가장 유명한 것이 <strong>BFGS(Broyden–Fletcher–Goldfarb–Shanno)</strong> 알고리즘입니다. </p>
+<p>BFGS의 핵심 아이디어는 실제 헤시안 역행렬(<code>H⁻¹</code>)을 매 스텝마다 직접 계산하는 대신, 이전 스텝의 파라미터 변화량과 그래디언트 변화량 정보를 이용하여 <code>H⁻¹</code>을 점진적으로 &#39;근사(approximate)&#39;하는 것입니다. 이는 헤시안을 직접 계산하지 않으면서도 뉴턴법에 가까운 빠른 수렴 속도를 얻을 수 있게 해주는 매우 효율적인 방법입니다.</p>
+<h4 id="newton-example">예제: 뉴턴 업데이트 1회 계산해보기</h4>
+<p>함수 <code>f(x, y) = x² + 4y²</code>에 대해 시작점 <code>w₀ = (2, 1)ᵀ</code>에서 뉴턴 업데이트를 1회 수행해 봅시다.</p>
+<ol>
+<li><strong>그래디언트 계산:</strong>
+<p><code>∇f(x, y) = [2x, 8y]ᵀ</code></p>
+<p><code>∇f(w₀) = ∇f(2, 1) = [4, 8]ᵀ</code></p>
+</li>
+<li><strong>헤시안 행렬 계산:</strong>
+<div class="math-formula">
+                    H = 
+                    [ 2  0 ]
+                    <br/>
+                    [ 0  8 ]
+                </div>
+<p>(이 예제에서는 헤시안이 상수 행렬입니다.)</p>
+</li>
+<li><strong>헤시안 역행렬 계산:</strong>
+<div class="math-formula">
+                    H⁻¹ = 
+                    [ 1/2  0   ]
+                    <br/>
+                    [ 0    1/8 ]
+                </div>
+</li>
+<li><strong>뉴턴 업데이트:</strong>
+<p><code>w₁ = w₀ - H⁻¹∇f(w₀)</code></p>
+<p><code>w₁ = [2, 1]ᵀ - [1/2, 0; 0, 1/8] * [4, 8]ᵀ</code></p>
+<p><code>w₁ = [2, 1]ᵀ - [2, 1]ᵀ = [0, 0]ᵀ</code></p>
+</li>
+</ol>
+<p>이차함수의 경우, 뉴턴법은 단 한 번의 스텝으로 정확히 최저점 <code>(0, 0)</code>에 도달합니다. 이는 뉴턴법이 함수의 곡률 정보를 얼마나 효과적으로 사용하는지를 보여주는 강력한 예시입니다.</p>
+<hr/>
+<h3 id="section-summary">요약 및 다음 챕터 예고</h3>
+<div class="summary-box">
+<h4>핵심 정리</h4>
+<ul>
+<li><strong>그래디언트(∇f):</strong> 손실 함수라는 지형에서 &#39;어느 방향&#39;으로 가야 가장 가파른지를 알려주는 <strong>나침반</strong>입니다.</li>
+<li><strong>헤시안(H):</strong> &#39;지형이 얼마나, 어떻게 휘었는지(곡률)&#39;를 알려주는 정교한 <strong>지형도</strong>입니다.</li>
+<li><strong>경사하강법(GD):</strong> 나침반(그래디언트)만 보고 현재 위치에서 가장 가파른 내리막길로 한 걸음씩 가는 가장 기본적인 최적화 방법입니다. <strong>모멘텀</strong>은 여기에 &#39;관성&#39;을 더해 효율을 높인 개선판입니다.</li>
+<li><strong>뉴턴법:</strong> 나침반(그래디언트)과 지형도(헤시안)를 모두 활용하여 최적의 경로로 &#39;점프&#39;하는 매우 빠르지만 계산 비용이 비싼 방법입니다.</li>
+</ul>
+</div>
+<p>지금까지 우리는 머신러닝 모델을 학습시키는 과정의 핵심인 &#39;최적화&#39;의 수학적 원리를 탐구했습니다. 손실 함수의 최저점을 찾아가는 이 여정은 미분이라는 도구를 통해 가능해집니다. 그래디언트는 우리에게 방향을 제시하고, 헤시안은 그 길의 험난함을 알려줍니다. 경사하강법과 뉴턴법은 이 정보들을 활용하여 최적의 파라미터를 찾는 각기 다른 전략입니다.</p>
+<p>다음 챕터에서는 이러한 최적화 원리가 구체적인 판별 모델에서 어떻게 작동하는지 살펴볼 것입니다. 로지스틱 회귀(Logistic Regression)와 서포트 벡터 머신(Support Vector Machine)과 같은 모델들이 각각의 손실 함수를 정의하고, 오늘 배운 최적화 알고리즘을 통해 어떻게 데이터 클래스를 구분하는 &#39;결정 경계(Decision Boundary)&#39;를 학습해 나가는지 직접 확인하게 될 것입니다.</p>
+<script>
+        // Chart for Contour Plots
+        (function() {
+            const ctx = document.getElementById('contourChart');
+            if (!ctx) return;
+
+            function generateContourData(func, xRange, yRange, steps, levels) {
+                const data = [];
+                const xStep = (xRange[1] - xRange[0]) / steps;
+                const yStep = (yRange[1] - yRange[0]) / steps;
+
+                for (let i = 0; i <= steps; i++) {
+                    for (let j = 0; j <= steps; j++) {
+                        const x = xRange[0] + i * xStep;
+                        const y = yRange[0] + j * yStep;
+                        const z = func(x, y);
+                        data.push({ x, y, z });
+                    }
+                }
+                return data;
+            }
+
+            function getColor(value, min, max) {
+                const ratio = (value - min) / (max - min);
+                const hue = 240 - ratio * 240; // Blue to Red
+                return `hsla(${hue}, 80%, 60%, 0.6)`;
+            }
+
+            const func1 = (x, y) => x * x + y * y;
+            const func2 = (x, y) => x * x + 10 * y * y;
+
+            const data1 = generateContourData(func1, [-5, 5], [-5, 5], 50);
+            const data2 = generateContourData(func2, [-5, 5], [-5, 5], 50);
+            
+            const minZ1 = Math.min(...data1.map(d => d.z));
+            const maxZ1 = Math.max(...data1.map(d => d.z));
+            const minZ2 = Math.min(...data2.map(d => d.z));
+            const maxZ2 = Math.max(...data2.map(d => d.z));
+
+            const background1 = {
+                id: 'background1',
+                beforeDraw: (chart) => {
+                    const { ctx, chartArea: { left, top, right, bottom }, scales: { x, y } } = chart;
+                    ctx.save();
+                    data1.forEach(point => {
+                        ctx.fillStyle = getColor(point.z, minZ1, maxZ1);
+                        const pixelX = x.getPixelForValue(point.x);
+                        const pixelY = y.getPixelForValue(point.y);
+                        const pixelSizeX = x.getPixelForValue(point.x + (x.max - x.min) / 50) - pixelX;
+                        const pixelSizeY = y.getPixelForValue(point.y + (y.max - y.min) / 50) - pixelY;
+                        ctx.fillRect(pixelX, pixelY, pixelSizeX, pixelSizeY);
+                    });
+                    ctx.restore();
+                }
+            };
+            
+            const background2 = {
+                id: 'background2',
+                beforeDraw: (chart) => {
+                    const { ctx, chartArea: { left, top, right, bottom }, scales: { x, y } } = chart;
+                    ctx.save();
+                    data2.forEach(point => {
+                        ctx.fillStyle = getColor(point.z, minZ2, maxZ2);
+                        const pixelX = x.getPixelForValue(point.x);
+                        const pixelY = y.getPixelForValue(point.y);
+                        const pixelSizeX = x.getPixelForValue(point.x + (x.max - x.min) / 50) - pixelX;
+                        const pixelSizeY = y.getPixelForValue(point.y - (y.max - y.min) / 50) - pixelY;
+                        ctx.fillRect(pixelX, pixelY, pixelSizeX, -pixelSizeY);
+                    });
+                    ctx.restore();
+                }
+            };
+
+            new Chart(ctx, {
+                type: 'scatter',
+                data: { datasets: [] },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: { display: false },
+                        legend: { display: false },
+                        annotation: {
+                            annotations: {
+                                text1: {
+                                    type: 'label',
+                                    xValue: -2.5,
+                                    yValue: 5.5,
+                                    content: 'f(x,y) = x² + y²',
+                                    font: { size: 16 }
+                                },
+                                text2: {
+                                    type: 'label',
+                                    xValue: 2.5,
+                                    yValue: 5.5,
+                                    content: 'f(x,y) = x² + 10y²',
+                                    font: { size: 16 }
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            type: 'linear',
+                            position: 'bottom',
+                            min: -5,
+                            max: 5,
+                            grid: {
+                                zeroLineColor: 'rgba(0, 0, 0, 1)',
+                                zeroLineWidth: 2
+                            }
+                        },
+                        y: {
+                            min: -5,
+                            max: 5,
+                            grid: {
+                                zeroLineColor: 'rgba(0, 0, 0, 1)',
+                                zeroLineWidth: 2
+                            }
+                        }
+                    },
+                    layout: {
+                        padding: {
+                            left: 0,
+                            right: 0,
+                            top: 30,
+                            bottom: 0
+                        }
+                    }
+                },
+                plugins: [{
+                    id: 'customContour',
+                    beforeDraw: (chart) => {
+                        const { ctx, chartArea: { left, top, right, bottom }, scales: { x, y } } = chart;
+                        const width = right - left;
+                        const midX = left + width / 2;
+                        
+                        ctx.save();
+                        
+                        // Draw for func1 on the left
+                        ctx.beginPath();
+                        ctx.rect(left, top, width / 2, bottom - top);
+                        ctx.clip();
+                        data1.forEach(point => {
+                            ctx.fillStyle = getColor(point.z, minZ1, maxZ1);
+                            const pixelX = x.getPixelForValue(point.x);
+                            const pixelY = y.getPixelForValue(point.y);
+                            const pixelSizeX = x.getPixelForValue(point.x + (x.max - x.min) / 50) - pixelX;
+                            const pixelSizeY = y.getPixelForValue(point.y - (y.max - y.min) / 50) - pixelY;
+                            ctx.fillRect(pixelX, pixelY, pixelSizeX, -pixelSizeY);
+                        });
+                        ctx.restore();
+                        
+                        ctx.save();
+                        // Draw for func2 on the right
+                        ctx.beginPath();
+                        ctx.rect(midX, top, width / 2, bottom - top);
+                        ctx.clip();
+                        data2.forEach(point => {
+                            ctx.fillStyle = getColor(point.z, minZ2, maxZ2);
+                            const pixelX = x.getPixelForValue(point.x);
+                            const pixelY = y.getPixelForValue(point.y);
+                            const pixelSizeX = x.getPixelForValue(point.x + (x.max - x.min) / 50) - pixelX;
+                            const pixelSizeY = y.getPixelForValue(point.y - (y.max - y.min) / 50) - pixelY;
+                            ctx.fillRect(pixelX, pixelY, pixelSizeX, -pixelSizeY);
+                        });
+                        ctx.restore();
+
+                        // Draw separator line
+                        ctx.beginPath();
+                        ctx.moveTo(midX, top);
+                        ctx.lineTo(midX, bottom);
+                        ctx.strokeStyle = 'black';
+                        ctx.lineWidth = 2;
+                        ctx.stroke();
+                    }
+                }]
+            });
+        })();
+
+        // Chart for Newton vs GD
+        (function() {
+            const ctx = document.getElementById('newtonVsGdChart');
+            if (!ctx) return;
+
+            const func = (x, y) => x * x + 10 * y * y;
+            const grad = (x, y) => ({ x: 2 * x, y: 20 * y });
+            const hessianInv = [[0.5, 0], [0, 0.05]];
+
+            const startPoint = { x: 4, y: 1.8 };
+            const learningRate = 0.045;
+
+            // GD step
+            const gd_grad = grad(startPoint.x, startPoint.y);
+            const gd_step = { x: startPoint.x - learningRate * gd_grad.x, y: startPoint.y - learningRate * gd_grad.y };
+
+            // Newton step
+            const newton_grad = grad(startPoint.x, startPoint.y);
+            const newton_update_x = hessianInv[0][0] * newton_grad.x + hessianInv[0][1] * newton_grad.y;
+            const newton_update_y = hessianInv[1][0] * newton_grad.x + hessianInv[1][1] * newton_grad.y;
+            const newton_step = { x: startPoint.x - newton_update_x, y: startPoint.y - newton_update_y };
+
+            const contourData = [];
+            const steps = 50;
+            const xRange = [-5, 5], yRange = [-2, 2];
+            const xStep = (xRange[1] - xRange[0]) / steps;
+            const yStep = (yRange[1] - yRange[0]) / steps;
+
+            for (let i = 0; i <= steps; i++) {
+                for (let j = 0; j <= steps; j++) {
+                    const x = xRange[0] + i * xStep;
+                    const y = yRange[0] + j * yStep;
+                    contourData.push({ x, y, z: func(x, y) });
+                }
+            }
+            const minZ = Math.min(...contourData.map(d => d.z));
+            const maxZ = Math.max(...contourData.map(d => d.z));
+            
+            function getColor(value, min, max) {
+                const ratio = Math.sqrt((value - min) / (max - min));
+                const hue = 240 - ratio * 240;
+                return `hsla(${hue}, 80%, 60%, 0.5)`;
+            }
+
+            new Chart(ctx, {
+                type: 'scatter',
+                data: {
+                    datasets: [
+                        {
+                            label: 'Start',
+                            data: [startPoint],
+                            backgroundColor: 'red',
+                            pointRadius: 8,
+                            pointHoverRadius: 10
+                        },
+                        {
+                            label: 'GD Step',
+                            data: [startPoint, gd_step],
+                            borderColor: 'blue',
+                            backgroundColor: 'blue',
+                            showLine: true,
+                            fill: false,
+                            pointRadius: [0, 6]
+                        },
+                        {
+                            label: 'Newton Step',
+                            data: [startPoint, newton_step],
+                            borderColor: 'green',
+                            backgroundColor: 'green',
+                            showLine: true,
+                            fill: false,
+                            pointRadius: [0, 6]
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.x !== null) {
+                                        label += `(${context.parsed.x.toFixed(2)}, ${context.parsed.y.toFixed(2)})`;
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: { min: -5, max: 5 },
+                        y: { min: -2, max: 2 }
+                    }
+                },
+                plugins: [{
+                    id: 'contourBackground',
+                    beforeDraw: (chart) => {
+                        const { ctx, scales: { x, y } } = chart;
+                        ctx.save();
+                        contourData.forEach(point => {
+                            ctx.fillStyle = getColor(point.z, minZ, maxZ);
+                            const pixelX = x.getPixelForValue(point.x);
+                            const pixelY = y.getPixelForValue(point.y);
+                            const pixelSizeX = x.getPixelForValue(point.x + xStep) - pixelX;
+                            const pixelSizeY = y.getPixelForValue(point.y - yStep) - pixelY;
+                            ctx.fillRect(pixelX, pixelY, pixelSizeX, pixelSizeY);
+                        });
+                        ctx.restore();
+                    }
+                }]
+            });
+        })();
+    </script>
+<div class="reference-container">
+			<div class="reference-section">
+				<h3 class="reference-title">참고 자료</h3>
+				<div class="reference-list">
+					
+					<div class="reference-item">
+						<span class="reference-number">[1]</span>
+						<div class="reference-content">
+							<div class="reference-text-container">
+								<span class="reference-text">Quadratic Functions - Anthony Tan</span>
+									
+							</div>
+							<a href="https://anthony-tan.com/Quadratic-Functions/" class="reference-link" target="_blank">
+								https://anthony-tan.com/Quadratic-Functions/
+							</a>
+						</div>
+					</div>
+					
+					<div class="reference-item">
+						<span class="reference-number">[2]</span>
+						<div class="reference-content">
+							<div class="reference-text-container">
+								<span class="reference-text">[PDF] Lecture 14: March 2: Newton&#39;s Method</span>
+									
+							</div>
+							<a href="https://www.stat.cmu.edu/~ryantibs/convexopt-S15/scribes/14-newton-scribed.pdf" class="reference-link" target="_blank">
+								https://www.stat.cmu.edu/~ryantibs/convexopt-S15/scribes/14-newton-scribed.pdf
+							</a>
+						</div>
+					</div>
+					
+					<div class="reference-item">
+						<span class="reference-number">[3]</span>
+						<div class="reference-content">
+							<div class="reference-text-container">
+								<span class="reference-text">Newton&#39;s Method for Unconstrained Optimization</span>
+									
+							</div>
+							<a href="https://ocw.mit.edu/courses/15-084j-nonlinear-programming-spring-2004/83159d56de04a7e7dc94d0348fa4ccda_lec3_newton_mthd.pdf" class="reference-link" target="_blank">
+								https://ocw.mit.edu/courses/15-084j-nonlinear-programming-spring-2004/83159d56de04a7e7dc94d0348fa4ccda_lec3_newton_mthd.pdf
+							</a>
+						</div>
+					</div>
+					
+					<div class="reference-item">
+						<span class="reference-number">[4]</span>
+						<div class="reference-content">
+							<div class="reference-text-container">
+								<span class="reference-text">Newton&#39;s method for multivariate minimization</span>
+									
+							</div>
+							<a href="https://drlvk.github.io/nm/section-newton-method-min-nd.html" class="reference-link" target="_blank">
+								https://drlvk.github.io/nm/section-newton-method-min-nd.html
+							</a>
+						</div>
+					</div>
+					
+					<div class="reference-item">
+						<span class="reference-number">[5]</span>
+						<div class="reference-content">
+							<div class="reference-text-container">
+								<span class="reference-text">Understanding the Gradient Hessian Matrix Multivariate ...</span>
+									
+							</div>
+							<a href="https://resources.system-analysis.cadence.com/blog/msa2023-understanding-the-gradient-and-hessian-matrix-in-multivariate-optimization" class="reference-link" target="_blank">
+								https://resources.system-analysis.cadence.com/blog/msa2023-understanding-the-gradient-and-hessian-matrix-in-multivariate-optimization
+							</a>
+						</div>
+					</div>
+					
+					<div class="reference-item">
+						<span class="reference-number">[6]</span>
+						<div class="reference-content">
+							<div class="reference-text-container">
+								<span class="reference-text">Lecture 7: Gradient Descent (and Beyond) - CS@Cornell</span>
+									
+							</div>
+							<a href="https://www.cs.cornell.edu/courses/cs4780/2018fa/lectures/lecturenote07.html" class="reference-link" target="_blank">
+								https://www.cs.cornell.edu/courses/cs4780/2018fa/lectures/lecturenote07.html
+							</a>
+						</div>
+					</div>
+					
+					<div class="reference-item">
+						<span class="reference-number">[7]</span>
+						<div class="reference-content">
+							<div class="reference-text-container">
+								<span class="reference-text">The Hessian matrix | Multivariable calculus (article) - Khan Academy</span>
+									
+							</div>
+							<a href="https://www.khanacademy.org/math/multivariable-calculus/applications-of-multivariable-derivatives/quadratic-approximations/a/the-hessian" class="reference-link" target="_blank">
+								https://www.khanacademy.org/math/multivariable-calculus/applications-of-multivariable-derivatives/quadratic-approximations/a/the-hessian
+							</a>
+						</div>
+					</div>
+					
+					<div class="reference-item">
+						<span class="reference-number">[8]</span>
+						<div class="reference-content">
+							<div class="reference-text-container">
+								<span class="reference-text">Gradient descent - Wikipedia</span>
+									
+							</div>
+							<a href="https://en.wikipedia.org/wiki/Gradient_descent" class="reference-link" target="_blank">
+								https://en.wikipedia.org/wiki/Gradient_descent
+							</a>
+						</div>
+					</div>
+					
+					<div class="reference-item">
+						<span class="reference-number">[9]</span>
+						<div class="reference-content">
+							<div class="reference-text-container">
+								<span class="reference-text">Why Momentum Really Works - Distill.pub</span>
+									
+							</div>
+							<a href="http://distill.pub/2017/momentum" class="reference-link" target="_blank">
+								http://distill.pub/2017/momentum
+							</a>
+						</div>
+					</div>
+					
+					<div class="reference-item">
+						<span class="reference-number">[10]</span>
+						<div class="reference-content">
+							<div class="reference-text-container">
+								<span class="reference-text">Visualizing Gradient Descent with Momentum in Python</span>
+									
+							</div>
+							<a href="https://hengluchang.medium.com/visualizing-gradient-descent-with-momentum-in-python-7ef904c8a847" class="reference-link" target="_blank">
+								https://hengluchang.medium.com/visualizing-gradient-descent-with-momentum-in-python-7ef904c8a847
+							</a>
+						</div>
+					</div>
+					
+					<div class="reference-item">
+						<span class="reference-number">[11]</span>
+						<div class="reference-content">
+							<div class="reference-text-container">
+								<span class="reference-text">Newton&#39;s method in optimization</span>
+									
+							</div>
+							<a href="https://en.wikipedia.org/wiki/Newton%27s_method_in_optimization" class="reference-link" target="_blank">
+								https://en.wikipedia.org/wiki/Newton%27s_method_in_optimization
+							</a>
+						</div>
+					</div>
+					
+					<div class="reference-item">
+						<span class="reference-number">[12]</span>
+						<div class="reference-content">
+							<div class="reference-text-container">
+								<span class="reference-text">Why We Use Gradient Descent — Even Though Newton&#39;s Method is ...</span>
+									
+							</div>
+							<a href="https://medium.com/@shnrndk/why-we-use-gradient-descent-even-though-newtons-method-is-faster-f7662b74056a" class="reference-link" target="_blank">
+								https://medium.com/@shnrndk/why-we-use-gradient-descent-even-though-newtons-method-is-faster-f7662b74056a
+							</a>
+						</div>
+					</div>
+					
+					<div class="reference-item">
+						<span class="reference-number">[13]</span>
+						<div class="reference-content">
+							<div class="reference-text-container">
+								<span class="reference-text">Quasi-Newton method</span>
+									
+							</div>
+							<a href="https://en.wikipedia.org/wiki/Quasi-Newton_method" class="reference-link" target="_blank">
+								https://en.wikipedia.org/wiki/Quasi-Newton_method
+							</a>
+						</div>
+					</div>
+					
+				</div>
+			</div>
+		</div></div>
+</body></html>
