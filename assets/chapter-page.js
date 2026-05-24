@@ -4,6 +4,8 @@ const rootPath = document.body.dataset.root || "";
 const chapterId = document.body.dataset.chapterId;
 const chapter = chapters.find((item) => item.id === chapterId);
 const content = document.querySelector("#chapterContent");
+const loadedScripts = new Map();
+let mathJaxPromise;
 
 const escapeHtml = (value) =>
   String(value)
@@ -60,6 +62,7 @@ if (!chapter) {
     .join("");
 
   const prevNext = getPrevNext(chapter.id);
+  const htmlSource = chapter.sourceLinks.find(([label]) => label === "HTML");
 
   content.innerHTML = `
     <section class="page-shell chapter-page">
@@ -92,6 +95,22 @@ if (!chapter) {
             ${list(chapter.goals)}
           </section>
 
+          <section class="chapter-block source-lecture-block">
+            <div class="source-lecture-head">
+              <div>
+                <p class="section-label">Full lecture note</p>
+                <h2>원본 강의노트 본문</h2>
+              </div>
+              ${htmlSource ? `<a class="text-link" href="${resolvePath(htmlSource[1])}">원본 HTML 열기</a>` : ""}
+            </div>
+            <p>
+              아래 본문은 해당 챕터의 원본 HTML 강의노트를 상세 페이지 안에서 다시 렌더링한 것입니다.
+              상단의 학습목표와 질문으로 방향을 잡고, 이어지는 본문에서 사례, 이론, 수식, 예제를 깊게 읽습니다.
+            </p>
+            <div class="reference-note-status" id="referenceNoteStatus">원본 강의노트를 불러오는 중입니다.</div>
+            <article class="reference-note-content" id="referenceNoteContent"></article>
+          </section>
+
           ${sections}
 
           <section class="chapter-block">
@@ -110,8 +129,8 @@ if (!chapter) {
             <p class="section-label">Content audit</p>
             <h2>보강 audit</h2>
             <p>
-              현재 상세 페이지는 기존 강의노트 초안을 그대로 붙여 넣는 대신,
-              공개 강의 페이지에서 먼저 보여 줄 핵심 설명과 보강 방향을 정리한 serving layer입니다.
+              상세 페이지는 원본 강의노트 전체를 함께 렌더링하고, 그 앞뒤에 강의 목표,
+              읽는 순서, 보강 방향을 덧붙이는 방식으로 운영합니다.
             </p>
             ${list(chapter.audit)}
           </section>
@@ -124,6 +143,8 @@ if (!chapter) {
       </div>
     </section>
   `;
+
+  renderReferenceNote(chapter);
 }
 
 function getPrevNext(id) {
@@ -132,4 +153,168 @@ function getPrevNext(id) {
     prev: index > 0 ? chapters[index - 1] : null,
     next: index >= 0 && index < chapters.length - 1 ? chapters[index + 1] : null
   };
+}
+
+async function renderReferenceNote(activeChapter) {
+  const status = document.querySelector("#referenceNoteStatus");
+  const mount = document.querySelector("#referenceNoteContent");
+  const htmlSource = activeChapter.sourceLinks.find(([label]) => label === "HTML");
+
+  if (!htmlSource) {
+    status.textContent = "이 챕터에는 아직 연결된 HTML 강의노트가 없습니다.";
+    return;
+  }
+
+  const sourceUrl = resolvePath(htmlSource[1]);
+
+  try {
+    const response = await fetch(sourceUrl);
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+
+    const html = await response.text();
+    const doc = new DOMParser().parseFromString(html, "text/html");
+    const sourceContainer = doc.querySelector(".container") || doc.body;
+    const clone = sourceContainer.cloneNode(true);
+
+    clone.querySelectorAll("script, style").forEach((node) => node.remove());
+    rewriteRelativeUrls(clone, new URL(sourceUrl, window.location.href));
+
+    mount.innerHTML = clone.innerHTML;
+    status.textContent = "원본 강의노트를 현재 강의 사이트 스타일로 불러왔습니다.";
+
+    await loadAndRunSourceScripts(doc, sourceUrl);
+    await typesetMath(mount);
+  } catch (error) {
+    status.textContent = `원본 HTML을 불러오지 못했습니다. 아래 source link에서 직접 확인해 주세요. (${error.message})`;
+  }
+}
+
+function rewriteRelativeUrls(root, baseUrl) {
+  root.querySelectorAll("[src]").forEach((node) => {
+    const value = node.getAttribute("src");
+    if (value && !isAbsoluteOrHash(value)) {
+      node.setAttribute("src", new URL(value, baseUrl).href);
+    }
+  });
+
+  root.querySelectorAll("a[href]").forEach((node) => {
+    const value = node.getAttribute("href");
+    if (!value) return;
+
+    if (value.startsWith("#")) {
+      return;
+    }
+
+    if (!isAbsoluteOrHash(value)) {
+      node.setAttribute("href", new URL(value, baseUrl).href);
+    }
+
+    if (node.hostname && node.hostname !== window.location.hostname) {
+      node.setAttribute("target", "_blank");
+      node.setAttribute("rel", "noreferrer");
+    }
+  });
+}
+
+function isAbsoluteOrHash(value) {
+  return /^(https?:|mailto:|tel:|#|data:)/i.test(value);
+}
+
+async function loadAndRunSourceScripts(doc, sourceUrl) {
+  const scripts = [...doc.querySelectorAll("script")];
+
+  for (const script of scripts) {
+    const src = script.getAttribute("src");
+    if (src) {
+      const absoluteSrc = new URL(src, new URL(sourceUrl, window.location.href)).href;
+      if (!shouldSkipSourceScript(absoluteSrc)) {
+        await loadScriptOnce(absoluteSrc);
+      }
+    }
+  }
+
+  for (const script of scripts) {
+    if (!script.getAttribute("src") && script.textContent.trim() && !shouldSkipSourceScript(script.textContent)) {
+      runInlineScript(script.textContent);
+    }
+  }
+}
+
+function shouldSkipSourceScript(value) {
+  return /mathjax/i.test(value);
+}
+
+function loadScriptOnce(src) {
+  if (loadedScripts.has(src)) {
+    return loadedScripts.get(src);
+  }
+
+  const promise = new Promise((resolve, reject) => {
+    const script = document.createElement("script");
+    script.src = src;
+    script.async = false;
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error(`script load failed: ${src}`));
+    document.head.appendChild(script);
+  });
+
+  loadedScripts.set(src, promise);
+  return promise;
+}
+
+function runInlineScript(code) {
+  const originalAddEventListener = document.addEventListener.bind(document);
+
+  document.addEventListener = (type, listener, options) => {
+    if (type === "DOMContentLoaded") {
+      window.setTimeout(() => listener.call(document, new Event("DOMContentLoaded")), 0);
+      return undefined;
+    }
+
+    return originalAddEventListener(type, listener, options);
+  };
+
+  try {
+    Function(code)();
+  } finally {
+    document.addEventListener = originalAddEventListener;
+  }
+}
+
+async function typesetMath(root) {
+  try {
+    await ensureMathJax();
+    if (window.MathJax?.typesetPromise) {
+      await window.MathJax.typesetPromise([root]);
+    }
+  } catch {
+    // MathJax is progressive enhancement; raw formulas remain readable if loading fails.
+  }
+}
+
+function ensureMathJax() {
+  if (window.MathJax?.typesetPromise) {
+    return Promise.resolve(window.MathJax);
+  }
+
+  if (mathJaxPromise) {
+    return mathJaxPromise;
+  }
+
+  window.MathJax = {
+    tex: {
+      inlineMath: [["$", "$"], ["\\(", "\\)"]],
+      displayMath: [["$$", "$$"], ["\\[", "\\]"]]
+    },
+    svg: {
+      fontCache: "global"
+    }
+  };
+
+  mathJaxPromise = loadScriptOnce("https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js")
+    .then(() => window.MathJax);
+
+  return mathJaxPromise;
 }

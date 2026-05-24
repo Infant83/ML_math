@@ -80,5 +80,6 @@ Lecture 2는 "예측을 확률로 표현하고, 불확실성을 정보량과 의
 
 - 홈 화면은 강의 순서와 챕터 목록을 바로 보여 주는 구조입니다.
 - 각 챕터는 `문제설정`, `기하`, `최적화`, `판별모델`, `확률`, `정보이론`, `의사결정`, `실습` 주제 축에 매핑됩니다.
-- `chapters/<chapter-id>/index.html` 상세 페이지는 기존 HTML 산출물을 그대로 붙여 넣지 않고, 사이트 전용 serving layer로 학습목표, 핵심 질문, 수식 해석, 강의 진행 방식, 보강 audit을 제공합니다.
+- `chapters/<chapter-id>/index.html` 상세 페이지는 사이트 전용 serving layer와 원본 HTML 강의노트 본문을 함께 제공합니다.
+- 상세 페이지의 본문은 `assets/course-data.js`의 `HTML` source link를 기준으로 원본 강의노트 HTML을 불러와 현재 사이트 디자인 안에서 렌더링합니다.
 - 실제 강의노트 원문과 렌더링 산출물은 상세 페이지의 source link에서 함께 연결합니다.

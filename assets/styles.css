@@ -755,6 +755,232 @@ select {
   color: var(--muted);
 }
 
+.source-lecture-block {
+  display: grid;
+  gap: 0.9rem;
+  padding: clamp(1rem, 2.6vw, 1.35rem);
+}
+
+.source-lecture-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.reference-note-status {
+  width: fit-content;
+  border: 1px solid rgba(49, 75, 66, 0.16);
+  border-radius: 999px;
+  background: rgba(219, 228, 219, 0.54);
+  color: var(--muted);
+  padding: 0.35rem 0.68rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.reference-note-content {
+  display: block;
+  min-width: 0;
+  border-top: 1px solid var(--line);
+  padding-top: 1rem;
+  color: var(--text);
+}
+
+.reference-note-content h1,
+.reference-note-content h2,
+.reference-note-content h3,
+.reference-note-content h4 {
+  color: var(--text);
+  word-break: keep-all;
+}
+
+.reference-note-content h1 {
+  margin: 0 0 1rem;
+  font-size: clamp(1.55rem, 2.8vw, 2.35rem);
+  line-height: 1.18;
+}
+
+.reference-note-content h2 {
+  margin-top: 2.3rem;
+  border-top: 1px solid var(--line);
+  padding-top: 1rem;
+  font-size: clamp(1.32rem, 2.2vw, 1.9rem);
+}
+
+.reference-note-content h3 {
+  margin-top: 1.65rem;
+  font-size: 1.18rem;
+}
+
+.reference-note-content h4 {
+  margin-top: 1.2rem;
+  color: var(--accent-warm);
+  font-size: 1rem;
+}
+
+.reference-note-content p {
+  color: rgba(33, 49, 43, 0.88);
+  line-height: 1.82;
+}
+
+.reference-note-content a {
+  color: var(--accent);
+  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-color: rgba(49, 75, 66, 0.22);
+  text-underline-offset: 0.18rem;
+}
+
+.reference-note-content ul,
+.reference-note-content ol {
+  padding-left: 1.25rem;
+  color: rgba(33, 49, 43, 0.88);
+}
+
+.reference-note-content li {
+  margin: 0.38rem 0;
+}
+
+.reference-note-content .toc,
+.reference-note-content .key-point,
+.reference-note-content .example-box,
+.reference-note-content .reference-container,
+.reference-note-content blockquote {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.58);
+  padding: 0.9rem;
+  margin: 1rem 0;
+}
+
+.reference-note-content .toc ul {
+  margin: 0.3rem 0 0;
+}
+
+.reference-note-content .key-point {
+  border-color: rgba(47, 107, 79, 0.22);
+  background: rgba(219, 228, 219, 0.54);
+}
+
+.reference-note-content .example-box {
+  border-color: rgba(156, 125, 93, 0.24);
+  background: rgba(156, 125, 93, 0.08);
+}
+
+.reference-note-content .math-formula,
+.reference-note-content mjx-container {
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+.reference-note-content .math-formula {
+  border: 1px solid rgba(49, 75, 66, 0.14);
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.62);
+  padding: 0.7rem;
+  margin: 0.85rem 0;
+  text-align: center;
+}
+
+.reference-note-content pre {
+  overflow-x: auto;
+  border-radius: var(--radius);
+  background: #1f2d28;
+  color: #f6f0e5;
+  padding: 0.85rem;
+  line-height: 1.55;
+}
+
+.reference-note-content code {
+  border-radius: 0.3rem;
+  background: rgba(31, 45, 40, 0.08);
+  padding: 0.1rem 0.24rem;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  font-size: 0.88em;
+}
+
+.reference-note-content pre code {
+  background: transparent;
+  color: inherit;
+  padding: 0;
+}
+
+.reference-note-content table {
+  display: block;
+  overflow-x: auto;
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+}
+
+.reference-note-content th,
+.reference-note-content td {
+  border: 1px solid var(--line);
+  padding: 0.58rem 0.65rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.reference-note-content th {
+  background: rgba(219, 228, 219, 0.54);
+}
+
+.reference-note-content img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  max-height: 360px;
+  margin: 1rem auto;
+  border-radius: var(--radius);
+}
+
+.reference-note-content figure {
+  margin: 1.4rem 0;
+  text-align: center;
+}
+
+.reference-note-content figcaption {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.reference-note-content .chart-container {
+  position: relative;
+  width: min(100%, 720px);
+  min-height: 260px;
+  margin: 1.3rem auto;
+}
+
+.reference-note-content canvas {
+  max-width: 100%;
+}
+
+.reference-note-content .reference-item {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.65rem;
+  border-top: 1px solid var(--line);
+  padding-top: 0.7rem;
+  margin-top: 0.7rem;
+}
+
+.reference-note-content .reference-item:first-child {
+  border-top: 0;
+  padding-top: 0;
+  margin-top: 0;
+}
+
+.reference-note-content .reference-number {
+  color: var(--accent-warm);
+  font-weight: 800;
+}
+
+.reference-note-content .reference-link {
+  overflow-wrap: anywhere;
+  font-size: 0.86rem;
+}
+
 .chapter-lede p {
   max-width: 58rem;
 }
@@ -977,6 +1203,10 @@ select {
   }
 
   .chapter-nav {
+    flex-direction: column;
+  }
+
+  .source-lecture-head {
     flex-direction: column;
   }
 }
