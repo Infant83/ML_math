@@ -1,4 +1,4 @@
-import { chapters } from "./course-data.js?v=20260524-copy";
+import { chapters } from "./course-data.js?v=20260524-visuals";
 
 const rootPath = document.body.dataset.root || "";
 const chapterId = document.body.dataset.chapterId;
@@ -63,6 +63,17 @@ if (!chapter) {
 
   const prevNext = getPrevNext(chapter.id);
   const htmlSource = chapter.sourceLinks.find(([label]) => label === "HTML");
+  const introPoints = (chapter.introPoints || chapter.keyQuestions)
+    .map((point) => `<span>${escapeHtml(point)}</span>`)
+    .join("");
+  const chapterVisual = chapter.visual
+    ? `
+      <figure class="chapter-intro-visual">
+        <img src="${resolvePath(chapter.visual.src)}" alt="${escapeHtml(chapter.visual.alt)}" width="1280" height="720">
+        <figcaption>${escapeHtml(chapter.visual.caption)}</figcaption>
+      </figure>
+    `
+    : "";
 
   content.innerHTML = `
     <section class="page-shell chapter-page">
@@ -80,12 +91,15 @@ if (!chapter) {
         </aside>
 
         <article class="chapter-main">
-          <section class="chapter-block chapter-lede">
-            <p class="section-label">${escapeHtml(chapter.lecture)}</p>
-            <h2>이 장에서 다루는 질문</h2>
-            <p>${escapeHtml(chapter.summary)}</p>
-            <div class="question-grid">
-              ${chapter.keyQuestions.map((question) => `<span>${escapeHtml(question)}</span>`).join("")}
+          <section class="chapter-block chapter-intro">
+            ${chapterVisual}
+            <div class="chapter-intro-copy">
+              <p class="section-label">${escapeHtml(chapter.lecture)} · 챕터 도입</p>
+              <h2>${escapeHtml(chapter.introTitle || "이 장을 배우는 이유")}</h2>
+              <p>${escapeHtml(chapter.intro || chapter.summary)}</p>
+              <div class="intro-point-grid">
+                ${introPoints}
+              </div>
             </div>
           </section>
 
@@ -101,10 +115,10 @@ if (!chapter) {
                 <p class="section-label">Lecture note</p>
                 <h2>강의노트 본문</h2>
               </div>
-              ${htmlSource ? `<a class="text-link" href="${resolvePath(htmlSource[1])}">원본 HTML 열기</a>` : ""}
+              ${htmlSource ? `<a class="text-link" href="${resolvePath(htmlSource[1])}">HTML 자료 열기</a>` : ""}
             </div>
             <p>
-              이 장의 강의노트 본문입니다. 상단의 학습목표와 질문으로 방향을 잡고,
+              이 장의 강의노트 본문입니다. 상단의 도입부와 학습 목표로 방향을 잡고,
               이어지는 본문에서 사례, 이론, 수식, 예제를 차례로 읽습니다.
             </p>
             <div class="reference-note-status" id="referenceNoteStatus">강의노트를 불러오는 중입니다.</div>

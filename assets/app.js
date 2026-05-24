@@ -1,4 +1,4 @@
-import { categories, chapters, checklistItems, routeStages } from "./course-data.js?v=20260524-copy";
+import { categories, chapters, checklistItems, routeStages } from "./course-data.js?v=20260524-visuals";
 
 const $ = (selector) => document.querySelector(selector);
 const rootPath = document.body.dataset.root || "";
@@ -27,7 +27,7 @@ function renderHeroPanel() {
     </div>
     <p class="role-summary">
       Lecture 1은 판별모델의 수학적 기초를, Lecture 2는 확률과 정보이론의 해석을 담당합니다.
-      각 챕터는 학습 목표, 핵심 질문, 강의노트 본문으로 이어집니다.
+      각 챕터는 왜 이 내용을 배워야 하는지 먼저 잡고, 학습 목표와 강의노트 본문으로 이어집니다.
     </p>
     <div class="tag-row" aria-label="주제별 챕터 수">
       ${Object.entries(counts)
@@ -75,14 +75,22 @@ function renderChapters() {
         .slice(0, 2)
         .map(([label, href]) => `<a class="mini-link" href="${resolvePath(href)}">${label}</a>`)
         .join("");
+      const visual = chapter.visual
+        ? `
+          <a class="chapter-card-visual" href="${resolvePath(chapter.detailPath)}" aria-label="${escapeHtml(chapter.title)} 상세 강의 페이지">
+            <img src="${resolvePath(chapter.visual.src)}" alt="${escapeHtml(chapter.visual.alt)}" loading="lazy">
+          </a>
+        `
+        : "";
 
       return `
         <article class="chapter-card" id="${chapter.id}">
+          ${visual}
           <div class="chapter-card-head">
             <div class="chapter-number">${chapter.lecture.replace("Lecture ", "L")}-${chapter.number}</div>
             <span class="topic-badge">${escapeHtml(chapter.category)}</span>
           </div>
-          <h3>${escapeHtml(chapter.title)}</h3>
+          <h3><a href="${resolvePath(chapter.detailPath)}">${escapeHtml(chapter.title)}</a></h3>
           <p>${escapeHtml(chapter.summary)}</p>
           <div class="chapter-meta">
             <p>${escapeHtml(chapter.goals[0])}</p>

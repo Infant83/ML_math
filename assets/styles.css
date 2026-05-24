@@ -577,8 +577,30 @@ select {
 .chapter-card {
   display: grid;
   gap: 0.68rem;
-  min-height: 21rem;
+  min-height: 25rem;
   padding: 0.88rem;
+}
+
+.chapter-card-visual {
+  display: block;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border: 1px solid rgba(49, 75, 66, 0.14);
+  border-radius: calc(var(--radius) - 2px);
+  background: rgba(246, 240, 229, 0.72);
+}
+
+.chapter-card-visual img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 180ms ease, filter 180ms ease;
+}
+
+.chapter-card:hover .chapter-card-visual img {
+  transform: scale(1.025);
+  filter: saturate(1.04) contrast(1.02);
 }
 
 .chapter-card-head {
@@ -596,6 +618,14 @@ select {
 
 .chapter-card h3 {
   font-size: 1.1rem;
+}
+
+.chapter-card h3 a {
+  color: inherit;
+}
+
+.chapter-card h3 a:hover {
+  color: var(--accent);
 }
 
 .chapter-card p {
@@ -1003,18 +1033,54 @@ select {
   font-size: 0.86rem;
 }
 
-.chapter-lede p {
-  max-width: 58rem;
+.chapter-intro {
+  display: grid;
+  grid-template-columns: minmax(18rem, 0.9fr) minmax(0, 1.1fr);
+  gap: clamp(0.9rem, 2.4vw, 1.35rem);
+  align-items: center;
+  padding: clamp(0.9rem, 2.5vw, 1.2rem);
 }
 
-.question-grid {
+.chapter-intro-visual {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.48rem;
+  min-width: 0;
+  margin: 0;
+}
+
+.chapter-intro-visual img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border: 1px solid rgba(49, 75, 66, 0.14);
+  border-radius: calc(var(--radius) - 2px);
+  background: rgba(246, 240, 229, 0.72);
+}
+
+.chapter-intro-visual figcaption {
+  color: var(--muted);
+  font-size: 0.82rem;
+  line-height: 1.55;
+}
+
+.chapter-intro-copy {
+  min-width: 0;
+}
+
+.chapter-intro-copy p:not(.section-label) {
+  max-width: 48rem;
+}
+
+.intro-point-grid {
+  display: grid;
+  grid-template-columns: 1fr;
   gap: 0.65rem;
   margin-top: 0.9rem;
 }
 
-.question-grid span {
+.intro-point-grid span {
   border: 1px solid var(--line);
   border-radius: var(--radius);
   background: rgba(255, 255, 255, 0.54);
@@ -1177,8 +1243,7 @@ select {
   }
 
   .workflow-board,
-  .equation-grid,
-  .question-grid {
+  .equation-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
@@ -1206,9 +1271,13 @@ select {
   .chapter-grid,
   .workflow-board,
   .equation-grid,
-  .question-grid,
+  .intro-point-grid,
   .control-row,
   .scenario-head {
+    grid-template-columns: 1fr;
+  }
+
+  .chapter-intro {
     grid-template-columns: 1fr;
   }
 
