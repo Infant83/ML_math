@@ -880,7 +880,19 @@ select {
 .reference-note-content .math-formula,
 .reference-note-content mjx-container {
   overflow-x: auto;
+  overflow-y: hidden;
   max-width: 100%;
+}
+
+.reference-note-content mjx-container {
+  display: inline-block !important;
+  min-width: 0;
+  vertical-align: middle;
+}
+
+.reference-note-content mjx-container[display="true"] {
+  display: block !important;
+  width: 100%;
 }
 
 .reference-note-content .math-formula {

@@ -372,22 +372,22 @@ code {
 <h3 id="%EA%B7%B8%EB%9E%98%EB%94%94%EC%96%B8%ED%8A%B8-gradient-nabla-f">그래디언트 (Gradient, $\nabla f$)</h3>
 <p><strong>직관적 이해</strong>: 다변수 함수에서 그래디언트는 함수 값이 가장 빠르게 증가하는 방향과 그 증가율을 나타내는 벡터입니다. 마치 산을 오를 때 가장 가파른 오르막길을 가리키는 방향과 같습니다. 최적화에서는 이 그래디언트의 반대 방향으로 이동하여 함수 값을 줄여나갑니다.</p>
 <p><strong>수학적 의미</strong>: 스칼라 값 함수 $f(x_1, x_2, \dots, x_n)$의 그래디언트는 각 변수에 대한 편미분(partial derivative)을 원소로 하는 벡터입니다.
-$$ \nabla f(\mathbf{x}) = \begin{pmatrix} \frac{\partial f}{\partial x_1} \ \frac{\partial f}{\partial x_2} \ \vdots \ \frac{\partial f}{\partial x_n} \end{pmatrix} $$</p>
+$$ \nabla f(\mathbf{x}) = \begin{pmatrix} \frac{\partial f}{\partial x_1} \\ \frac{\partial f}{\partial x_2} \\ \vdots \\ \frac{\partial f}{\partial x_n} \end{pmatrix} $$</p>
 <p><strong>예제: 주어진 $f(x,y)$의 $\nabla f$ 계산</strong>
 함수 $f(x, y) = x^2 + 3xy + y^3$의 그래디언트를 계산해 봅시다.
 $$ \frac{\partial f}{\partial x} = 2x + 3y $$
 $$ \frac{\partial f}{\partial y} = 3x + 3y^2 $$
-따라서, $\nabla f(x, y) = \begin{pmatrix} 2x + 3y \ 3x + 3y^2 \end{pmatrix}$ 입니다.</p>
+따라서, $\nabla f(x, y) = \begin{pmatrix} 2x + 3y \\ 3x + 3y^2 \end{pmatrix}$ 입니다.</p>
 <h3 id="%EC%95%BC%EC%BD%94%EB%B9%84%EC%95%88-jacobian-jf">야코비안 (Jacobian, $J_f$)</h3>
 <p><strong>직관적 이해</strong>: 야코비안은 여러 개의 입력 변수를 받아 여러 개의 출력 변수를 내놓는 함수(벡터-값 함수)의 '변화율 행렬'입니다. 각 출력 변수가 각 입력 변수에 대해 얼마나 변하는지를 나타냅니다.</p>
 <p><strong>수학적 의미</strong>: 벡터-값 함수 $\mathbf{f}(\mathbf{x}) = (f_1(\mathbf{x}), f_2(\mathbf{x}), \dots, f_m(\mathbf{x}))^T$ (여기서 $\mathbf{x} = (x_1, \dots, x_n)^T$)의 야코비안 행렬은 각 $f_i$를 각 $x_j$에 대해 편미분한 값들을 원소로 가집니다.
-$$ J_{\mathbf{f}}(\mathbf{x}) = \begin{pmatrix} \frac{\partial f_1}{\partial x_1} &amp; \frac{\partial f_1}{\partial x_2} &amp; \dots &amp; \frac{\partial f_1}{\partial x_n} \ \frac{\partial f_2}{\partial x_1} &amp; \frac{\partial f_2}{\partial x_2} &amp; \dots &amp; \frac{\partial f_2}{\partial x_n} \ \vdots &amp; \vdots &amp; \ddots &amp; \vdots \ \frac{\partial f_m}{\partial x_1} &amp; \frac{\partial f_m}{\partial x_2} &amp; \dots &amp; \frac{\partial f_m}{\partial x_n} \end{pmatrix} $$
+$$ J_{\mathbf{f}}(\mathbf{x}) = \begin{pmatrix} \frac{\partial f_1}{\partial x_1} &amp; \frac{\partial f_1}{\partial x_2} &amp; \dots &amp; \frac{\partial f_1}{\partial x_n} \\ \frac{\partial f_2}{\partial x_1} &amp; \frac{\partial f_2}{\partial x_2} &amp; \dots &amp; \frac{\partial f_2}{\partial x_n} \\ \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\ \frac{\partial f_m}{\partial x_1} &amp; \frac{\partial f_m}{\partial x_2} &amp; \dots &amp; \frac{\partial f_m}{\partial x_n} \end{pmatrix} $$
 스칼라 함수 $f(\mathbf{x})$의 경우, 야코비안은 그래디언트 벡터의 전치($(\nabla f(\mathbf{x}))^T$)와 같습니다.</p>
 <p><strong>체인룰 (Chain Rule)과 야코비안</strong>: 복합 함수의 미분에서 체인룰은 야코비안 행렬의 곱셈으로 표현될 수 있습니다. 이는 역전파(Backpropagation) 알고리즘의 핵심 원리입니다.</p>
 <h3 id="%ED%97%A4%EC%8B%9C%EC%95%88-hessian-hf-%EB%98%90%EB%8A%94-nabla2-f">헤시안 (Hessian, $H_f$ 또는 $\nabla^2 f$)</h3>
 <p><strong>직관적 이해</strong>: 헤시안 행렬은 함수의 '곡률(curvature)'에 대한 정보를 담고 있습니다. 1차 미분(그래디언트)이 함수의 기울기를 알려준다면, 2차 미분(헤시안)은 기울기가 얼마나 빠르게 변하는지, 즉 함수가 얼마나 볼록하거나 오목한지를 알려줍니다. 이는 최적화에서 극소점, 극대점, 안장점 등을 판단하는 데 사용됩니다.</p>
 <p><strong>수학적 의미</strong>: 스칼라 값 함수 $f(x_1, x_2, \dots, x_n)$의 헤시안 행렬은 모든 2차 편미분으로 구성된 대칭 행렬입니다.
-$$ H_f(\mathbf{x}) = \nabla^2 f(\mathbf{x}) = \begin{pmatrix} \frac{\partial^2 f}{\partial x_1^2} &amp; \frac{\partial^2 f}{\partial x_1 \partial x_2} &amp; \dots &amp; \frac{\partial^2 f}{\partial x_1 \partial x_n} \ \frac{\partial^2 f}{\partial x_2 \partial x_1} &amp; \frac{\partial^2 f}{\partial x_2^2} &amp; \dots &amp; \frac{\partial^2 f}{\partial x_2 \partial x_n} \ \vdots &amp; \vdots &amp; \ddots &amp; \vdots \ \frac{\partial^2 f}{\partial x_n \partial x_1} &amp; \frac{\partial^2 f}{\partial x_n \partial x_2} &amp; \dots &amp; \frac{\partial^2 f}{\partial x_n^2} \end{pmatrix} $$
+$$ H_f(\mathbf{x}) = \nabla^2 f(\mathbf{x}) = \begin{pmatrix} \frac{\partial^2 f}{\partial x_1^2} &amp; \frac{\partial^2 f}{\partial x_1 \partial x_2} &amp; \dots &amp; \frac{\partial^2 f}{\partial x_1 \partial x_n} \\ \frac{\partial^2 f}{\partial x_2 \partial x_1} &amp; \frac{\partial^2 f}{\partial x_2^2} &amp; \dots &amp; \frac{\partial^2 f}{\partial x_2 \partial x_n} \\ \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\ \frac{\partial^2 f}{\partial x_n \partial x_1} &amp; \frac{\partial^2 f}{\partial x_n \partial x_2} &amp; \dots &amp; \frac{\partial^2 f}{\partial x_n^2} \end{pmatrix} $$
 함수가 연속적인 2차 편미분을 가질 경우, 교차 편미분($\frac{\partial^2 f}{\partial x_i \partial x_j}$와 $\frac{\partial^2 f}{\partial x_j \partial x_i}$)은 같으므로 헤시안 행렬은 항상 대칭 행렬입니다.</p>
 <p><strong>헤시안의 양의 정부호성 (Positive Definiteness)</strong>:
 최적화에서 헤시안 행렬의 특성은 함수의 극점을 판별하는 데 중요합니다.</p>
@@ -407,11 +407,11 @@ $$ \frac{\partial^2 f}{\partial x^2} = \frac{\partial}{\partial x}(2x + 3y) = 2 
 $$ \frac{\partial^2 f}{\partial y^2} = \frac{\partial}{\partial y}(3x + 3y^2) = 6y $$
 $$ \frac{\partial^2 f}{\partial x \partial y} = \frac{\partial}{\partial y}(2x + 3y) = 3 $$
 $$ \frac{\partial^2 f}{\partial y \partial x} = \frac{\partial}{\partial x}(3x + 3y^2) = 3 $$
-따라서, $H_f(x, y) = \begin{pmatrix} 2 &amp; 3 \ 3 &amp; 6y \end{pmatrix}$ 입니다.</p>
+따라서, $H_f(x, y) = \begin{pmatrix} 2 &amp; 3 \\ 3 &amp; 6y \end{pmatrix}$ 입니다.</p>
 <p><strong>2변수 이차함수의 등고선과 최저점 사례</strong>
 이차 함수 $F(\mathbf{x})=\frac{1}{2}\mathbf{x}^TA\mathbf{x}+\mathbf{d}\mathbf{x}+c$의 형태는 헤시안 행렬 $A$의 고유값과 고유벡터에 의해 결정됩니다. 헤시안 행렬의 고유값은 함수의 곡률을 나타내며, 고유벡터는 곡률이 가장 큰(또는 작은) 방향을 나타내는 주축(principal axes)이 됩니다.</p>
 <p>예를 들어, $F(x_1, x_2) = x_1^2 + x_1x_2 + x_2^2$와 같은 이차 함수의 등고선은 타원 형태를 띠며, 이 타원의 주축은 헤시안 행렬의 고유벡터 방향과 일치합니다.
-이 함수의 헤시안 행렬은 $A = \begin{pmatrix} 2 &amp; 1 \ 1 &amp; 2 \end{pmatrix}$ 이고, 고유값은 $\lambda_1=1, \lambda_2=3$ (모두 양수)입니다. 이는 함수가 아래로 볼록하며 명확한 최저점을 가진다는 것을 의미합니다.</p>
+이 함수의 헤시안 행렬은 $A = \begin{pmatrix} 2 &amp; 1 \\ 1 &amp; 2 \end{pmatrix}$ 이고, 고유값은 $\lambda_1=1, \lambda_2=3$ (모두 양수)입니다. 이는 함수가 아래로 볼록하며 명확한 최저점을 가진다는 것을 의미합니다.</p>
 <table>
 <thead>
 <tr>
@@ -470,8 +470,8 @@ $$ \mathbf{w}_{k+1} = \mathbf{w}_k - \alpha \nabla L(\mathbf{w}_k) $$
 <h3 id="%EB%AA%A8%EB%A9%98%ED%85%80-momentum">모멘텀 (Momentum)</h3>
 <p><strong>직관적 이해</strong>: 모멘텀은 경사하강법에 '관성'을 부여하는 개념입니다. 공이 언덕을 굴러 내려올 때, 현재 기울기뿐만 아니라 이전에 굴러온 속도(관성)도 고려하여 움직이는 것과 같습니다. 이는 최적화 과정에서 발생하는 불필요한 진동을 줄이고, 수렴 속도를 가속화하는 데 도움을 줍니다.</p>
 <p><strong>수학적 의미</strong>: 모멘텀을 적용한 경사하강법은 다음과 같이 두 단계로 업데이트됩니다.
-$$ \mathbf{v}_{k+1} = \beta \mathbf{v}_k + \nabla L(\mathbf{w}<em>k) $$
-$$ \mathbf{w}</em>{k+1} = \mathbf{w}<em>k - \alpha \mathbf{v}</em>{k+1} $$
+$$ \mathbf{v}_{k+1} = \beta \mathbf{v}_k + \nabla L(\mathbf{w}_k) $$
+$$ \mathbf{w}_{k+1} = \mathbf{w}_k - \alpha \mathbf{v}_{k+1} $$
 여기서 $\mathbf{v}$는 속도(velocity) 벡터로, 이전 그래디언트들의 지수 가중 평균을 나타냅니다. $\beta$는 모멘텀 계수(보통 0.9 또는 0.99)로, 이전 속도의 영향을 얼마나 반영할지를 결정합니다. $\beta=0$이면 일반 경사하강법과 동일합니다.</p>
 <p><strong>이차 볼에서의 수렴 궤적 비교 (GD vs 모멘텀) 사례</strong>:
 손실 함수 표면이 '계곡'처럼 한 방향으로는 가파르고 다른 방향으로는 완만한 '병적인 곡률(pathological curvature)'을 가질 때, 일반 경사하강법은 최적점을 향해 지그재그로 움직이며 수렴이 매우 느려집니다. (Reference: Distill.pub - zigzags toward the solution)</p>
@@ -486,9 +486,9 @@ $$ \mathbf{w}</em>{k+1} = \mathbf{w}<em>k - \alpha \mathbf{v}</em>{k+1} $$
 <h3 id="%EB%89%B4%ED%84%B4%EB%B2%95-newtons-method">뉴턴법 (Newton's Method)</h3>
 <p><strong>직관적 이해</strong>: 뉴턴법은 현재 위치에서 손실 함수를 2차 함수(포물선)로 근사한 다음, 이 근사 함수의 최저점으로 한 번에 이동하는 방식입니다. 마치 현재 위치 주변의 지형을 포물선으로 정확히 파악하고, 그 포물선의 가장 낮은 곳으로 점프하는 것과 같습니다.</p>
 <p><strong>수학적 의미</strong>: 함수 $f(\mathbf{w})$를 최소화하기 위해, 현재 파라미터 $\mathbf{w}_k$에서 $f(\mathbf{w})$를 2차 테일러 근사합니다.
-$$ f(\mathbf{w}) \approx f(\mathbf{w}_k) + \nabla f(\mathbf{w}_k)^T (\mathbf{w} - \mathbf{w}_k) + \frac{1}{2} (\mathbf{w} - \mathbf{w}_k)^T H_f(\mathbf{w}_k) (\mathbf{w} - \mathbf{w}<em>k) $$
+$$ f(\mathbf{w}) \approx f(\mathbf{w}_k) + \nabla f(\mathbf{w}_k)^T (\mathbf{w} - \mathbf{w}_k) + \frac{1}{2} (\mathbf{w} - \mathbf{w}_k)^T H_f(\mathbf{w}_k) (\mathbf{w} - \mathbf{w}_k) $$
 이 2차 근사 함수의 최소값을 찾기 위해 미분하여 0으로 두면, 다음 업데이트 규칙을 얻습니다.
-$$ \mathbf{w}</em>{k+1} = \mathbf{w}_k - H_f(\mathbf{w}_k)^{-1} \nabla f(\mathbf{w}_k) $$
+$$ \mathbf{w}_{k+1} = \mathbf{w}_k - H_f(\mathbf{w}_k)^{-1} \nabla f(\mathbf{w}_k) $$
 여기서 $H_f(\mathbf{w}_k)$는 현재 파라미터에서의 헤시안 행렬입니다.</p>
 <p><strong>동일 데이터에서 GD vs 뉴턴 한 걸음 비교 사례</strong>:
 아래 그림은 경사하강법(녹색)과 뉴턴법(빨간색)이 함수를 최소화하는 궤적을 비교한 것입니다. 뉴턴법은 함수의 곡률 정보를 활용하기 때문에, 경사하강법이 지그재그로 여러 번 이동해야 하는 경로를 단 몇 걸음 만에 최적점으로 수렴시킬 수 있습니다. 특히 2차 함수에 대해서는 단 한 번의 스텝으로 최적점에 도달합니다. (Reference: Newton's method in optimization - comparison image, Cornell CS4780 - Newton's Method is much faster)</p>
