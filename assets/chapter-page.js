@@ -1,4 +1,4 @@
-import { chapters } from "./course-data.js";
+import { chapters } from "./course-data.js?v=20260524-copy";
 
 const rootPath = document.body.dataset.root || "";
 const chapterId = document.body.dataset.chapterId;
@@ -98,16 +98,16 @@ if (!chapter) {
           <section class="chapter-block source-lecture-block">
             <div class="source-lecture-head">
               <div>
-                <p class="section-label">Full lecture note</p>
-                <h2>원본 강의노트 본문</h2>
+                <p class="section-label">Lecture note</p>
+                <h2>강의노트 본문</h2>
               </div>
               ${htmlSource ? `<a class="text-link" href="${resolvePath(htmlSource[1])}">원본 HTML 열기</a>` : ""}
             </div>
             <p>
-              아래 본문은 해당 챕터의 원본 HTML 강의노트를 상세 페이지 안에서 다시 렌더링한 것입니다.
-              상단의 학습목표와 질문으로 방향을 잡고, 이어지는 본문에서 사례, 이론, 수식, 예제를 깊게 읽습니다.
+              이 장의 강의노트 본문입니다. 상단의 학습목표와 질문으로 방향을 잡고,
+              이어지는 본문에서 사례, 이론, 수식, 예제를 차례로 읽습니다.
             </p>
-            <div class="reference-note-status" id="referenceNoteStatus">원본 강의노트를 불러오는 중입니다.</div>
+            <div class="reference-note-status" id="referenceNoteStatus">강의노트를 불러오는 중입니다.</div>
             <article class="reference-note-content" id="referenceNoteContent"></article>
           </section>
 
@@ -125,14 +125,14 @@ if (!chapter) {
             ${list(chapter.delivery)}
           </section>
 
-          <section class="chapter-block audit-block">
-            <p class="section-label">Content audit</p>
-            <h2>보강 audit</h2>
+          <section class="chapter-block next-steps-block">
+            <p class="section-label">Further study</p>
+            <h2>더 생각해 볼 지점</h2>
             <p>
-              상세 페이지는 원본 강의노트 전체를 함께 렌더링하고, 그 앞뒤에 강의 목표,
-              읽는 순서, 보강 방향을 덧붙이는 방식으로 운영합니다.
+              본문을 읽은 뒤에는 아래 질문으로 개념 사이의 연결을 다시 확인합니다.
+              각 항목은 다음 장으로 넘어가기 전에 남겨 둘 작은 체크포인트입니다.
             </p>
-            ${list(chapter.audit)}
+            ${list(chapter.nextSteps)}
           </section>
 
           <nav class="chapter-nav" aria-label="이전/다음 챕터">
@@ -161,7 +161,7 @@ async function renderReferenceNote(activeChapter) {
   const htmlSource = activeChapter.sourceLinks.find(([label]) => label === "HTML");
 
   if (!htmlSource) {
-    status.textContent = "이 챕터에는 아직 연결된 HTML 강의노트가 없습니다.";
+    status.textContent = "이 챕터에는 아직 연결된 강의노트 본문이 없습니다.";
     return;
   }
 
@@ -182,12 +182,12 @@ async function renderReferenceNote(activeChapter) {
     rewriteRelativeUrls(clone, new URL(sourceUrl, window.location.href));
 
     mount.innerHTML = clone.innerHTML;
-    status.textContent = "원본 강의노트를 현재 강의 사이트 스타일로 불러왔습니다.";
+    status.textContent = "강의노트를 불러왔습니다.";
 
     await loadAndRunSourceScripts(doc, sourceUrl);
     await typesetMath(mount);
   } catch (error) {
-    status.textContent = `원본 HTML을 불러오지 못했습니다. 아래 source link에서 직접 확인해 주세요. (${error.message})`;
+    status.textContent = `강의노트를 불러오지 못했습니다. 상단의 자료 링크에서 직접 확인해 주세요. (${error.message})`;
   }
 }
 

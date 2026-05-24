@@ -83,10 +83,10 @@ export const chapters = [
       "2차원 산점도 위에 직선을 그려 결정경계의 직관을 만든 뒤, 같은 직선을 수식 d(x)=w^T x+b로 바꿉니다.",
       "정확도보다 손실함수가 먼저 필요한 이유를 오분류 비용과 확률 예측 사례로 설명합니다."
     ],
-    audit: [
-      "현재 초안의 내부 사고 과정 흔적은 공개용 본문에서는 강사용 메모로 분리하는 편이 좋습니다.",
-      "결정경계 그림과 손실함수의 예를 같은 데이터셋으로 통일하면 Lecture 1 전체의 연결감이 좋아집니다.",
-      "장 끝에 '이 장의 표기법' 표를 추가하면 이후 장의 수식 진입 장벽이 낮아집니다."
+    nextSteps: [
+      "입력 공간, 특성 공간, 가설, 손실, 결정경계가 하나의 분류 문제에서 어떻게 이어지는지 되짚어 봅니다.",
+      "같은 데이터셋에서 결정경계와 손실함수를 함께 생각하면 모델 선택 기준이 더 분명해집니다.",
+      "이 장에서 쓰인 표기법이 이후 선형대수와 최적화 수식에서 어떻게 다시 등장하는지 확인합니다."
     ],
     sourceLinks: [
       ["Markdown", "Lecture-1 선형대수, 미적분, 판별적모델/chapter1_introduction_lecturenote.md"],
@@ -147,10 +147,10 @@ export const chapters = [
       "행렬 곱을 '좌표를 다시 쓰는 일'로 보여준 뒤, 스케일링과 회전 예제로 연결합니다.",
       "타원형 산점도에서 주축을 찾는 시각화를 통해 고유벡터와 PCA를 연결합니다."
     ],
-    audit: [
-      "조건수와 rank는 추상 정의 뒤에 학습 안정성 예제를 붙이면 더 강의식으로 살아납니다.",
-      "SVD 설명은 PCA 장과 중복될 수 있으므로, 이 장에서는 기하 직관을 중심으로 두고 세부 계산은 6장으로 넘기는 편이 좋습니다.",
-      "각 개념마다 'ML에서 쓰이는 위치'를 한 줄로 고정하면 복습성이 좋아집니다."
+    nextSteps: [
+      "조건수와 rank가 학습 안정성과 데이터 차원 구조를 어떻게 설명하는지 확인합니다.",
+      "SVD는 이 장에서는 기하 직관으로, 6장에서는 PCA 계산 도구로 다시 읽습니다.",
+      "내적, norm, 행렬곱이 실제 모델의 점수 계산에서 어디에 놓이는지 연결해 봅니다."
     ],
     sourceLinks: [
       ["Markdown", "Lecture-1 선형대수, 미적분, 판별적모델/chapter2_linear_algebra_lecturenote.md"],
@@ -206,10 +206,10 @@ export const chapters = [
       "같은 손실 표면에서 학습률을 바꾸어 수렴, 진동, 발산을 비교합니다.",
       "뉴턴법은 그림으로 곡률 보정의 직관을 주고, 계산 복잡도는 표로 정리합니다."
     ],
-    audit: [
-      "그래디언트, 야코비안, 헤시안은 정의 뒤에 입력/출력 shape 예제를 추가하면 실습 친화적입니다.",
-      "경사하강법 코드 예제에는 seed, 학습률, 반복 횟수, 손실 기록을 명시하는 것이 좋습니다.",
-      "조건수 설명은 2장 선형대수의 조건수와 상호 링크하면 이해가 빨라집니다."
+    nextSteps: [
+      "그래디언트, 야코비안, 헤시안의 입력과 출력 shape를 직접 써 보면 계산 대상이 명확해집니다.",
+      "경사하강법 실습에서는 seed, 학습률, 반복 횟수, 손실 기록이 결과 해석에 어떤 영향을 주는지 확인합니다.",
+      "조건수는 2장의 선형대수 개념과 연결해 손실 표면의 수렴 난이도로 다시 읽습니다."
     ],
     sourceLinks: [
       ["Markdown", "Lecture-1 선형대수, 미적분, 판별적모델/chapter3_optimization_lecturenote.md"],
@@ -266,10 +266,10 @@ export const chapters = [
       "KKT 조건은 암기 목록이 아니라 '해가 멈추는 이유'로 설명합니다.",
       "SVM margin이나 L1/L2 정규화로 제약과 ML 모델을 연결합니다."
     ],
-    audit: [
-      "KKT는 한 번에 모든 조건을 제시하기보다, 등식 제약에서 부등식 제약으로 단계화하면 좋습니다.",
-      "볼록집합과 볼록함수 그림을 더 추가하면 강의 페이지의 시각적 이해가 좋아집니다.",
-      "투영 경사하강법 예제는 simplex 또는 box constraint처럼 계산 가능한 투영을 쓰는 편이 좋습니다."
+    nextSteps: [
+      "KKT 조건은 등식 제약에서 부등식 제약으로 확장되는 순서로 읽으면 부담이 줄어듭니다.",
+      "볼록집합과 볼록함수의 그림을 떠올리며 지역 최적해와 전역 최적해의 차이를 확인합니다.",
+      "투영 경사하강법은 simplex나 box constraint처럼 손으로 투영을 계산할 수 있는 예제로 이해합니다."
     ],
     sourceLinks: [
       ["Markdown", "Lecture-1 선형대수, 미적분, 판별적모델/chapter4_Convex_Optimization_lecturenote.md"],
@@ -325,10 +325,10 @@ export const chapters = [
       "로짓이 0일 때 p=0.5가 되어 결정경계가 생기는 순간을 강조합니다.",
       "불균형 데이터에서 accuracy, precision, recall, ROC/AUC를 비교합니다."
     ],
-    audit: [
-      "정규화는 2장 norm, 4장 제약 최적화, Lecture 2의 MAP와 연결 표를 추가하면 강의 설득력이 커집니다.",
-      "평가지표는 수식보다 혼동행렬 기반 사례를 먼저 두는 편이 좋습니다.",
-      "로지스틱 회귀 예제는 calibration까지 이어질 수 있게 확률 출력 저장을 권장합니다."
+    nextSteps: [
+      "정규화는 2장의 norm, 4장의 제약 최적화, Lecture 2의 MAP 추정과 함께 다시 연결해 봅니다.",
+      "평가지표는 먼저 혼동행렬의 실제 사례로 해석한 뒤 수식으로 돌아오면 이해가 쉽습니다.",
+      "로지스틱 회귀의 확률 출력은 이후 calibration과 의사결정 문제로 이어집니다."
     ],
     sourceLinks: [
       ["Markdown", "Lecture-1 선형대수, 미적분, 판별적모델/chapter5_linear_models_lecturenote.md"],
@@ -384,10 +384,10 @@ export const chapters = [
       "2D에서 1D로 투영하고 다시 복원하는 예제를 보여 줍니다.",
       "캡스톤의 PCA 시각화와 연결해 모델 평가 보조 도구로 사용합니다."
     ],
-    audit: [
-      "PCA와 SVD의 관계는 행렬 shape를 명시하면 혼동이 줄어듭니다.",
-      "분산 설명률 그래프를 추가하면 주성분 수 선택이 강의식으로 명확해집니다.",
-      "라벨을 보지 않는 비지도 방법이라는 한계를 반드시 정리해야 합니다."
+    nextSteps: [
+      "PCA와 SVD의 관계는 데이터 행렬의 shape를 직접 적어 보면 혼동이 줄어듭니다.",
+      "분산 설명률 그래프를 떠올리며 주성분 수 선택이 어떤 절충인지 확인합니다.",
+      "PCA는 라벨을 보지 않는 비지도 방법이므로, 분산 보존과 예측력 보존을 구분해서 읽습니다."
     ],
     sourceLinks: [
       ["Markdown", "Lecture-1 선형대수, 미적분, 판별적모델/chapter6_dimensionality_reduction_lecturenote.md"],
@@ -443,10 +443,10 @@ export const chapters = [
       "미니배치 크기를 바꿀 때 손실 곡선이 어떻게 달라지는지 보여 줍니다.",
       "Adam은 수식 전체보다 모멘트 추정과 adaptive step의 직관을 우선합니다."
     ],
-    audit: [
-      "계산 그래프 예제는 숫자 하나를 끝까지 미분하는 표가 있으면 학습자가 따라가기 쉽습니다.",
-      "Adam 설명은 bias correction까지 깊게 들어가기보다, 왜 필요한지와 언제 조심해야 하는지를 먼저 두는 편이 좋습니다.",
-      "이 장은 딥러닝 강의가 아니라 ML 수학 강의이므로, 네트워크 구조보다 미분과 최적화 연결에 집중해야 합니다."
+    nextSteps: [
+      "작은 계산 그래프 하나를 골라 forward 값과 backward gradient를 끝까지 손으로 따라가 봅니다.",
+      "Adam은 bias correction 공식보다, 왜 모멘트 추정이 필요한지와 언제 조심해야 하는지를 먼저 이해합니다.",
+      "네트워크 구조보다 연쇄법칙과 최적화 업데이트가 어떻게 만나는지에 초점을 둡니다."
     ],
     sourceLinks: [
       ["Markdown", "Lecture-1 선형대수, 미적분, 판별적모델/chapter7_neural_networks_lecturenote.md"],
@@ -502,10 +502,10 @@ export const chapters = [
       "예측 확률과 임계값을 나누어 설명하고, 임계값 변화가 confusion matrix에 미치는 영향을 보여 줍니다.",
       "마지막에는 어떤 수학 개념이 실습의 어느 줄에 대응되는지 표로 되돌아봅니다."
     ],
-    audit: [
-      "예시 데이터 생성과 실제 데이터 로드가 섞여 보이지 않도록 두 경로를 분리하는 것이 좋습니다.",
-      "데이터 누수를 피하기 위해 scaling과 split 순서를 더 명확히 써야 합니다.",
-      "캡스톤은 상세 페이지에서 가장 먼저 코드 실행 환경과 재현 조건을 제시하는 편이 좋습니다."
+    nextSteps: [
+      "예시 데이터 생성과 실제 데이터 로드가 각각 어떤 상황에서 필요한지 구분합니다.",
+      "데이터 누수를 피하기 위해 scaling과 train/test split의 순서를 직접 점검합니다.",
+      "실습을 시작하기 전에 코드 실행 환경과 재현 조건을 먼저 확인합니다."
     ],
     sourceLinks: [
       ["Markdown", "Lecture-1 선형대수, 미적분, 판별적모델/chapter8_capstone_lecturenote.md"],
@@ -561,11 +561,11 @@ export const chapters = [
       "베이즈 정리는 네 항목 likelihood/prior/evidence/posterior 표로 고정합니다.",
       "MLE와 MAP는 같은 likelihood에서 prior가 들어오며 해가 어떻게 달라지는지 비교합니다."
     ],
-    audit: [
-      "몬티홀 문제는 표본공간 그림과 시뮬레이션을 함께 제시하면 직관 저항을 줄일 수 있습니다.",
-      "MLE/MAP는 로지스틱 회귀와 정규화 장으로 다시 링크해야 강의 시리즈의 연결이 살아납니다.",
-      "실습 섹션은 문서 산출물 제작이 아니라 베르누이 우도, 베타 사후분포, MLE/MAP 비교처럼 확률/베이즈 계산 자체를 구현하도록 유지해야 합니다.",
-      "분포 소개는 모든 분포를 넓게 나열하기보다 Bernoulli, Gaussian, Categorical을 ML 예제와 묶는 편이 좋습니다."
+    nextSteps: [
+      "몬티홀 문제는 표본공간 그림과 간단한 시뮬레이션을 함께 떠올리면 직관의 흔들림이 줄어듭니다.",
+      "MLE/MAP는 로지스틱 회귀와 정규화 장으로 돌아가 같은 문제를 다른 관점에서 읽게 해 줍니다.",
+      "베르누이 우도, 베타 사후분포, MLE/MAP 비교를 직접 계산하며 베이즈 업데이트의 의미를 확인합니다.",
+      "분포는 이름을 많이 외우기보다 Bernoulli, Gaussian, Categorical이 어떤 ML 예제와 연결되는지 중심으로 봅니다."
     ],
     sourceLinks: [
       ["Markdown", "Lecture-2 엔트로피, 베이지안, 생성적모델/chapter1_probability_bayesian_thinking_lecture_notes.md"],
@@ -622,10 +622,10 @@ export const chapters = [
       "one-hot label과 softmax 출력의 cross entropy를 직접 계산합니다.",
       "p와 q를 바꿔 KL(p||q), KL(q||p)가 달라지는 예제를 반드시 보여 줍니다."
     ],
-    audit: [
-      "로그의 밑과 단위(bit/nat)를 명시하면 정보량 수식의 혼동이 줄어듭니다.",
-      "로지스틱 회귀와 softmax 분류의 loss를 같은 표로 비교하면 연결감이 좋아집니다.",
-      "KLD 활용 예시는 이산 분포와 가우시안 분포를 분리해서 제시하는 편이 명확합니다."
+    nextSteps: [
+      "로그의 밑과 단위(bit/nat)를 구분하면 정보량 수식의 의미가 더 선명해집니다.",
+      "로지스틱 회귀와 softmax 분류의 loss를 나란히 놓고 비교해 봅니다.",
+      "KL divergence는 이산 분포 예제와 가우시안 분포 예제를 분리해서 읽으면 쓰임이 더 명확해집니다."
     ],
     sourceLinks: [
       ["Markdown", "Lecture-2 엔트로피, 베이지안, 생성적모델/chapter2_information_theory_loss_functions_lecture_notes.md"],
@@ -682,10 +682,10 @@ export const chapters = [
       "GLM은 확률분포, 선형예측자, 링크 함수의 세 요소로 정리합니다.",
       "reliability diagram과 Brier score를 통해 calibration을 시각적으로 설명합니다."
     ],
-    audit: [
-      "베이즈 위험은 수식만으로 어렵기 때문에 2x2 비용행렬 예제가 필요합니다.",
-      "GLM은 너무 넓은 주제이므로 로지스틱 회귀, 포아송 회귀 정도의 대표 사례로 제한하는 편이 좋습니다.",
-      "calibration은 캡스톤 실습과 연결해 실제 확률 예측 품질을 점검하도록 보강하면 좋습니다."
+    nextSteps: [
+      "베이즈 위험은 2x2 비용행렬 예제로 바꾸어 보면 임계값 선택의 의미가 잘 드러납니다.",
+      "GLM은 로지스틱 회귀와 포아송 회귀 같은 대표 사례를 중심으로 먼저 이해합니다.",
+      "calibration은 캡스톤 실습과 연결해 실제 확률 예측 품질을 점검하는 기준으로 읽습니다."
     ],
     sourceLinks: [
       ["Markdown", "Lecture-2 엔트로피, 베이지안, 생성적모델/chapter3_bayesian_decision_lecture_notes.md"],

@@ -1,4 +1,4 @@
-import { categories, chapters, checklistItems, routeStages } from "./course-data.js";
+import { categories, chapters, checklistItems, routeStages } from "./course-data.js?v=20260524-copy";
 
 const $ = (selector) => document.querySelector(selector);
 const rootPath = document.body.dataset.root || "";
@@ -27,7 +27,7 @@ function renderHeroPanel() {
     </div>
     <p class="role-summary">
       Lecture 1은 판별모델의 수학적 기초를, Lecture 2는 확률과 정보이론의 해석을 담당합니다.
-      각 챕터는 별도 상세 페이지와 원천 강의노트로 연결됩니다.
+      각 챕터는 학습 목표, 핵심 질문, 강의노트 본문으로 이어집니다.
     </p>
     <div class="tag-row" aria-label="주제별 챕터 수">
       ${Object.entries(counts)
