@@ -1,4 +1,4 @@
-import { chapters } from "./course-data.js?v=20260524-visuals";
+import { chapters } from "./course-data.js?v=20260524-tone";
 
 const rootPath = document.body.dataset.root || "";
 const chapterId = document.body.dataset.chapterId;

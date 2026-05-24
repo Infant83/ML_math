@@ -1,4 +1,4 @@
-import { categories, chapters, checklistItems, routeStages } from "./course-data.js?v=20260524-visuals";
+import { categories, chapters, checklistItems, routeStages } from "./course-data.js?v=20260524-tone";
 
 const $ = (selector) => document.querySelector(selector);
 const rootPath = document.body.dataset.root || "";
