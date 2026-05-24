@@ -694,6 +694,7 @@ select {
   grid-template-columns: minmax(13rem, 0.36fr) minmax(0, 1.64fr);
   gap: clamp(0.9rem, 2.4vw, 1.5rem);
   align-items: start;
+  min-width: 0;
 }
 
 .chapter-side {
@@ -730,6 +731,7 @@ select {
 .chapter-main {
   display: grid;
   gap: 0.85rem;
+  min-width: 0;
 }
 
 .chapter-block {
@@ -737,6 +739,7 @@ select {
   border-radius: var(--radius);
   background: rgba(255, 255, 255, 0.58);
   padding: 0.95rem;
+  min-width: 0;
 }
 
 .chapter-block h2 {
@@ -759,6 +762,7 @@ select {
   display: grid;
   gap: 0.9rem;
   padding: clamp(1rem, 2.6vw, 1.35rem);
+  min-width: 0;
 }
 
 .source-lecture-head {
@@ -822,6 +826,7 @@ select {
 .reference-note-content p {
   color: rgba(33, 49, 43, 0.88);
   line-height: 1.82;
+  overflow-wrap: anywhere;
 }
 
 .reference-note-content a {
@@ -834,12 +839,16 @@ select {
 
 .reference-note-content ul,
 .reference-note-content ol {
+  display: block;
+  min-width: 0;
   padding-left: 1.25rem;
   color: rgba(33, 49, 43, 0.88);
 }
 
 .reference-note-content li {
+  max-width: 100%;
   margin: 0.38rem 0;
+  overflow-wrap: anywhere;
 }
 
 .reference-note-content .toc,
@@ -885,6 +894,7 @@ select {
 
 .reference-note-content pre {
   overflow-x: auto;
+  max-width: 100%;
   border-radius: var(--radius);
   background: #1f2d28;
   color: #f6f0e5;
