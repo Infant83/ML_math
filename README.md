@@ -11,6 +11,7 @@
 - Pages URL: <https://infant83.github.io/ML_math/>
 - 학습 경로 바로가기: <https://infant83.github.io/ML_math/#route>
 - 루트 파일: [`index.html`](<index.html>)
+- 챕터 상세 페이지 예시: [`chapters/l1-ch01/`](<chapters/l1-ch01/>), [`chapters/l2-ch02/`](<chapters/l2-ch02/>)
 
 ## 강의 목표
 
@@ -74,3 +75,10 @@ Lecture 2는 "예측을 확률로 표현하고, 불확실성을 정보량과 의
 - 산출물을 다시 만들 경우 동일한 장 번호와 주제를 유지하고, 변경된 파일명을 README에 반영합니다.
 - 강의 내용은 "수학 개념 자체"보다 "그 개념이 머신러닝 모델을 어떻게 설명하는가"를 중심에 둡니다.
 - 저장소 작업 방침은 [`AGENTS.md`](<AGENTS.md>)를 따릅니다.
+
+## Pages 운영 메모
+
+- 홈 화면은 강의 순서와 챕터 목록을 바로 보여 주는 구조입니다.
+- 각 챕터는 `문제설정`, `기하`, `최적화`, `판별모델`, `확률`, `정보이론`, `의사결정`, `실습` 주제 축에 매핑됩니다.
+- `chapters/<chapter-id>/index.html` 상세 페이지는 기존 HTML 산출물을 그대로 붙여 넣지 않고, 사이트 전용 serving layer로 학습목표, 핵심 질문, 수식 해석, 강의 진행 방식, 보강 audit을 제공합니다.
+- 실제 강의노트 원문과 렌더링 산출물은 상세 페이지의 source link에서 함께 연결합니다.

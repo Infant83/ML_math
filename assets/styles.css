@@ -312,17 +312,14 @@ h3 {
   margin-top: 0.85rem;
 }
 
-.role-switcher-wrap {
-  padding: 0.45rem 0 2rem;
-}
-
-.role-switcher {
-  display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+.topic-tabs {
+  display: flex;
+  flex-wrap: wrap;
   gap: 0.55rem;
+  margin: 1.2rem 0 0;
 }
 
-.lens-button,
+.topic-tab,
 .choice-button {
   border: 1px solid var(--line);
   border-radius: var(--radius);
@@ -336,17 +333,18 @@ h3 {
     transform 0.16s ease;
 }
 
-.lens-button {
+.topic-tab {
   min-height: 2.85rem;
+  padding: 0 0.9rem;
 }
 
-.lens-button:hover,
+.topic-tab:hover,
 .choice-button:hover {
   border-color: var(--line-strong);
   transform: translateY(-1px);
 }
 
-.lens-button.active {
+.topic-tab.active {
   border-color: rgba(49, 75, 66, 0.52);
   background: var(--accent);
   color: #fff;
@@ -579,8 +577,15 @@ select {
 .chapter-card {
   display: grid;
   gap: 0.68rem;
-  min-height: 18.5rem;
+  min-height: 21rem;
   padding: 0.88rem;
+}
+
+.chapter-card-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.7rem;
 }
 
 .chapter-number {
@@ -620,6 +625,38 @@ select {
   align-self: end;
 }
 
+.topic-badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.72rem;
+  padding: 0.22rem 0.58rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.62);
+  color: var(--accent-warm);
+  font-size: 0.76rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.mini-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.mini-tags span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.55rem;
+  padding: 0.18rem 0.48rem;
+  border: 1px solid rgba(49, 75, 66, 0.12);
+  border-radius: 999px;
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
 .mini-link,
 .text-link {
   color: var(--accent);
@@ -628,6 +665,176 @@ select {
   text-decoration: underline;
   text-decoration-color: rgba(49, 75, 66, 0.22);
   text-underline-offset: 0.18rem;
+}
+
+.primary-link {
+  color: var(--text);
+  text-decoration-color: rgba(156, 125, 93, 0.55);
+}
+
+.chapter-page {
+  padding: clamp(2rem, 4vw, 3.4rem) 0 0;
+}
+
+.breadcrumb {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  margin-bottom: 1.3rem;
+  color: var(--muted);
+  font-size: 0.92rem;
+  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-color: rgba(49, 75, 66, 0.22);
+  text-underline-offset: 0.18rem;
+}
+
+.chapter-hero {
+  display: grid;
+  grid-template-columns: minmax(13rem, 0.36fr) minmax(0, 1.64fr);
+  gap: clamp(0.9rem, 2.4vw, 1.5rem);
+  align-items: start;
+}
+
+.chapter-side {
+  position: sticky;
+  top: 5.4rem;
+  display: grid;
+  gap: 0.8rem;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  padding: 1rem;
+}
+
+.chapter-side .chapter-number {
+  margin-top: 0.2rem;
+}
+
+.chapter-side h1 {
+  max-width: 100%;
+  margin: 0;
+  font-size: clamp(1.45rem, 2vw, 1.9rem);
+  line-height: 1.12;
+  overflow-wrap: break-word;
+  word-break: keep-all;
+}
+
+.chapter-side p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.chapter-main {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.chapter-block {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.58);
+  padding: 0.95rem;
+}
+
+.chapter-block h2 {
+  font-size: clamp(1.28rem, 2.1vw, 1.75rem);
+}
+
+.chapter-block p {
+  color: var(--muted);
+}
+
+.chapter-block ul {
+  display: grid;
+  gap: 0.48rem;
+  margin: 0.8rem 0 0;
+  padding-left: 1.15rem;
+  color: var(--muted);
+}
+
+.chapter-lede p {
+  max-width: 58rem;
+}
+
+.question-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.65rem;
+  margin-top: 0.9rem;
+}
+
+.question-grid span {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.54);
+  padding: 0.75rem;
+  color: var(--text);
+  font-size: 0.9rem;
+}
+
+.equation-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.65rem;
+  margin-top: 0.85rem;
+}
+
+.equation-card {
+  display: grid;
+  gap: 0.55rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.54);
+  padding: 0.75rem;
+}
+
+.equation-card code {
+  color: #f6f0e5;
+  background: #1f2d28;
+  border-radius: var(--radius);
+  padding: 0.58rem;
+  overflow-wrap: anywhere;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  font-size: 0.82rem;
+}
+
+.equation-card p {
+  margin: 0;
+  font-size: 0.88rem;
+}
+
+.audit-block {
+  background: rgba(156, 125, 93, 0.08);
+  border-color: rgba(156, 125, 93, 0.24);
+}
+
+.source-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.source-pill {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0.28rem 0.58rem;
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.source-pill:hover {
+  border-color: var(--line-strong);
+  color: var(--accent);
+}
+
+.chapter-nav {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
 }
 
 .checklist-section {
@@ -699,7 +906,8 @@ select {
 
 @media (max-width: 1040px) {
   .command-center,
-  .section-grid {
+  .section-grid,
+  .chapter-hero {
     grid-template-columns: 1fr;
   }
 
@@ -715,14 +923,19 @@ select {
     grid-row: auto;
   }
 
-  .role-switcher,
   .route-grid,
   .chapter-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
-  .workflow-board {
+  .workflow-board,
+  .equation-grid,
+  .question-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .chapter-side {
+    position: static;
   }
 }
 
@@ -741,10 +954,11 @@ select {
     padding-top: 3rem;
   }
 
-  .role-switcher,
   .route-grid,
   .chapter-grid,
   .workflow-board,
+  .equation-grid,
+  .question-grid,
   .control-row,
   .scenario-head {
     grid-template-columns: 1fr;
@@ -762,8 +976,8 @@ select {
     display: grid;
   }
 
-  .role-switcher-wrap {
-    padding-top: 0.25rem;
+  .chapter-nav {
+    flex-direction: column;
   }
 }
 
