@@ -1193,12 +1193,70 @@ select {
   gap: 0.75rem;
 }
 
-.checklist-section {
-  align-items: stretch;
+.takehome-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.14fr) minmax(18rem, 0.86fr);
+  gap: clamp(0.9rem, 2.5vw, 1.25rem);
+  align-items: start;
+  margin-top: 1.2rem;
+}
+
+.takeaway-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.takeaway-card {
+  display: grid;
+  gap: 0.6rem;
+  min-height: 12rem;
+  padding: 0.95rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.58);
+}
+
+.takeaway-number {
+  display: inline-grid;
+  width: 2.25rem;
+  height: 2.25rem;
+  place-items: center;
+  border: 1px solid var(--line-strong);
+  border-radius: 50%;
+  color: var(--accent-warm);
+  font-family: "Newsreader", "Noto Serif KR", Georgia, serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.takeaway-card h3 {
+  font-size: 1.18rem;
+}
+
+.takeaway-card p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.94rem;
 }
 
 .checklist-panel {
   padding: 1rem;
+}
+
+.selfcheck-panel {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.selfcheck-head h3 {
+  font-size: 1.22rem;
+}
+
+.selfcheck-head p:not(.section-label) {
+  margin: 0.55rem 0 0;
+  color: var(--muted);
+  font-size: 0.94rem;
 }
 
 .checklist {
@@ -1263,7 +1321,8 @@ select {
 @media (max-width: 1040px) {
   .command-center,
   .section-grid,
-  .chapter-hero {
+  .chapter-hero,
+  .takehome-layout {
     grid-template-columns: 1fr;
   }
 
@@ -1315,6 +1374,7 @@ select {
 
   .route-grid,
   .chapter-grid,
+  .takeaway-grid,
   .workflow-board,
   .equation-grid,
   .intro-point-grid,

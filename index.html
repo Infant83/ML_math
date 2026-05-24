@@ -12,7 +12,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600;6..72,700&family=Noto+Sans+KR:wght@400;500;600;700&family=Noto+Serif+KR:wght@500;600;700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/styles.css?v=20260524-tone">
+  <link rel="stylesheet" href="assets/styles.css?v=20260525-takehome">
 </head>
 <body data-root="">
   <a class="skip-link" href="#content">본문으로 이동</a>
@@ -90,17 +90,28 @@
       <div class="chapter-grid" id="chapterGrid"></div>
     </section>
 
-    <section class="page-shell section-grid checklist-section" id="takehome">
-      <div class="section-copy">
+    <section class="page-shell section takehome-section" id="takehome">
+      <div class="section-heading">
         <p class="section-label">핵심 정리</p>
-        <h2>학습목표 self-check</h2>
+        <h2>강의 전체를 관통하는 네 가지 연결</h2>
         <p>
-          학습 후 목표 달성 여부를 셀프 체크해봅니다. 부족한 부분은 다시 살펴봅시다.
+          이 강의는 개별 공식의 목록이 아니라 데이터 표현, 학습 기준, 모델 해석, 의사결정으로 이어지는 흐름입니다.
+          아래 요약은 각 챕터를 읽을 때 되돌아볼 기준입니다.
         </p>
       </div>
-      <div class="checklist-panel">
-        <div id="learnerChecklist" class="checklist"></div>
-        <button class="button button-ghost reset-button" type="button" id="resetChecklist">체크 초기화</button>
+      <div class="takehome-layout">
+        <div class="takeaway-grid" id="coreTakeaways"></div>
+        <aside class="checklist-panel selfcheck-panel" aria-label="학습목표 self-check">
+          <div class="selfcheck-head">
+            <p class="section-label">self-check</p>
+            <h3>학습목표 self-check</h3>
+            <p>
+              학습 후 목표 달성 여부를 셀프 체크해봅니다. 부족한 부분은 다시 살펴봅시다.
+            </p>
+          </div>
+          <div id="learnerChecklist" class="checklist"></div>
+          <button class="button button-ghost reset-button" type="button" id="resetChecklist">체크 초기화</button>
+        </aside>
       </div>
     </section>
   </main>
@@ -114,7 +125,7 @@
     </span>
   </footer>
 
-  <script defer src="assets/metrics.js?v=20260524-tone"></script>
-  <script type="module" src="assets/app.js?v=20260524-tone"></script>
+  <script defer src="assets/metrics.js?v=20260525-takehome"></script>
+  <script type="module" src="assets/app.js?v=20260525-takehome"></script>
 </body>
 </html>

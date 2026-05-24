@@ -1,4 +1,4 @@
-import { categories, chapters, checklistItems, routeStages } from "./course-data.js?v=20260524-tone";
+import { categories, chapters, checklistItems, coreTakeaways, routeStages } from "./course-data.js?v=20260525-takehome";
 
 const $ = (selector) => document.querySelector(selector);
 const rootPath = document.body.dataset.root || "";
@@ -125,6 +125,20 @@ function renderChecklist() {
     .join("");
 }
 
+function renderCoreTakeaways() {
+  $("#coreTakeaways").innerHTML = coreTakeaways
+    .map(
+      (item) => `
+        <article class="takeaway-card">
+          <span class="takeaway-number">${escapeHtml(item.number)}</span>
+          <h3>${escapeHtml(item.title)}</h3>
+          <p>${escapeHtml(item.body)}</p>
+        </article>
+      `
+    )
+    .join("");
+}
+
 function attachEvents() {
   $("#categoryTabs").addEventListener("click", (event) => {
     const button = event.target.closest("[data-category]");
@@ -179,6 +193,7 @@ renderHeroPanel();
 renderRoute();
 renderCategoryTabs();
 renderChapters();
+renderCoreTakeaways();
 renderChecklist();
 attachEvents();
 activateNav();
