@@ -4,6 +4,14 @@
 
 현재 자료는 강의노트 Markdown, HTML/PDF 렌더링 산출물, DOCX/PPTX 초안이 함께 들어 있는 작업 저장소입니다. 향후에는 각 장의 설명 밀도, 예제, 실습 코드, 그림, 연습문제를 순차적으로 보강하여 실제 강의용 노트로 업데이트할 예정입니다.
 
+## GitHub Pages
+
+강의 시리즈의 목표와 학습 경로를 빠르게 공유하기 위한 정적 강의 페이지를 제공합니다.
+
+- Pages URL: <https://infant83.github.io/ML_math/>
+- 학습 경로 바로가기: <https://infant83.github.io/ML_math/#route>
+- 루트 파일: [`index.html`](<index.html>)
+
 ## 강의 목표
 
 - 머신러닝 모델을 수식, 기하, 확률 관점에서 읽을 수 있도록 기본 언어를 정리합니다.

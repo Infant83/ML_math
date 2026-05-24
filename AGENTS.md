@@ -26,6 +26,14 @@
 - README.md는 저장소의 강의 로드맵입니다. 장 추가, 주요 파일명 변경, 강의 범위 변경이 있으면 README도 함께 갱신합니다.
 - AGENTS.md는 작업 방침입니다. 반복되는 운영 규칙이나 사용자의 명시적 선호가 새로 생기면 이 파일에 반영합니다.
 
+## GitHub Pages 디자인 기준
+
+- 루트 `index.html`은 강의 공유용 정적 Pages 진입점입니다.
+- 페이지 디자인은 `https://infant83.github.io/GitLab-Onboarding-Lectures/index.html#route`의 톤을 기준으로 맞춥니다.
+- 베이지 계열 배경, 얕은 그리드 질감, `Newsreader` 계열 세리프 헤딩, `page-shell` 중심 레이아웃, 원형 brand mark, pill 버튼, compact route/chapter card 구조를 유지합니다.
+- 새 섹션을 추가할 때도 GitLab 온보딩 사이트처럼 "현재 상태 패널 - 선택 버튼 - 목차 카드 - 실습/체크리스트"의 인터랙티브 강의 흐름을 우선합니다.
+- 강의 페이지는 마케팅 랜딩 페이지가 아니라 학습 목표와 진행 순서가 바로 보이는 강의용 인터페이스로 유지합니다.
+
 ## 검토와 품질 확인
 
 - Markdown 변경 후 제목 구조가 자연스러운지 `rg -n "^#{1,3} "`로 빠르게 확인합니다.
