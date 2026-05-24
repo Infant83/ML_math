@@ -118,7 +118,7 @@ if (!chapter) {
               ${htmlSource ? `<a class="text-link" href="${resolvePath(htmlSource[1])}">HTML 자료 열기</a>` : ""}
             </div>
             <p>
-              이 장의 강의노트 본문입니다. 상단의 도입부와 학습 목표로 방향을 잡고,
+              이 장의 강의노트 본문입니다. 상단의 도입부와 학습 목표를 먼저 확인한 뒤,
               이어지는 본문에서 사례, 이론, 수식, 예제를 차례로 읽습니다.
             </p>
             <div class="reference-note-status" id="referenceNoteStatus">강의노트를 불러오는 중입니다.</div>

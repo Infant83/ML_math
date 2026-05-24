@@ -26,8 +26,9 @@ function renderHeroPanel() {
       <h2>11개 챕터</h2>
     </div>
     <p class="role-summary">
-      Lecture 1은 판별모델의 수학적 기초를, Lecture 2는 확률과 정보이론의 해석을 담당합니다.
-      각 챕터는 왜 이 내용을 배워야 하는지 먼저 잡고, 학습 목표와 강의노트 본문으로 이어집니다.
+      Lecture 1에서는 판별모델을 이해하는 데 필요한 수학적 기초를 다루고,
+      Lecture 2에서는 확률과 정보이론으로 예측을 해석합니다. 각 챕터는 왜 배우는지 먼저 설명한 뒤
+      학습 목표와 강의노트 본문으로 이어집니다.
     </p>
     <div class="tag-row" aria-label="주제별 챕터 수">
       ${Object.entries(counts)
