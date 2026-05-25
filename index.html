@@ -12,7 +12,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600;6..72,700&family=Noto+Sans+KR:wght@400;500;600;700&family=Noto+Serif+KR:wght@500;600;700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/styles.css?v=20260525-takehome">
+  <link rel="stylesheet" href="assets/styles.css?v=20260525-summary">
 </head>
 <body data-root="">
   <a class="skip-link" href="#content">본문으로 이동</a>
@@ -50,9 +50,9 @@
           우도와 엔트로피를 통한 확률적 해석을 하나의 흐름으로 연결합니다.
         </p>
         <p class="supporting">
-          Lecture 1에서는 판별모델을 이해하는 데 필요한 기하와 최적화를 다루고,
-          Lecture 2에서는 확률과 정보이론으로 예측을 해석합니다. 각 챕터는 왜 배우는지 먼저 설명한 뒤
-          학습 목표와 강의노트 본문으로 이어집니다.
+          Lecture 1: 판별모델을 위한 선형대수와 최적화.
+          Lecture 2: 생성모델을 위한 확률, 베이즈, 정보이론.
+          두 모델 계열을 읽는 데 필요한 수학만 좁혀서 연결합니다.
         </p>
         <div class="hero-actions">
           <a class="button" href="#chapters">강의 챕터 보기</a>
@@ -68,8 +68,8 @@
         <p class="section-label">목차</p>
         <h2>강의 순서</h2>
         <p>
-          처음에는 데이터와 모델의 문제 설정을 정리합니다. 그 다음 선형대수와 최적화로
-          판별모델을 읽고, 확률과 정보이론으로 예측의 의미를 확장합니다.
+          두 줄기: 판별모델을 위한 데이터 표현과 최적화,
+          생성모델을 위한 확률, 베이즈, 정보이론.
         </p>
       </div>
       <div class="route-grid" id="routeGrid"></div>
@@ -93,12 +93,23 @@
     <section class="page-shell section takehome-section" id="takehome">
       <div class="section-heading">
         <p class="section-label">핵심 정리</p>
-        <h2>강의 전체를 관통하는 네 가지 연결</h2>
+        <h2>판별모델과 생성모델로 읽는 수학 지도</h2>
         <p>
-          이 강의는 개별 공식의 목록이 아니라 데이터 표현, 학습 기준, 모델 해석, 의사결정으로 이어지는 흐름입니다.
-          아래 요약은 각 챕터를 읽을 때 되돌아볼 기준입니다.
+          Lecture 1: 판별모델의 기하와 최적화.
+          Lecture 2: 생성모델의 확률과 정보이론.
+          공식의 자리는 이 두 흐름 안에서 확인합니다.
         </p>
       </div>
+      <figure class="summary-figure">
+        <img
+          src="assets/summary-infographic.webp"
+          alt="판별모델의 결정경계와 최적화 흐름, 생성모델의 확률분포와 샘플링 흐름을 나란히 배치한 요약 인포그래픽"
+          loading="lazy"
+        >
+        <figcaption>
+          왼쪽: 판별모델의 경계와 손실. 오른쪽: 생성모델의 분포와 샘플링.
+        </figcaption>
+      </figure>
       <div class="takehome-layout">
         <div class="takeaway-grid" id="coreTakeaways"></div>
         <aside class="checklist-panel selfcheck-panel" aria-label="학습목표 self-check">
@@ -125,7 +136,7 @@
     </span>
   </footer>
 
-  <script defer src="assets/metrics.js?v=20260525-takehome"></script>
-  <script type="module" src="assets/app.js?v=20260525-takehome"></script>
+  <script defer src="assets/metrics.js?v=20260525-summary"></script>
+  <script type="module" src="assets/app.js?v=20260525-summary"></script>
 </body>
 </html>
