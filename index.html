@@ -12,7 +12,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600;6..72,700&family=Noto+Sans+KR:wght@400;500;600;700&family=Noto+Serif+KR:wght@500;600;700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/styles.css?v=20260525-visualaudit">
+  <link rel="stylesheet" href="assets/styles.css?v=20260525-twomodelmap">
 </head>
 <body data-root="">
   <a class="skip-link" href="#content">본문으로 이동</a>
@@ -97,17 +97,16 @@
         <p>
           Lecture 1: 판별모델의 기하와 최적화.
           Lecture 2: 생성모델의 확률과 정보이론.
-          공식의 자리는 이 두 흐름 안에서 확인합니다.
         </p>
       </div>
       <figure class="summary-figure">
         <img
-          src="assets/summary-infographic.webp?v=20260525-visualaudit"
-          alt="판별모델의 결정경계, 손실 등고선, 그래디언트와 생성모델의 확률분포, 정보량, 샘플링 구조를 함께 배치한 요약 인포그래픽"
+          src="assets/summary-infographic.webp?v=20260525-twomodelmap"
+          alt="왼쪽에는 특성 공간, 결정경계, sigmoid, 손실 등고선, 평가 곡선이 있고 오른쪽에는 확률분포, 베이즈 갱신, 엔트로피와 KL, 샘플링이 배치된 두 모델 계열 비교 그림"
           loading="lazy"
         >
         <figcaption>
-          왼쪽: 판별모델의 경계와 손실. 오른쪽: 생성모델의 분포와 샘플링.
+          왼쪽은 x에서 y를 직접 예측하는 판별모델 흐름, 오른쪽은 데이터 분포를 추정하고 샘플링하는 생성모델 흐름입니다.
         </figcaption>
       </figure>
       <div class="takehome-layout">
@@ -136,7 +135,7 @@
     </span>
   </footer>
 
-  <script defer src="assets/metrics.js?v=20260525-visualaudit"></script>
-  <script type="module" src="assets/app.js?v=20260525-visualaudit"></script>
+  <script defer src="assets/metrics.js?v=20260525-twomodelmap"></script>
+  <script type="module" src="assets/app.js?v=20260525-twomodelmap"></script>
 </body>
 </html>

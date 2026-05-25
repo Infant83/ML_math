@@ -1,4 +1,4 @@
-import { categories, chapters, checklistItems, coreTakeaways, routeStages } from "./course-data.js?v=20260525-visualaudit";
+import { categories, chapters, checklistItems, coreTakeaways, routeStages } from "./course-data.js?v=20260525-twomodelmap";
 
 const $ = (selector) => document.querySelector(selector);
 const rootPath = document.body.dataset.root || "";

@@ -1195,7 +1195,7 @@ select {
 
 .takehome-layout {
   display: grid;
-  grid-template-columns: minmax(0, 1.14fr) minmax(18rem, 0.86fr);
+  grid-template-columns: 1fr;
   gap: clamp(0.9rem, 2.5vw, 1.25rem);
   align-items: start;
   margin-top: 1.2rem;
@@ -1233,7 +1233,7 @@ select {
 .takeaway-card {
   display: grid;
   gap: 0.6rem;
-  min-height: 12rem;
+  min-height: 9.5rem;
   padding: 0.95rem;
   border: 1px solid var(--line);
   border-radius: var(--radius);
@@ -1270,6 +1270,10 @@ select {
 .selfcheck-panel {
   display: grid;
   gap: 0.85rem;
+}
+
+.selfcheck-panel .checklist {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .selfcheck-head h3 {
@@ -1398,6 +1402,7 @@ select {
   .route-grid,
   .chapter-grid,
   .takeaway-grid,
+  .selfcheck-panel .checklist,
   .workflow-board,
   .equation-grid,
   .intro-point-grid,

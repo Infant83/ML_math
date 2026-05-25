@@ -1,4 +1,4 @@
-import { chapters } from "./course-data.js?v=20260525-visualaudit";
+import { chapters } from "./course-data.js?v=20260525-twomodelmap";
 
 const rootPath = document.body.dataset.root || "";
 const chapterId = document.body.dataset.chapterId;
