@@ -67,7 +67,7 @@ export const chapters = [
     subtitle: "데이터, 가설, 손실, 결정경계를 하나의 문제 설정으로 묶는 장",
     summary: "첫 장은 머신러닝을 수학적으로 말하기 위한 최소 어휘를 정합니다. 입력 공간과 특성 공간을 구분하고, 라벨과 가설 공간을 놓은 뒤, 손실함수가 왜 모델 선택의 기준이 되는지 설명합니다.",
     visual: {
-      src: "assets/chapter-visuals/l1-ch01.webp",
+      src: "assets/chapter-visuals/l1-ch01.webp?v=20260525-visualaudit",
       alt: "특성 벡터, 결정경계, 손실 표면이 하나의 학습 문제로 이어지는 강의노트형 그림",
       caption: "데이터 표현에서 손실 최소화까지 이어지는 머신러닝 문제 설정"
     },
@@ -139,7 +139,7 @@ export const chapters = [
     subtitle: "벡터와 행렬을 데이터의 위치, 방향, 변환으로 읽는 장",
     summary: "벡터, 내적, norm, 거리, 행렬과 선형변환을 머신러닝의 기하 언어로 정리합니다. 고유값, 고유벡터, 직교기저, SVD는 PCA와 저랭크 구조를 이해하기 위한 다리로 배치합니다.",
     visual: {
-      src: "assets/chapter-visuals/l1-ch02.webp",
+      src: "assets/chapter-visuals/l1-ch02.webp?v=20260525-visualaudit",
       alt: "벡터, 행렬 변환, 고유축, 저랭크 구조가 연결된 선형대수 강의노트 그림",
       caption: "벡터와 행렬을 데이터 공간의 위치, 방향, 변환으로 읽는 관점"
     },
@@ -214,7 +214,7 @@ export const chapters = [
     subtitle: "손실 표면 위에서 모델 파라미터를 움직이는 방법",
     summary: "다변수 미분, 그래디언트, 야코비안, 헤시안의 의미를 정리하고 경사하강법, 모멘텀, 뉴턴법, 준뉴턴법을 학습 알고리즘의 관점에서 해석합니다.",
     visual: {
-      src: "assets/chapter-visuals/l1-ch03.webp",
+      src: "assets/chapter-visuals/l1-ch03.webp?v=20260525-visualaudit",
       alt: "손실 표면의 등고선, 그래디언트 경로, 곡률 보정이 함께 보이는 최적화 강의노트 그림",
       caption: "학습을 손실 표면 위에서 파라미터가 이동하는 과정으로 이해하기"
     },
@@ -286,7 +286,7 @@ export const chapters = [
     subtitle: "제약 조건이 붙은 학습 문제와 안정적인 해의 조건",
     summary: "라그랑주 승수, KKT 조건, 투영 경사하강법, 볼록집합과 볼록함수를 통해 제약이 있는 최적화 문제를 머신러닝 학습 문제로 해석합니다.",
     visual: {
-      src: "assets/chapter-visuals/l1-ch04.webp",
+      src: "assets/chapter-visuals/l1-ch04.webp?v=20260525-visualaudit",
       alt: "볼록 feasible set, 등고선, 경계 접점, 투영 업데이트가 보이는 제약 최적화 그림",
       caption: "제약 조건 안에서 목적함수의 좋은 해를 찾는 기하적 관점"
     },
@@ -357,7 +357,7 @@ export const chapters = [
     subtitle: "선형회귀와 로지스틱 회귀를 판별모델의 기준 사례로 읽기",
     summary: "최소제곱, L1/L2 정규화, 로지스틱 회귀, 로짓, 결정경계, 평가 지표를 한 흐름으로 묶어 판별모델의 기본 작동 방식을 설명합니다.",
     visual: {
-      src: "assets/chapter-visuals/l1-ch05.webp",
+      src: "assets/chapter-visuals/l1-ch05.webp?v=20260525-visualaudit",
       alt: "회귀선, 로지스틱 곡선, 선형 결정경계가 나란히 배치된 선형모형 강의노트 그림",
       caption: "선형 점수가 회귀, 확률 예측, 분류 결정으로 바뀌는 흐름"
     },
@@ -428,7 +428,7 @@ export const chapters = [
     subtitle: "PCA와 SVD로 데이터가 놓인 낮은 차원의 구조를 찾기",
     summary: "공분산, 고유분해, 투영과 재구성, SVD 관점의 저랭크 근사를 통해 차원축소가 단순 압축이 아니라 구조 해석임을 설명합니다.",
     visual: {
-      src: "assets/chapter-visuals/l1-ch06.webp",
+      src: "assets/chapter-visuals/l1-ch06.webp?v=20260525-visualaudit",
       alt: "데이터 구름이 주성분 평면으로 투영되고 저랭크 구조로 압축되는 차원축소 그림",
       caption: "고차원 데이터에서 분산이 큰 방향과 낮은 차원 구조를 찾는 과정"
     },
@@ -499,7 +499,7 @@ export const chapters = [
     subtitle: "계산 그래프와 역전파를 최적화의 언어로 이해하기",
     summary: "계산 그래프, 순전파, 역전파, SGD, 미니배치, Adam을 개념 수준에서 다루며, 신경망 학습이 연쇄법칙과 확률적 최적화의 조합임을 설명합니다.",
     visual: {
-      src: "assets/chapter-visuals/l1-ch07.webp",
+      src: "assets/chapter-visuals/l1-ch07.webp?v=20260525-visualaudit",
       alt: "계산 그래프의 순전파와 역전파 화살표, 미니배치 점, 최적화 경로가 보이는 신경망 그림",
       caption: "신경망 학습을 연쇄법칙과 확률적 최적화의 결합으로 읽기"
     },
@@ -570,9 +570,9 @@ export const chapters = [
     subtitle: "전처리, 분류, 평가, 시각화를 하나의 실습으로 연결하기",
     summary: "날씨 데이터를 예시로 로지스틱 회귀 모델을 만들고, ROC/AUC와 혼동행렬로 평가하며, PCA 시각화를 통해 데이터 구조와 분류 결과를 함께 봅니다.",
     visual: {
-      src: "assets/chapter-visuals/l1-ch08.webp",
-      alt: "날씨 데이터 아이콘, 로지스틱 분류 흐름, ROC 곡선, 혼동행렬, PCA 산점도가 이어지는 실습 그림",
-      caption: "전처리, 분류, 평가, 시각화를 하나의 분석 흐름으로 연결하기"
+      src: "assets/chapter-visuals/l1-ch08.webp?v=20260525-visualaudit",
+      alt: "표 형태 데이터가 특성 행렬, 로지스틱 확률 곡선, 혼동행렬, ROC 곡선과 PCA 산점도로 이어지는 실습 그림",
+      caption: "특성 구성, 확률 예측, 분류 평가, PCA 해석을 하나의 분석 흐름으로 연결하기"
     },
     introTitle: "수학 개념을 하나의 분석 흐름으로 묶기",
     intro: "앞선 장의 개념은 따로 외우는 것보다 실제 분석 절차 안에서 만날 때 더 잘 남습니다. 이 캡스톤에서는 데이터 전처리, 로지스틱 회귀 학습, 확률 출력, ROC/AUC, PCA 시각화를 하나의 실습 흐름으로 연결합니다.",
@@ -641,7 +641,7 @@ export const chapters = [
     subtitle: "조건부 확률에서 MLE/MAP와 정규화까지 이어지는 장",
     summary: "확률, 사건, 조건부 확률, 독립성, 몬티홀 문제, 전확률정리, 베이즈 정리, 확률변수, 주요 분포, MLE/MAP를 다룹니다. L2 정규화와 사전분포의 연결도 함께 설명합니다.",
     visual: {
-      src: "assets/chapter-visuals/l2-ch01.webp",
+      src: "assets/chapter-visuals/l2-ch01.webp?v=20260525-visualaudit",
       alt: "사건 영역, 확률 트리, 사전분포에서 사후분포로 이동하는 베이즈 업데이트 그림",
       caption: "조건부 정보가 들어올 때 확률적 믿음이 갱신되는 과정"
     },
@@ -714,7 +714,7 @@ export const chapters = [
     subtitle: "엔트로피와 KL divergence로 로그손실을 다시 읽기",
     summary: "정보량, 엔트로피, 교차 엔트로피, 로그우도, KL divergence를 다룹니다. 분류 모델의 로그손실이 정보이론적으로 어떤 의미를 갖는지 설명합니다.",
     visual: {
-      src: "assets/chapter-visuals/l2-ch02.webp",
+      src: "assets/chapter-visuals/l2-ch02.webp?v=20260525-visualaudit",
       alt: "확률 막대, 코드 길이, 엔트로피, 교차 엔트로피, KL 차이를 연결한 정보이론 그림",
       caption: "분류 손실을 평균 정보량과 분포 근사의 관점으로 해석하기"
     },
@@ -786,7 +786,7 @@ export const chapters = [
     subtitle: "확률 예측을 실제 판단으로 바꾸는 기준",
     summary: "베이즈 위험, 비용민감 학습, 일반화 선형모형, 링크 함수, calibration, 예측 확률의 품질 평가를 다룹니다. 예측 확률을 단순 점수가 아니라 의사결정의 입력으로 해석합니다.",
     visual: {
-      src: "assets/chapter-visuals/l2-ch03.webp",
+      src: "assets/chapter-visuals/l2-ch03.webp?v=20260525-visualaudit",
       alt: "확률 예측이 비용, 임계값, 위험 곡선, 보정 곡선으로 이어지는 베이즈 의사결정 그림",
       caption: "예측 확률을 비용 구조와 보정 관점에서 실제 행동으로 바꾸기"
     },
